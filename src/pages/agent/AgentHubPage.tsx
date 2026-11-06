@@ -1,11 +1,16 @@
 /** Grok-style home for Ceyo bots and multi-bot groups, backed by real AgentSky chats. */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Bot,
   ChevronDown,
   ChevronRight,
   EyeOff,
+  Folder,
+  MessageSquareDot,
+  Pin,
+  Star,
+  Trash2,
   Grid2X2,
   Loader2,
   MessageSquareText,
@@ -84,6 +89,9 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [hiddenOpen, setHiddenOpen] = useState(false);
+  const [rowMenu, setRowMenu] = useState<{ kind: "bot" | "group"; id: string; x: number; y: number; move?: boolean } | null>(null);
+  const pressTimer = useRef<number | null>(null);
+  const pressed = useRef(false);
 
   useEffect(() => {
     if (!demo) void loadWorkspace();
@@ -157,8 +165,10 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     const latestSession = latest ? ws.sessions.find((session) => session.agentId === agentId) : null;
     const chosen = sessionId === undefined ? latestSession?.id : sessionId;
     if (chosen) next.session = chosen;
+    const key = itemKey(kind, id);
+    updateLocal((current) => ({ ...current, unread: current.unread.filter((k) => k !== key), seen: { ...current.seen, [key]: new Date().toISOString() } }));
     go(next);
-  }, [go, local.groups, ws.sessions]);
+  }, [go, local.groups, ws.sessions, updateLocal]);
 
   const latestFor = useCallback((agentId: string) => ws.sessions.find((session) => session.agentId === agentId), [ws.sessions]);
 
@@ -252,14 +262,28 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   orderedAgents.forEach((agent) => { if (!agent.isDefault) categories.add(categoryFor("bot", agent.id)); });
   local.groups.forEach((group) => categories.add(categoryFor("group", group.id, group)));
 
+  const isUnread = (key: string, at?: string) => local.unread.includes(key) || (!!at && !!local.seen[key] && at > local.seen[key]);
+  const pressProps = (kind: "bot" | "group", id: string) => ({
+    onPointerDown: (e: React.PointerEvent) => {
+      pressed.current = false;
+      const x = e.clientX, y = e.clientY;
+      pressTimer.current = window.setTimeout(() => { pressed.current = true; setRowMenu({ kind, id, x, y }); }, 450);
+    },
+    onPointerUp: () => { if (pressTimer.current) window.clearTimeout(pressTimer.current); },
+    onPointerLeave: () => { if (pressTimer.current) window.clearTimeout(pressTimer.current); },
+    onContextMenu: (e: React.MouseEvent) => { e.preventDefault(); setRowMenu({ kind, id, x: e.clientX, y: e.clientY }); },
+    onClickCapture: (e: React.MouseEvent) => { if (pressed.current) { e.stopPropagation(); e.preventDefault(); pressed.current = false; } },
+  });
+  const sortPinned = <T,>(items: T[], key: (t: T) => string) => [...items].sort((a, b) => Number(local.pinned.includes(key(b))) - Number(local.pinned.includes(key(a))));
+
   const renderBotRow = (agent: AgentInfo, hidden = false) => {
     const latest = latestFor(agent.id);
     const key = itemKey("bot", agent.id);
     return (
       <div className="hub-list-row" key={key}>
-        <button type="button" className="hub-list-row-main" onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
+        <button type="button" className="hub-list-row-main" {...pressProps("bot", agent.id)} data-unread={isUnread(key, latest?.createdAt)} onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
           <BotAvatar agent={agent} size={52} />
-          <span className="hub-row-copy"><span className="hub-row-title"><strong>{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
+          <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
       </div>
@@ -272,9 +296,9 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     const members = group.memberIds.map((id) => ws.agents.find((agent) => agent.id === id)).filter((agent): agent is AgentInfo => !!agent);
     return (
       <div className="hub-list-row" key={key}>
-        <button type="button" className="hub-list-row-main" onClick={() => openChat("group", group.id)} aria-label={`${ar ? "افتح" : "Open"} ${group.name}`}>
+        <button type="button" className="hub-list-row-main" {...pressProps("group", group.id)} data-unread={isUnread(key, latest?.createdAt)} onClick={() => openChat("group", group.id)} aria-label={`${ar ? "افتح" : "Open"} ${group.name}`}>
           <GroupAvatar group={group} agents={ws.agents} size={40} />
-          <span className="hub-row-copy"><span className="hub-row-title"><strong>{group.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || members.map((member) => member.name).join(" · ")}</span></span>
+          <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{group.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || members.map((member) => member.name).join(" · ")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
       </div>
@@ -294,9 +318,8 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       <div className="hub-home-scroll">
         {primary ? (
           <button type="button" className="hub-primary-button" onClick={() => openChat("bot", primary.id)}>
-            <span className="hub-primary-character"><BotAvatar agent={primary} size={104} state="hello" /><i /></span>
-            <strong>{primary.name}</strong>
-            <small><span />{ar ? "متصل" : "Online"}</small>
+            <span className="hub-primary-character"><BotAvatar agent={primary} size={104} state="idle" /><i className="hub-primary-star"><Star size={13} fill="currentColor" strokeWidth={0} /></i></span>
+            <strong>{isUnread(itemKey("bot", primary.id), latestFor(primary.id)?.createdAt) && <span className="hub-unread-dot" />}{primary.name}</strong>
           </button>
         ) : !ws.ready ? <div className="hub-primary-skeleton"><Loader2 size={24} className="animate-spin" /></div> : null}
 
@@ -307,7 +330,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
           const bots = orderedAgents.filter((agent) => !agent.isDefault && categoryFor("bot", agent.id) === "Unassigned" && !local.hidden.includes(itemKey("bot", agent.id)));
           const groups = local.groups.filter((group) => categoryFor("group", group.id, group) === "Unassigned" && !local.hidden.includes(itemKey("group", group.id)));
           if (!bots.length && !groups.length) return null;
-          return <div className="hub-category-rows hub-flat-rows">{groups.map((group) => renderGroupRow(group))}{bots.map((agent) => renderBotRow(agent))}</div>;
+          return <div className="hub-category-rows hub-flat-rows">{sortPinned(groups, (g) => itemKey("group", g.id)).map((group) => renderGroupRow(group))}{sortPinned(bots, (a) => itemKey("bot", a.id)).map((agent) => renderBotRow(agent))}</div>;
         })()}
 
         {ws.ready && [...categories].filter((category) => category !== "Unassigned").sort((a, b) => a.localeCompare(b)).map((category) => {

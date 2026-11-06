@@ -20,6 +20,9 @@ export type HubLocalState = {
   categories: Record<string, string>;
   hidden: string[];
   voices: Record<string, VoiceSettings>;
+  pinned: string[];
+  unread: string[];
+  seen: Record<string, string>;
 };
 
 export const EMPTY_HUB_LOCAL: HubLocalState = {
@@ -27,6 +30,9 @@ export const EMPTY_HUB_LOCAL: HubLocalState = {
   categories: {},
   hidden: [],
   voices: {},
+  pinned: [],
+  unread: [],
+  seen: {},
 };
 
 export const DEFAULT_VOICE: VoiceSettings = { voice: "Not set", speed: 1, language: "Auto" };
@@ -53,6 +59,9 @@ export function loadHubLocal(userId: string): HubLocalState {
       categories: value.categories && typeof value.categories === "object" ? value.categories : {},
       hidden: Array.isArray(value.hidden) ? value.hidden.filter((id): id is string => typeof id === "string") : [],
       voices: value.voices && typeof value.voices === "object" ? value.voices : {},
+      pinned: Array.isArray(value.pinned) ? value.pinned.filter((id): id is string => typeof id === "string") : [],
+      unread: Array.isArray(value.unread) ? value.unread.filter((id): id is string => typeof id === "string") : [],
+      seen: value.seen && typeof value.seen === "object" ? value.seen : {},
     };
   } catch {
     return EMPTY_HUB_LOCAL;
