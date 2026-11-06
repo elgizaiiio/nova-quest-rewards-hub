@@ -14,25 +14,25 @@ const strip = (path: string) => path.split(/[?#]/)[0].replace(/\/+$/, "") || "/"
 
 const importForPath = (key: string): Promise<unknown> | null => {
   if (key.startsWith("/chat") || key.startsWith("/build")) {
-    return import("@/pages/chat/ChatPage");
+    return import("@/pages/agent/AgentHubPage");
   }
   if (key.startsWith("/settings/referrals")) {
-    return import("@/pages/billing/ReferralsPage");
+    return import("@/pages/ceyo/CeyoSettings");
   }
   if (key.startsWith("/settings/billing") || key.startsWith("/usage")) {
-    return import("@/pages/usage/UsagePage");
+    return import("@/pages/ceyo/CeyoSettings");
   }
   if (key.startsWith("/settings/profile/edit")) {
-    return import("@/pages/settings/ProfileEditPage");
+    return import("@/pages/ceyo/CeyoSettings");
   }
   if (key.startsWith("/settings/security")) {
-    return import("@/pages/settings/SecuritySettingsPage");
+    return import("@/pages/ceyo/CeyoSettings");
   }
   if (key.startsWith("/settings")) {
-    return import("@/pages/settings/SettingsPage");
+    return import("@/pages/ceyo/CeyoSettings");
   }
   if (key.startsWith("/pricing")) {
-    return import("@/pages/marketing/PricingPage");
+    return import("@/pages/ceyo/CeyoSettings");
   }
   if (
     key === "/auth" ||
