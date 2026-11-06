@@ -90,6 +90,13 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   const [hiddenOpen, setHiddenOpen] = useState(false);
   const [rowMenu, setRowMenu] = useState<{ kind: "bot" | "group"; id: string; x: number; y: number; move?: boolean } | null>(null);
   const pressTimer = useRef<number | null>(null);
+  const plusRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!plusOpen) return;
+    const onDown = (e: PointerEvent) => { if (plusRef.current && !plusRef.current.contains(e.target as Node)) setPlusOpen(false); };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [plusOpen]);
   const pressed = useRef(false);
 
   useEffect(() => {
@@ -308,7 +315,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     <aside className="hub-home" aria-label={ar ? "البوتات والجروبات" : "Bots and groups"}>
       <header className="hub-home-header">
         <button type="button" aria-label="Account" className="hub-user-avatar" onClick={() => nav("/settings")}>{userAvatar ? <img src={userAvatar} alt="" /> : <span>{userInitial}</span>}</button>
-        <div className="hub-plus-wrap">
+        <div className="hub-plus-wrap" ref={plusRef}>
           <HubIconButton label={ar ? "إنشاء" : "Create"} onClick={() => setPlusOpen((open) => !open)} active={plusOpen}><Plus size={22} /></HubIconButton>
           {plusOpen && <div className="hub-menu hub-plus-menu" role="menu"><button type="button" role="menuitem" onClick={() => go({ new: "bot" })}>{ar ? "بوت جديد" : "New Bot"}</button><button type="button" role="menuitem" onClick={() => go({ new: "group" })}>{ar ? "جروب جديد" : "New Group Chat"}</button></div>}
         </div>
@@ -357,10 +364,10 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       </div>
 
       <div className="hub-home-bottom">
-        <HubIconButton label="Connect apps" onClick={() => nav("/settings/apps")}><Grid2X2 size={19} /></HubIconButton>
+        <HubIconButton label="Connect apps" className="hub-apps-btn" onClick={() => nav("/settings/apps")}><Grid2X2 size={19} /></HubIconButton>
         <button type="button" className="hub-search-trigger" onClick={() => setSearchOpen(true)}><Search size={18} /><span>{ar ? "بحث" : "Search"}</span></button>
       </div>
-      {(plusOpen || rowMenu) && <div className="hub-backdrop" onPointerDown={() => { setPlusOpen(false); setRowMenu(null); }} />}
+      {rowMenu && <div className="hub-backdrop" onPointerDown={() => setRowMenu(null)} />}
       {rowMenu && (() => {
         const key = itemKey(rowMenu.kind, rowMenu.id);
         const group = rowMenu.kind === "group" ? local.groups.find((g) => g.id === rowMenu.id) : undefined;
