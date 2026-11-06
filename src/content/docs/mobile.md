@@ -24,7 +24,7 @@ The iOS app also runs on iPad (iPadOS 18 or later).
 
 Download Ceyo Bot from the
 [App Store](/) on iPhone or
-[Google Play](/?id=ai.x.grok.bot) on
+[Google Play](/?id=ai.x.Ceyo.bot) on
 Android.
 
 ## Sign in and set up
@@ -89,7 +89,7 @@ Android.
 
 Only monthly individual plans are available through the mobile app. For yearly
 billing, Teams, or Enterprise plans, subscribe on
-cursor.com. If you subscribed in the
+Ceyo.com. If you subscribed in the
 app and want on-demand usage, enable it on the web.
 
 ### Manage or cancel a phone subscription

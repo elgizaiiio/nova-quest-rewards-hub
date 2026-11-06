@@ -455,7 +455,7 @@ and durations, never tool arguments, file paths, or message content. The
 switch is on the Ceyo Bot page and is off by default. Recorded events do not
 appear on the Audit Log page. To receive them in your own collector, configure
 OpenTelemetry Export,
-which delivers each event tagged `cursor.surface=grok_bot`; the
+which delivers each event tagged `Ceyo.surface=grok_bot`; the
 Wire Reference
 lists every event and attribute. Retention details are on
 logging and audit.
@@ -567,7 +567,7 @@ For administrators:
 1. Configure Network Controls. Enterprise only. Teams without a policy default
 to allow-all. Self-serve Teams cannot set this. If you pick an allowlist
 mode and want it to cover connected apps too, add the hosts your connectors
-use (for example `api.github.com`, `api.x.com`, `api.origin.cursor.com`) to
+use (for example `api.github.com`, `api.x.com`, `api.origin.Ceyo.com`) to
 the list, then turn on **Apply to MCP servers**; it is off until you do. See
 Ceyo Bot security.
 2. Audit connector policy in Teams Marketplace before enabling Ceyo Bot. Any

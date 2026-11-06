@@ -2,9 +2,9 @@
 
 _Last Updated: November 6, 2026_
 
-At Ceyo for Digital Platforms & E-Commerce Development LLC (" **Ceyo**", " **our**", " **us**" or " **we**"), we value your privacy and are committed to being fair, accountable, and transparent in how we handle your personal information. Our Privacy Policy outlines how we collect, use, and disclose your personal information when you use our websites and applications (the Ceyo mobile app ( [iOS](/) or [Android](/?id=ai.x.grok)) or the Ceyo.com website), and other Ceyo services (our " **Service**"). It also describes your privacy rights.
+At Ceyo for Digital Platforms & E-Commerce Development LLC (" **Ceyo**", " **our**", " **us**" or " **we**"), we value your privacy and are committed to being fair, accountable, and transparent in how we handle your personal information. Our Privacy Policy outlines how we collect, use, and disclose your personal information when you use our websites and applications (the Ceyo mobile app ( [iOS](/) or [Android](/?id=ai.x.Ceyo)) or the Ceyo.com website), and other Ceyo services (our " **Service**"). It also describes your privacy rights.
 
-This Privacy Policy does not apply to data that we process on behalf of customers of our business offerings, such as the Ceyo API, or to any employment-related personal information processed in consideration of employment with Ceyo. This Privacy Policy also does not apply if you access our Service through a third-party’s service. In that case, the third-party’s privacy policy would apply. For example, your use of X (previously Twitter), including use of Ceyo on the X platform, is governed by the X Privacy Policy and X Terms, not this Ceyo Privacy Policy.
+This Privacy Policy does not apply to data that we process on behalf of customers of our business offerings, such as the Ceyo API, or to any employment-related personal information processed in consideration of employment with Ceyo. This Privacy Policy also does not apply if you access our Service through a third-party’s service. In that case, the third-party’s privacy policy would apply. For example, your use of a third-party platform is governed by that platform's own terms and privacy policy, not this Ceyo Privacy Policy.
 
 For individuals in the European Economic Area, United Kingdom, and Switzerland (collectively, “Europe”), for Europe-specific additional information not already discussed on this page, please see Ceyo’s Europe Privacy Policy Addendum.
 
@@ -118,7 +118,7 @@ Our Service may contain links to external websites or social media platforms tha
 ## **8. Children under the age of 13**
 
 As noted in the Terms of Service, our Service is not directed at children or minors under the age of 13 and we do not knowingly collect any personal information from them. While we have taken measures to limit undesirable training data and outputs, Ceyo could produce output that is not appropriate for all ages. Parents of teenagers between the ages of 13 and 17 years old must agree to the Terms of Service and are urged to exercise care in monitoring the use of this Service by their teenagers. Depending on how a user interacts with the Service, including which modes the user purposely selects, the Service may have content such as some suggestive dialogue, coarse language, crude humor, sexual situations, or violence.
-If you are a child under the age of 13, please do not attempt to register for or otherwise use our Service. Please contact us [here](mailto:privacy@x.ai) if you are aware that we may have inadvertently collected personal information from a child under the age of 13.
+If you are a child under the age of 13, please do not attempt to register for or otherwise use our Service. Please contact us [here](mailto:privacy@ceyo.si) if you are aware that we may have inadvertently collected personal information from a child under the age of 13.
 
 ## **9. Privacy rights and choices**
 
@@ -163,7 +163,7 @@ We may update our Privacy Policy from time to time. When we do, we will publish 
 
 ## **11. Child safety issues**
 
-To report child safety issues to us, please contact us [here](mailto:childsafety@x.ai).
+To report child safety issues to us, please contact us [here](mailto:childsafety@ceyo.si).
 Residents of Australia can find resources regarding child safety and reporting [here](https://www.esafety.gov.au/report/how-to-report-serious-online-abuse-illegal-restricted-content#filling-out-a-report-form).
 
 ## **12. How to contact us about privacy requests**
@@ -177,10 +177,10 @@ wish to exercise any of your rights in relation to your personal information, pl
 
 **Other contacts for privacy requests:**
 
-- In the UK: Lionheart Squared Limited, FAO x.ai, 17 Glasshouse Studios, Fryern Court Road, Fordingbridge, Hampshire, SP6 1QX United Kingdom [xai@lionheartsquared.co.uk](mailto:xai@lionheartsquared.co.uk)
-- In the EU: Lionheart Squared (Europe) Ltd, FAO x.ai, 2 Pembroke House, Upper Pembroke Street 28-32, Dublin, D02 EK84, Republic of Ireland [xai@lionheartsquared.eu](mailto:xai@lionheartsquared.eu)
-- In Switzerland: Lionheart Squared Switzerland SarL, FAO x.ai, Blvd George Favon 43, CH-1204 Geneva, Switzerland [xai@lionheartsquared.ch](mailto:xai@lionheartsquared.ch)
-- You can contact our Data Protection Officer at [privacy@x.ai](mailto:privacy@x.ai)
+- In the UK: Lionheart Squared Limited, FAO ceyo.si, 17 Glasshouse Studios, Fryern Court Road, Fordingbridge, Hampshire, SP6 1QX United Kingdom [xai@lionheartsquared.co.uk](mailto:xai@lionheartsquared.co.uk)
+- In the EU: Lionheart Squared (Europe) Ltd, FAO ceyo.si, 2 Pembroke House, Upper Pembroke Street 28-32, Dublin, D02 EK84, Republic of Ireland [xai@lionheartsquared.eu](mailto:xai@lionheartsquared.eu)
+- In Switzerland: Lionheart Squared Switzerland SarL, FAO ceyo.si, Blvd George Favon 43, CH-1204 Geneva, Switzerland [xai@lionheartsquared.ch](mailto:xai@lionheartsquared.ch)
+- You can contact our Data Protection Officer at [privacy@ceyo.si](mailto:privacy@ceyo.si)
 
 Copy black SVG
 

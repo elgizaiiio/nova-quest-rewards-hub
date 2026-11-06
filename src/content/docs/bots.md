@@ -128,7 +128,7 @@ Share a template when someone else should start from the same Bot.
 **Share**, then choose **Create a copy**. The Bot builds a template and posts
 it in the chat.
 2. Choose **Publish** on the template card, then **Copy link**.
-3. Send the link. The recipient opens a preview on x.ai and can
+3. Send the link. The recipient opens a preview on ceyo.si and can
 choose **Add to Ceyo Bot**. They need the Ceyo Bot app to finish adding it.
 
 On iPhone and Android, open the Bot's menu and choose **Share as Template**.
@@ -166,7 +166,7 @@ sharing.
 ## Add a Bot from a template
 
 To browse Bot templates, open **Connect apps** in the sidebar and choose
-**Bot templates**. The gallery opens on x.ai in your browser. Open a template
+**Bot templates**. The gallery opens on ceyo.si in your browser. Open a template
 link and choose **Import Bot** to add your own copy of that Bot.
 
 ## Delete a Bot

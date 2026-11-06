@@ -24,7 +24,7 @@ Get the installer from the Ceyo Bot page of the
 Ceyo dashboard: the **Download Ceyo Bot**
 setup row installs the desktop app or copies a link you can share. If you don't
 have dashboard access, ask your admin for the download link. You can also
-download the app from x.ai/bot. The app runs on macOS
+download the app from ceyo.si/bot. The app runs on macOS
 (Apple silicon and Intel), Windows (x64 and Arm64), and Linux (x64 and Arm64)
 and checks for updates automatically. On a phone, install Ceyo Bot from the App
 Store or Google Play; see

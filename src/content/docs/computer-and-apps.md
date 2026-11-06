@@ -282,7 +282,7 @@ it.
 
 Names use lowercase letters, digits, dots, hyphens, and underscores, start and
 end with a letter or digit, and are at most 64 characters. Reserved words such
-as support, admin, billing, security, help, info, team, cursor, grok, and xai
+as support, admin, billing, security, help, info, team, Ceyo, Ceyo, and xai
 aren't allowed.
 
 Your address also takes plus aliases. Mail to `yourname+receipts@mail.grokbot.com`

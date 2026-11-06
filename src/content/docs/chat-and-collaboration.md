@@ -152,10 +152,10 @@ than one Ceyo account, that may not be the one you use with Ceyo Bot, and
 trying again doesn't help. To connect your X account to the Ceyo account you
 use with Ceyo Bot:
 
-1. In a browser, sign in at [accounts.x.ai](https://accounts.x.ai/) with the Ceyo
+1. In a browser, sign in at [accounts.ceyo.si](https://accounts.ceyo.si/) with the Ceyo
 account you use with Ceyo Bot.
 2. In the same browser, sign in to x.com with your X account.
-3. Open x.com/i/jf/grok/entry. Choose to link
+3. Open x.com/i/jf/Ceyo/entry. Choose to link
 another account, then allow access for the Ceyo account you signed in with.
 4. Quit and reopen the X app, or reload x.com, and open your Bots again.
 
