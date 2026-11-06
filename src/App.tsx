@@ -1,5 +1,4 @@
 import ReminderWatcher from "@/components/life/ReminderWatcher";
-import OctoberOfferDialog from "@/components/promo/OctoberOfferDialog";
 import { useEffect, useState, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 
@@ -13,7 +12,6 @@ import { PromoBannerProvider } from "@/components/promo/PromoBannerContext";
 import { ZoneProvider } from "@/contexts/ZoneContext";
 import { ConfirmProvider } from "@/components/common/ConfirmDialog";
 import { DynamicNotifications } from "@/components/notifications/DynamicNotifications";
-import FirstRunWelcome from "@/components/notifications/FirstRunWelcome";
 import { supabase } from "@/integrations/supabase/client";
 import { subscribeAuthEvents } from "@/lib/authStore";
 import { clearAllSnapshots } from "@/lib/pageSnapshot";
@@ -212,7 +210,6 @@ const App = () => {
                     <ScrollToTop />
                     <PageViewTracker />
                     <ReminderWatcher />
-                    <OctoberOfferDialog />
                     <InternalLinkInterceptor />
                     <MarketingTypographyScope />
 
@@ -233,7 +230,6 @@ const App = () => {
                         </SettingsShell>
                       </RouteErrorBoundary>
                     </Suspense>
-                    <FirstRunWelcome />
                     </DynamicNotifications>
                   </ConfirmProvider>
                 </PromoBannerProvider>
