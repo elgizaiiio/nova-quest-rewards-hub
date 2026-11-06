@@ -8,7 +8,6 @@ import { CostConfirmationHost } from "@/components/billing/CostConfirmationHost"
 import PageViewTracker from "@/components/analytics/PageViewTracker";
 import ErrorBoundary, { RouteErrorBoundary } from "@/components/common/ErrorBoundary";
 import TranslationWrapper from "@/components/common/TranslationWrapper";
-import MarketingTypographyScope from "@/components/common/MarketingTypographyScope";
 import { PromoBannerProvider } from "@/components/promo/PromoBannerContext";
 import { ZoneProvider } from "@/contexts/ZoneContext";
 import { ConfirmProvider } from "@/components/common/ConfirmDialog";
@@ -17,14 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { subscribeAuthEvents } from "@/lib/authStore";
 import { clearAllSnapshots } from "@/lib/pageSnapshot";
 
-import {
-  CommandPalette,
-  ShortcutsHelp,
-  SettingsShell,
-  OfflineBanner,
-  Analytics,
-  SpeedInsights,
-} from "@/routes-app/lazyPages";
+import { SettingsShell } from "@/routes-app/lazyPages";
 import {
   LazyFallback,
   DeferredRoutes,
@@ -212,12 +204,8 @@ const App = () => {
                     <PageViewTracker />
                     <ReminderWatcher />
                     <InternalLinkInterceptor />
-                    <MarketingTypographyScope />
 
                     <Suspense fallback={null}>
-                      <OfflineBanner />
-                      <CommandPalette />
-                      <ShortcutsHelp />
                       <CostConfirmationHost />
                       <CeyoConfirmHost />
                       <BackgroundJobNotifier />
@@ -237,20 +225,6 @@ const App = () => {
                 </PromoBannerProvider>
               </ZoneProvider>
             </BrowserRouter>
-            {/* Vercel's beacons only exist when the app is served by Vercel.
-                On the Lovable host both scripts 404 on every page load, so we
-                mount them only where they can actually resolve. */}
-            {typeof window !== "undefined" &&
-            window.location.hostname.endsWith(".vercel.app") ? (
-              <>
-                <Suspense fallback={null}>
-                  <Analytics />
-                </Suspense>
-                <Suspense fallback={null}>
-                  <SpeedInsights />
-                </Suspense>
-              </>
-            ) : null}
           </ErrorBoundary>
       </TooltipProvider>
     </TranslationWrapper>

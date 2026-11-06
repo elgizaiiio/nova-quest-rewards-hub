@@ -3,13 +3,10 @@ import { Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import PageTransition from "@/components/common/PageTransition";
-import { usePromoBanner } from "@/components/promo/usePromoBanner";
-import { useSidebarCollapsed } from "@/hooks/useSidebarCollapsed";
 import { useTrackInAppNavigation } from "@/hooks/useSmartBack";
-import { pathForZone, stripZonePrefix } from "@/lib/zoneRouting";
+import { pathForZone } from "@/lib/zoneRouting";
 import { prefetchNextHop } from "@/lib/nextHop";
 import { bootstrapAuth, getAuthState, subscribeAuthState } from "@/lib/authStore";
-import { UnlimitedPromoBanner } from "./lazyPages";
 // Redirect legacy /tools/<slug> to /images/tools/<slug>
 export const LegacyToolsRedirect = () => {
   const location = useLocation();
@@ -76,18 +73,6 @@ export const DeferredRoutes = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const PromoBannerGate = () => {
-  const { hidden } = usePromoBanner();
-  const location = useLocation();
-  const [sidebarCollapsed] = useSidebarCollapsed();
-  const appPath = stripZonePrefix(location.pathname);
-  const landingPaths = ["/", "/landing"];
-  if (hidden) return null;
-  if (landingPaths.includes(appPath)) return null;
-  const isChatSurface = appPath.startsWith("/chat");
-  const chatSurfaceOffset = isChatSurface ? (sidebarCollapsed ? 60 : 280) : 0;
-  return <UnlimitedPromoBanner chatSurfaceOffset={chatSurfaceOffset} />;
-};
 
 // Preload the most-likely next routes AND the heavy shared chunks (icons,
 // framer-motion, lucide-react) during idle time so navigation from the
