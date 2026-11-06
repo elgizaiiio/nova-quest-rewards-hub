@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Mic, MicOff, Settings, X } from "lucide-react";
+import { Mic, MicOff, X } from "lucide-react";
 import type { AgentInfo } from "@/lib/agentsky/client";
 import { BotAvatar, type HubLang } from "./HubParts";
 
@@ -60,7 +60,6 @@ export function VoiceCallBar({ agent, lang, busy, lastReply, onSay, onEnd }: {
     <div className="cx-call" role="dialog" aria-label={ar ? "مكالمة صوتية" : "Voice call"}>
       <BotAvatar agent={agent} size={44} state={phase === "speaking" ? "talking" : phase === "thinking" ? "thinking" : "idle"} />
       <div className="cx-call-level" data-phase={muted ? "muted" : phase} title={label}><span /></div>
-      <button type="button" className="cx-call-btn" aria-label={ar ? "الإعدادات" : "Settings"}><Settings size={19} /></button>
       <button type="button" className="cx-call-btn" data-off={muted} aria-label={muted ? "Unmute" : "Mute"} onClick={() => setMuted((m) => !m)}>{muted ? <MicOff size={19} /> : <Mic size={19} />}</button>
       <button type="button" className="cx-call-btn cx-call-end" aria-label={ar ? "إنهاء المكالمة" : "End call"} onClick={onEnd}><X size={20} /></button>
       <span className="cx-call-grip" />
