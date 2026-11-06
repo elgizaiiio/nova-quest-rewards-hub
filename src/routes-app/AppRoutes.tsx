@@ -61,7 +61,7 @@ export const AppRoutes = (_props: { currentUserId: string | null }) => (
     <Route path="/privacy" element={<LegalPage slug="privacy" />} />
 
     {import.meta.env.DEV && <Route path="/__pv/hub" element={<AgentHubPage demo />} />}
-    {import.meta.env.DEV && <Route path="/__pv/:section" element={<CeyoSettings />} />}
+    {import.meta.env.DEV && <Route path="/__pv/settings/:section" element={<CeyoSettings />} />}
     <Route path="/chat" element={home} />
     <Route path="*" element={home} />
   </>
