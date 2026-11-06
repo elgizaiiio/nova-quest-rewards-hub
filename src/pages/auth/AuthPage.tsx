@@ -478,6 +478,32 @@ const AuthPage = () => {
         else setStep("set-password");
       }
     } catch (e: any) {
+      // The backend reports an existing account during sign-up verification.
+      // Sign the person in with the password they typed, or send them to the
+      // password screen instead of showing a failure.
+      const msg = String(e?.message || "");
+      if (step === "otp-signup" && /already (been )?(registered|exists)/i.test(msg)) {
+        const normalizedEmail = email.trim().toLowerCase();
+        if (newPassword) {
+          const { error: signInErr } = await supabase.auth.signInWithPassword({
+            email: normalizedEmail,
+            password: newPassword,
+          });
+          if (!signInErr) {
+            const target = redirectUrl || pathForZone("/chat", window.location.pathname);
+            const mfa = await getMfaRedirect(target);
+            if (mfa) navigate(mfa);
+            else if (redirectUrl) navigateAfterAuth(navigate, redirectUrl, window.location.search);
+            else navigate(target);
+            return;
+          }
+        }
+        setUserExists(true);
+        setPassword("");
+        setStep("password");
+        toast.message(authT("emailExists"), { description: authT("emailExistsDesc") });
+        return;
+      }
       toast.error(translateAuthError(e, "verificationFailed"));
       setOtpValues(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
