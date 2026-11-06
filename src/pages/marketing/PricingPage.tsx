@@ -196,10 +196,10 @@ const PricingPage = () => {
   const pricingLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: "Megsy AI",
+    name: "Ceyo SI",
     description:
       "AI agent workspace for chat, deep research, image and video generation, presentations, documents and app building.",
-    brand: { "@type": "Brand", name: "Megsy AI" },
+    brand: { "@type": "Brand", name: "Ceyo SI" },
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "USD",

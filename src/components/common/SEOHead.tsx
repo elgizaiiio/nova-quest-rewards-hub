@@ -32,7 +32,7 @@ const SEOHead = ({
 }: SEOHeadProps) => {
   const meta = locale ? getLocale(locale) : undefined;
 
-  const brandName = "Megsy AI";
+  const brandName = "Ceyo SI";
 
   const isHomePath = path === "/" || (meta && path === meta.path);
   const fullTitle = isHomePath ? title : `${title} | ${brandName}`;

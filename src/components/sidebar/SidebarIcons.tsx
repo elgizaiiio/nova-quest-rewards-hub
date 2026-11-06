@@ -1,4 +1,4 @@
-// Custom Megsy nav icons — clean minimal geometric marks
+// Custom Ceyo nav icons — clean minimal geometric marks
 // Each renders inline SVG, currentColor, props-controlled size & stroke.
 
 type Props = { size?: number; className?: string; strokeWidth?: number };
