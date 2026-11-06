@@ -10,8 +10,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
 import { getStoredTheme, setTheme, type ThemeMode } from "@/lib/theme";
-import { useWorkspaceStore } from "@/lib/agentsky/store";
-import { integrations as CATALOG, type Integration } from "@/lib/integrationsData";
+import { useWorkspaceStore } from "@/lib/agentsky/store";import { integrations as CATALOG, type Integration } from "@/lib/integrationsData";
 import {
   disconnectIntegration, loadIntegrationConnections, startIntegrationConnection, waitForConnectionRefresh,
 } from "@/lib/integrationBackend";
