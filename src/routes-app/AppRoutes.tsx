@@ -57,6 +57,8 @@ export const AppRoutes = (_props: { currentUserId: string | null }) => (
     <Route path="/settings" element={guard(<CeyoSettings />)} />
     <Route path="/settings/:section" element={guard(<CeyoSettings />)} />
     <Route path="/settings/:section/:sub" element={guard(<CeyoSettings />)} />
+    <Route path="/dev-settings" element={<CeyoSettings />} />
+    <Route path="/dev-settings/:section" element={<CeyoSettings />} />
 
     <Route path="/terms" element={<LegalDocPage slug="terms" />} />
     <Route path="/privacy" element={<LegalDocPage slug="privacy" />} />
