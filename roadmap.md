@@ -62,3 +62,10 @@
 - [ ] Bot Computer reset requires a connected backend computer; permission rules currently persist locally and authenticated memory/device actions need a real external session.
 - [x] New Ceyo landing page
 - [x] Remove all old pages from the app; rename to Ceyo, English UI, no "AI" wording
+
+## Group chat (Grok-style)
+- [x] Chat screen: floating header pill, bubbles per bot, mentions, working line, error toast, swipe for times
+- [x] Long-press message sheet: reactions, reply, mark unread, copy, select, request ID, report
+- [x] Find in chat bar
+- [x] Group profile, Routines, Library, Members, Edit name, Avatar (upload; generate not connected)
+- [x] Smoother page-open animation

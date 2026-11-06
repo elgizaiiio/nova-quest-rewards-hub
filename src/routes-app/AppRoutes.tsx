@@ -26,7 +26,6 @@ const guard = (el: React.ReactNode, guest?: string) => <ProtectedRoute guestEntr
 const home = <Navigate to="/" replace />;
 
 /** Ceyo: landing, sign-in, the bot home and settings. Everything else returns home. */
-const AgentHubDemoTmp = lazy(() => import("@/pages/agent/AgentHubPage").then((m) => ({ default: () => <m.default demo /> })));
 export const AppRoutes = (_props: { currentUserId: string | null }) => (
   <>
     <Route path="/" element={guard(<AgentHubPage />, "/welcome")} />
@@ -61,7 +60,6 @@ export const AppRoutes = (_props: { currentUserId: string | null }) => (
     <Route path="/terms" element={<LegalPage slug="terms" />} />
     <Route path="/privacy" element={<LegalPage slug="privacy" />} />
 
-    <Route path="/__hub-demo" element={<AgentHubDemoTmp />} />
     <Route path="/chat" element={home} />
     <Route path="*" element={home} />
   </>
