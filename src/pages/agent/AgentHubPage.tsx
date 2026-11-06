@@ -1,17 +1,21 @@
 /** Grok-style home for Ceyo bots and multi-bot groups, backed by real AgentSky chats. */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Bot,
   ChevronDown,
   ChevronRight,
   EyeOff,
+  Folder,
+  MessageSquareDot,
+  Pin,
+  Star,
+  Trash2,
   Grid2X2,
   Loader2,
   MessageSquareText,
   Plus,
   Search,
-  Settings2,
 } from "lucide-react";
 import SEOHead from "@/components/common/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -84,6 +88,9 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [hiddenOpen, setHiddenOpen] = useState(false);
+  const [rowMenu, setRowMenu] = useState<{ kind: "bot" | "group"; id: string; x: number; y: number; move?: boolean } | null>(null);
+  const pressTimer = useRef<number | null>(null);
+  const pressed = useRef(false);
 
   useEffect(() => {
     if (!demo) void loadWorkspace();
@@ -157,8 +164,10 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     const latestSession = latest ? ws.sessions.find((session) => session.agentId === agentId) : null;
     const chosen = sessionId === undefined ? latestSession?.id : sessionId;
     if (chosen) next.session = chosen;
+    const key = itemKey(kind, id);
+    updateLocal((current) => ({ ...current, unread: current.unread.filter((k) => k !== key), seen: { ...current.seen, [key]: new Date().toISOString() } }));
     go(next);
-  }, [go, local.groups, ws.sessions]);
+  }, [go, local.groups, ws.sessions, updateLocal]);
 
   const latestFor = useCallback((agentId: string) => ws.sessions.find((session) => session.agentId === agentId), [ws.sessions]);
 
@@ -252,14 +261,28 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   orderedAgents.forEach((agent) => { if (!agent.isDefault) categories.add(categoryFor("bot", agent.id)); });
   local.groups.forEach((group) => categories.add(categoryFor("group", group.id, group)));
 
+  const isUnread = (key: string, at?: string) => local.unread.includes(key) || (!!at && !!local.seen[key] && at > local.seen[key]);
+  const pressProps = (kind: "bot" | "group", id: string) => ({
+    onPointerDown: (e: React.PointerEvent) => {
+      pressed.current = false;
+      const x = e.clientX, y = e.clientY;
+      pressTimer.current = window.setTimeout(() => { pressed.current = true; setRowMenu({ kind, id, x, y }); }, 450);
+    },
+    onPointerUp: () => { if (pressTimer.current) window.clearTimeout(pressTimer.current); },
+    onPointerLeave: () => { if (pressTimer.current) window.clearTimeout(pressTimer.current); },
+    onContextMenu: (e: React.MouseEvent) => { e.preventDefault(); setRowMenu({ kind, id, x: e.clientX, y: e.clientY }); },
+    onClickCapture: (e: React.MouseEvent) => { if (pressed.current) { e.stopPropagation(); e.preventDefault(); pressed.current = false; } },
+  });
+  const sortPinned = <T,>(items: T[], key: (t: T) => string) => [...items].sort((a, b) => Number(local.pinned.includes(key(b))) - Number(local.pinned.includes(key(a))));
+
   const renderBotRow = (agent: AgentInfo, hidden = false) => {
     const latest = latestFor(agent.id);
     const key = itemKey("bot", agent.id);
     return (
       <div className="hub-list-row" key={key}>
-        <button type="button" className="hub-list-row-main" onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
+        <button type="button" className="hub-list-row-main" {...pressProps("bot", agent.id)} data-unread={isUnread(key, latest?.createdAt)} onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
           <BotAvatar agent={agent} size={52} />
-          <span className="hub-row-copy"><span className="hub-row-title"><strong>{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
+          <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
       </div>
@@ -272,9 +295,9 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     const members = group.memberIds.map((id) => ws.agents.find((agent) => agent.id === id)).filter((agent): agent is AgentInfo => !!agent);
     return (
       <div className="hub-list-row" key={key}>
-        <button type="button" className="hub-list-row-main" onClick={() => openChat("group", group.id)} aria-label={`${ar ? "افتح" : "Open"} ${group.name}`}>
+        <button type="button" className="hub-list-row-main" {...pressProps("group", group.id)} data-unread={isUnread(key, latest?.createdAt)} onClick={() => openChat("group", group.id)} aria-label={`${ar ? "افتح" : "Open"} ${group.name}`}>
           <GroupAvatar group={group} agents={ws.agents} size={40} />
-          <span className="hub-row-copy"><span className="hub-row-title"><strong>{group.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || members.map((member) => member.name).join(" · ")}</span></span>
+          <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{group.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || members.map((member) => member.name).join(" · ")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
       </div>
@@ -294,9 +317,8 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       <div className="hub-home-scroll">
         {primary ? (
           <button type="button" className="hub-primary-button" onClick={() => openChat("bot", primary.id)}>
-            <span className="hub-primary-character"><BotAvatar agent={primary} size={104} state="hello" /><i /></span>
-            <strong>{primary.name}</strong>
-            <small><span />{ar ? "متصل" : "Online"}</small>
+            <span className="hub-primary-character"><BotAvatar agent={primary} size={104} state="idle" /><i className="hub-primary-star"><Star size={13} fill="currentColor" strokeWidth={0} /></i></span>
+            <strong>{isUnread(itemKey("bot", primary.id), latestFor(primary.id)?.createdAt) && <span className="hub-unread-dot" />}{primary.name}</strong>
           </button>
         ) : !ws.ready ? <div className="hub-primary-skeleton"><Loader2 size={24} className="animate-spin" /></div> : null}
 
@@ -307,7 +329,9 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
           const bots = orderedAgents.filter((agent) => !agent.isDefault && categoryFor("bot", agent.id) === "Unassigned" && !local.hidden.includes(itemKey("bot", agent.id)));
           const groups = local.groups.filter((group) => categoryFor("group", group.id, group) === "Unassigned" && !local.hidden.includes(itemKey("group", group.id)));
           if (!bots.length && !groups.length) return null;
-          return <div className="hub-category-rows hub-flat-rows">{groups.map((group) => renderGroupRow(group))}{bots.map((agent) => renderBotRow(agent))}</div>;
+          const hasSections = [...categories].some((c) => c !== "Unassigned" && (orderedAgents.some((a) => !a.isDefault && categoryFor("bot", a.id) === c && !local.hidden.includes(itemKey("bot", a.id))) || local.groups.some((g) => categoryFor("group", g.id, g) === c && !local.hidden.includes(itemKey("group", g.id)))));
+          const rows = <div className="hub-category-rows hub-flat-rows">{sortPinned(groups, (g) => itemKey("group", g.id)).map((group) => renderGroupRow(group))}{sortPinned(bots, (a) => itemKey("bot", a.id)).map((agent) => renderBotRow(agent))}</div>;
+          return hasSections ? <section className="hub-category"><div className="hub-category-title"><span>Unassigned</span><ChevronDown size={14} /></div>{rows}</section> : rows;
         })()}
 
         {ws.ready && [...categories].filter((category) => category !== "Unassigned").sort((a, b) => a.localeCompare(b)).map((category) => {
@@ -333,12 +357,38 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       </div>
 
       <div className="hub-home-bottom">
-        <div className="hub-apps-wrap">
-          <HubIconButton label={ar ? "التطبيقات" : "Apps"} onClick={() => setAppsOpen((open) => !open)} active={appsOpen}><Grid2X2 size={19} /></HubIconButton>
-          {appsOpen && <div className="hub-menu hub-apps-menu" role="menu"><button type="button" role="menuitem" onClick={() => primary && openChat("bot", primary.id, false)}><MessageSquareText size={18} />{ar ? "المحادثة الأساسية" : "New chat"}</button><button type="button" role="menuitem" onClick={() => nav("/settings")}><Settings2 size={18} />{ar ? "الإعدادات" : "Settings"}</button><button type="button" role="menuitem" onClick={() => nav("/settings/apps")}><Grid2X2 size={18} />{ar ? "ربط التطبيقات" : "Connect apps"}</button></div>}
-        </div>
+        <HubIconButton label="Connect apps" onClick={() => nav("/settings/apps")}><Grid2X2 size={19} /></HubIconButton>
         <button type="button" className="hub-search-trigger" onClick={() => setSearchOpen(true)}><Search size={18} /><span>{ar ? "بحث" : "Search"}</span></button>
       </div>
+      {(plusOpen || rowMenu) && <div className="hub-backdrop" onPointerDown={() => { setPlusOpen(false); setRowMenu(null); }} />}
+      {rowMenu && (() => {
+        const key = itemKey(rowMenu.kind, rowMenu.id);
+        const group = rowMenu.kind === "group" ? local.groups.find((g) => g.id === rowMenu.id) : undefined;
+        const agent = rowMenu.kind === "bot" ? ws.agents.find((a) => a.id === rowMenu.id) : undefined;
+        const close = () => setRowMenu(null);
+        const top = Math.min(rowMenu.y, (typeof window !== "undefined" ? window.innerHeight : 800) - 330);
+        const setCategory = (category: string) => {
+          if (group) updateLocal((c) => ({ ...c, groups: c.groups.map((g) => g.id === group.id ? { ...g, category } : g) }));
+          else updateLocal((c) => ({ ...c, categories: { ...c.categories, [key]: category } }));
+          close();
+        };
+        const existing = [...categories].filter((c) => c !== "Unassigned");
+        return (
+          <div className="hub-menu hub-row-menu" role="menu" style={{ top: Math.max(12, top) }}>
+            {!rowMenu.move ? (<>
+              <button type="button" role="menuitem" onClick={() => { updateLocal((c) => ({ ...c, unread: [...new Set([...c.unread, key])] })); close(); }}><MessageSquareDot size={20} />Mark Unread</button>
+              <button type="button" role="menuitem" onClick={() => { updateLocal((c) => ({ ...c, pinned: c.pinned.includes(key) ? c.pinned.filter((k) => k !== key) : [...c.pinned, key] })); close(); }}><Pin size={20} />{local.pinned.includes(key) ? "Unpin" : "Pin"}</button>
+              <button type="button" role="menuitem" onClick={() => setRowMenu({ ...rowMenu, move: true })}><Folder size={20} />Move to<ChevronRight size={18} className="hub-menu-chev" /></button>
+              <button type="button" role="menuitem" data-danger="true" onClick={() => { toggleHidden(key, true); close(); }}><EyeOff size={20} />Hide</button>
+              <button type="button" role="menuitem" data-danger="true" onClick={() => { close(); if (group) void deleteGroup(group); else if (agent) void deleteBot(agent); }}><Trash2 size={20} />Delete</button>
+            </>) : (<>
+              {existing.map((c) => <button type="button" role="menuitem" key={c} onClick={() => setCategory(c)}><Folder size={20} />{c}</button>)}
+              <button type="button" role="menuitem" onClick={() => { const name = window.prompt("Section name")?.trim(); if (name) setCategory(name.slice(0, 40)); else close(); }}><Plus size={20} />New section</button>
+              {existing.length > 0 && <button type="button" role="menuitem" onClick={() => setCategory("Unassigned")}><Folder size={20} />Unassigned</button>}
+            </>)}
+          </div>
+        );
+      })()}
     </aside>
   );
 
@@ -365,7 +415,6 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       {listContent}
       <main className="hub-content">{content}</main>
       {searchOpen && <SearchOverlay lang={lang} agents={orderedAgents} groups={local.groups} sessions={ws.sessions} onClose={() => setSearchOpen(false)} onBot={(id) => openChat("bot", id)} onGroup={(id) => openChat("group", id)} onSession={(session) => { const group = local.groups.find((item) => item.coordinatorId === session.agentId); openChat(group ? "group" : "bot", group?.id || session.agentId, false, session.id); }} />}
-      {(plusOpen || appsOpen) && <button type="button" className="hub-menu-dismiss" aria-label={ar ? "قفل القائمة" : "Dismiss menu"} onClick={() => { setPlusOpen(false); setAppsOpen(false); }} />}
     </div>
   );
 }

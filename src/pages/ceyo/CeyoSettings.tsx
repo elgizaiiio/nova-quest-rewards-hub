@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   Brain, Check, ChevronLeft, ChevronRight, Copy, CreditCard, Gauge, HelpCircle, KeyRound, Languages,
-  LayoutGrid, LogOut, Monitor, Moon, Plus, Search, Shield, Smartphone, Trash2, User, UserPlus, Vibrate, Vault,
+  LayoutGrid, LogOut, Monitor, Moon, Plus, Search, Shield, Smartphone, Trash2, User, UserPlus, Vibrate, Vault, X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
@@ -187,14 +187,16 @@ function Vault_({ nav }: { nav: Nav }) {
 /* ── Connect apps ─────────────────────────────────────── */
 function Apps({ nav, appId }: { nav: Nav; appId?: string }) {
   const [connected, setConnected] = useState<Record<string, boolean>>({});
-  const [cat, setCat] = useState("Suggested");
+  const [cat, setCat] = useState("All");
   const [busy, setBusy] = useState("");
   const refresh = async (): Promise<boolean> => {
     try { const s = await loadIntegrationConnections(CATALOG); setConnected(s.connectedApps as Record<string, boolean>); return true; } catch { return false; }
   };
   useEffect(() => { void refresh(); }, []);
-  const cats = useMemo(() => ["Suggested", ...Array.from(new Set(CATALOG.map((i) => i.category)))], []);
-  const list = cat === "Suggested" ? CATALOG.slice(0, 24) : CATALOG.filter((i) => i.category === cat);
+  const [q, setQ] = useState("");
+  const cats = useMemo(() => ["All", ...Array.from(new Set(CATALOG.map((i) => i.category)))], []);
+  const filtered = CATALOG.filter((i) => (cat === "All" || cat === "Suggested" || i.category === cat) && (!q || `${i.name} ${i.description}`.toLowerCase().includes(q.toLowerCase())));
+  const count = Object.values(connected).filter(Boolean).length;
   const toggle = async (item: Integration) => {
     setBusy(item.app);
     try {
@@ -207,24 +209,35 @@ function Apps({ nav, appId }: { nav: Nav; appId?: string }) {
       await refresh();
     } catch (e) { toast.error(e instanceof Error ? e.message : "Could not connect"); } finally { setBusy(""); }
   };
-  const btn = (item: Integration) => <button type="button" className="ceyo-pill" data-on={!!connected[item.app]} disabled={busy === item.app} onClick={(e) => { e.stopPropagation(); void toggle(item); }}>{busy === item.app ? "…" : connected[item.app] ? "Connected" : item.type === "oauth" || item.type === "pipedream" ? "Authorize" : "Connect"}</button>;
+  const label = (item: Integration) => connected[item.app] ? "Connected" : item.type === "oauth" || item.type === "pipedream" ? "Authorize" : "Connect";
+  const btn = (item: Integration, big = false) => <button type="button" className={big ? "gx-connect-big" : "gx-pill"} data-kind={connected[item.app] ? "on" : label(item) === "Authorize" ? "auth" : "plain"} disabled={busy === item.app} onClick={(e) => { e.stopPropagation(); void toggle(item); }}>{busy === item.app ? "…" : label(item)}</button>;
   const detail = appId ? CATALOG.find((i) => i.app === appId) : undefined;
   if (detail) return (
-    <Shell title={detail.name} back={() => nav("/settings/apps")}>
-      <div className="ceyo-app-hero"><IntegrationLogo item={detail} size={64} /><h2>{detail.name}</h2><small>{detail.category}</small><p>{detail.description}</p>{btn(detail)}</div>
-    </Shell>
+    <div className="gx-apps gx-sheet">
+      <button type="button" className="gx-round" aria-label="Close" onClick={() => nav("/settings/apps")}><X size={22} /></button>
+      <div className="gx-detail"><span className="gx-logo gx-logo-lg"><IntegrationLogo item={detail} size={44} /></span><h2>{detail.name}</h2><p>{detail.description}</p></div>
+      <div className="gx-detail-cta">{btn(detail, true)}</div>
+    </div>
+  );
+  const row = (item: Integration) => (
+    <div key={item.id} className="gx-app-row" role="button" tabIndex={0} onClick={() => nav(`/settings/apps/${encodeURIComponent(item.app)}`)}>
+      <span className="gx-logo"><IntegrationLogo item={item} size={30} /></span>
+      <span className="gx-app-copy"><strong>{item.name}</strong><small>{item.description}</small></span>
+      {btn(item)}
+    </div>
   );
   return (
-    <Shell title="Connect apps" back={() => nav("/settings")}>
-      <div className="hub-search-filters ceyo-tabs">{cats.map((c) => <button type="button" key={c} data-active={cat === c} onClick={() => setCat(c)}>{c}</button>)}</div>
-      <Group>{list.map((item) => (
-        <div key={item.id} className="ceyo-row" role="button" tabIndex={0} onClick={() => nav(`/settings/apps/${encodeURIComponent(item.app)}`)}>
-          <span className="ceyo-app-logo"><IntegrationLogo item={item} size={30} /></span>
-          <span className="ceyo-row-label"><strong>{item.name}</strong><small>{item.description}</small></span>
-          {btn(item)}
-        </div>
-      ))}</Group>
-    </Shell>
+    <div className="gx-apps">
+      <header className="gx-apps-head"><button type="button" className="gx-round" aria-label="Back" onClick={() => nav("/")}><ChevronLeft size={24} /></button><h1>Connect apps</h1><span className="gx-count">{count} connected</span></header>
+      <div className="gx-chips">{cats.map((c) => <button type="button" key={c} data-active={cat === c || (c === "All" && cat === "Suggested")} onClick={() => setCat(c)}>{c}</button>)}</div>
+      <div className="gx-apps-scroll">
+        {cat === "All" || cat === "Suggested" ? (<>
+          {!q && <><h3 className="gx-sec">For You <ChevronRight size={18} /></h3>{filtered.slice(0, 4).map(row)}<h3 className="gx-sec">Featured plugins <ChevronRight size={18} /></h3></>}
+          {(q ? filtered : filtered.slice(4)).map(row)}
+        </>) : filtered.map(row)}
+      </div>
+      <div className="gx-bottom-search"><Search size={20} /><input placeholder="Search across apps and skills" value={q} onChange={(e) => setQ(e.target.value)} /></div>
+    </div>
   );
 }
 
