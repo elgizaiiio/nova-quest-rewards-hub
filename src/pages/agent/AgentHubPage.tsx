@@ -330,7 +330,9 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
           const bots = orderedAgents.filter((agent) => !agent.isDefault && categoryFor("bot", agent.id) === "Unassigned" && !local.hidden.includes(itemKey("bot", agent.id)));
           const groups = local.groups.filter((group) => categoryFor("group", group.id, group) === "Unassigned" && !local.hidden.includes(itemKey("group", group.id)));
           if (!bots.length && !groups.length) return null;
-          return <div className="hub-category-rows hub-flat-rows">{sortPinned(groups, (g) => itemKey("group", g.id)).map((group) => renderGroupRow(group))}{sortPinned(bots, (a) => itemKey("bot", a.id)).map((agent) => renderBotRow(agent))}</div>;
+          const hasSections = [...categories].some((c) => c !== "Unassigned" && (orderedAgents.some((a) => !a.isDefault && categoryFor("bot", a.id) === c && !local.hidden.includes(itemKey("bot", a.id))) || local.groups.some((g) => categoryFor("group", g.id, g) === c && !local.hidden.includes(itemKey("group", g.id)))));
+          const rows = <div className="hub-category-rows hub-flat-rows">{sortPinned(groups, (g) => itemKey("group", g.id)).map((group) => renderGroupRow(group))}{sortPinned(bots, (a) => itemKey("bot", a.id)).map((agent) => renderBotRow(agent))}</div>;
+          return hasSections ? <section className="hub-category"><div className="hub-category-title"><span>Unassigned</span><ChevronDown size={14} /></div>{rows}</section> : rows;
         })()}
 
         {ws.ready && [...categories].filter((category) => category !== "Unassigned").sort((a, b) => a.localeCompare(b)).map((category) => {
@@ -356,12 +358,38 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       </div>
 
       <div className="hub-home-bottom">
-        <div className="hub-apps-wrap">
-          <HubIconButton label={ar ? "التطبيقات" : "Apps"} onClick={() => setAppsOpen((open) => !open)} active={appsOpen}><Grid2X2 size={19} /></HubIconButton>
-          {appsOpen && <div className="hub-menu hub-apps-menu" role="menu"><button type="button" role="menuitem" onClick={() => primary && openChat("bot", primary.id, false)}><MessageSquareText size={18} />{ar ? "المحادثة الأساسية" : "New chat"}</button><button type="button" role="menuitem" onClick={() => nav("/settings")}><Settings2 size={18} />{ar ? "الإعدادات" : "Settings"}</button><button type="button" role="menuitem" onClick={() => nav("/settings/apps")}><Grid2X2 size={18} />{ar ? "ربط التطبيقات" : "Connect apps"}</button></div>}
-        </div>
+        <HubIconButton label="Connect apps" onClick={() => nav("/settings/apps")}><Grid2X2 size={19} /></HubIconButton>
         <button type="button" className="hub-search-trigger" onClick={() => setSearchOpen(true)}><Search size={18} /><span>{ar ? "بحث" : "Search"}</span></button>
       </div>
+      {(plusOpen || rowMenu) && <div className="hub-backdrop" onPointerDown={() => { setPlusOpen(false); setRowMenu(null); }} />}
+      {rowMenu && (() => {
+        const key = itemKey(rowMenu.kind, rowMenu.id);
+        const group = rowMenu.kind === "group" ? local.groups.find((g) => g.id === rowMenu.id) : undefined;
+        const agent = rowMenu.kind === "bot" ? ws.agents.find((a) => a.id === rowMenu.id) : undefined;
+        const close = () => setRowMenu(null);
+        const top = Math.min(rowMenu.y, (typeof window !== "undefined" ? window.innerHeight : 800) - 330);
+        const setCategory = (category: string) => {
+          if (group) updateLocal((c) => ({ ...c, groups: c.groups.map((g) => g.id === group.id ? { ...g, category } : g) }));
+          else updateLocal((c) => ({ ...c, categories: { ...c.categories, [key]: category } }));
+          close();
+        };
+        const existing = [...categories].filter((c) => c !== "Unassigned");
+        return (
+          <div className="hub-menu hub-row-menu" role="menu" style={{ top: Math.max(12, top) }}>
+            {!rowMenu.move ? (<>
+              <button type="button" role="menuitem" onClick={() => { updateLocal((c) => ({ ...c, unread: [...new Set([...c.unread, key])] })); close(); }}><MessageSquareDot size={20} />Mark Unread</button>
+              <button type="button" role="menuitem" onClick={() => { updateLocal((c) => ({ ...c, pinned: c.pinned.includes(key) ? c.pinned.filter((k) => k !== key) : [...c.pinned, key] })); close(); }}><Pin size={20} />{local.pinned.includes(key) ? "Unpin" : "Pin"}</button>
+              <button type="button" role="menuitem" onClick={() => setRowMenu({ ...rowMenu, move: true })}><Folder size={20} />Move to<ChevronRight size={18} className="hub-menu-chev" /></button>
+              <button type="button" role="menuitem" data-danger="true" onClick={() => { toggleHidden(key, true); close(); }}><EyeOff size={20} />Hide</button>
+              <button type="button" role="menuitem" data-danger="true" onClick={() => { close(); if (group) void deleteGroup(group); else if (agent) void deleteBot(agent); }}><Trash2 size={20} />Delete</button>
+            </>) : (<>
+              {existing.map((c) => <button type="button" role="menuitem" key={c} onClick={() => setCategory(c)}><Folder size={20} />{c}</button>)}
+              <button type="button" role="menuitem" onClick={() => { const name = window.prompt("Section name")?.trim(); if (name) setCategory(name.slice(0, 40)); else close(); }}><Plus size={20} />New section</button>
+              {existing.length > 0 && <button type="button" role="menuitem" onClick={() => setCategory("Unassigned")}><Folder size={20} />Unassigned</button>}
+            </>)}
+          </div>
+        );
+      })()}
     </aside>
   );
 
