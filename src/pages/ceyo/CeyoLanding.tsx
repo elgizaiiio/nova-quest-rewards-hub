@@ -1,11 +1,14 @@
 /** Ceyo public landing — the same dark character-first look as the app. */
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { forceDarkTheme } from "@/lib/theme";
 import { Bot, LayoutGrid, Users } from "lucide-react";
 import { AgentOrb } from "@/components/agent/AgentOrb";
 import "@/styles/agent-hub.css";
 import "@/styles/ceyo.css";
 
 export default function CeyoLanding() {
+  useEffect(() => forceDarkTheme(), []);
   return (
     <div className="agent-hub ceyo-landing" data-no-translate>
       <nav className="ceyo-land-nav">
