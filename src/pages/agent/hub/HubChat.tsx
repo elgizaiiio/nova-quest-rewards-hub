@@ -265,7 +265,7 @@ export function HubChat({
     const now = new Date().toISOString();
     const source: any[] = demo ? [
       { id: "d1", type: "user", text: ar ? "عايزكم تجهزوا خطة الأسبوع" : "Plan this week for me", images: [], at: now },
-      ...(group ? [{ id: "d2", type: "agent", text: group.memberIds.slice(0, 2).map((id) => `**${agents.find((a) => a.id === id)?.name}:** ${ar ? "تمام، هبدأ دلوقتي." : "On it."}`).join("\n\n"), steps: [], cards: [] }] : [{ id: "d2", type: "agent", text: ar ? "أكيد، هقسمها لثلاث خطوات." : "Sure, three steps.", steps: [], cards: [] }]),
+      ...(group ? [{ id: "d2", type: "agent", text: group.memberIds.slice(0, 2).map((id) => `[[speaker: ${agents.find((a) => a.id === id)?.name}]] @${agents.find((a) => a.id === group.memberIds[0])?.name} ${ar ? "تمام، هبدأ دلوقتي." : "On it."}`).join("\n\n"), steps: [], cards: [] }] : [{ id: "d2", type: "agent", text: ar ? "أكيد، هقسمها لثلاث خطوات." : "Sure, three steps.", steps: [], cards: [] }]),
     ] : s.turns;
     source.forEach((turn: any, turnIndex) => {
       if (turn.type === "user") {
