@@ -127,3 +127,44 @@
 .gx-abs{position:fixed}
 .gx-group-preview{display:flex;margin-bottom:40px}
 .gx-group-preview>span+span{margin-inline-start:-34px;margin-top:40px}
+/* compact sizing pass (reference ~390px wide) */
+.gx-round{width:40px;height:40px}
+.gx-round svg{width:19px;height:19px}
+.gx-create{padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 16px)}
+.gx-create-head{gap:14px}
+.gx-create-head h1{font-size:15.5px}
+.gx-create-body{padding-top:44px}
+.gx-create-preview{margin-bottom:34px}
+.gx-name{height:52px;border-radius:16px;font-size:17px}
+.gx-shapes{gap:6px 10px;max-width:290px;margin:26px 0 22px}
+.gx-shapes button{width:48px;height:48px;border-radius:12px}
+.gx-colors{gap:14px 30px;max-width:300px}
+.gx-colors button{width:24px;height:24px}
+.gx-create-cta{height:44px;font-size:15px}
+.gx-next{padding:8px 14px;font-size:14px}
+.gx-pick-list{padding:20px 0 90px}
+.gx-selected{font-size:13px}
+.gx-pick{gap:13px;padding:8px 0;font-size:15px}
+.gx-pick svg{width:18px;height:18px}
+.gx-group-preview{margin-bottom:30px}
+.gx-group-preview>span+span{margin-inline-start:-22px;margin-top:26px}
+.gx-apps-head{gap:14px;padding:0 16px 18px}
+.gx-apps-head h1{font-size:16px}
+.gx-count{padding:8px 13px;font-size:14px}
+.gx-chips{padding:0 16px 10px;gap:7px}
+.gx-chips button{padding:6px 12px;font-size:13.5px}
+.gx-apps-scroll{padding:0 16px 96px}
+.gx-sec{font-size:15px;margin:10px 0 4px}
+.gx-sec svg{width:15px;height:15px}
+.gx-app-row{gap:12px;padding:9px 0}
+.gx-logo{width:36px;height:36px;border-radius:10px}
+.gx-logo>*{transform:scale(.85)}
+.gx-app-copy strong{font-size:14.5px}
+.gx-app-copy small{font-size:12.5px}
+.gx-pill{padding:7px 12px;font-size:13px}
+.gx-bottom-search{height:44px;left:16px;right:16px;padding:0 15px;gap:9px}
+.gx-bottom-search svg{width:17px;height:17px}
+.gx-bottom-search input{font-size:14.5px}
+.gx-detail h2{font-size:17px}
+.gx-detail p{font-size:13px}
+.gx-connect-big{padding:11px 30px;font-size:15px}

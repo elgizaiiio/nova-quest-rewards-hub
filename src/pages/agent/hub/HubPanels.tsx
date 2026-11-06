@@ -82,11 +82,11 @@ export function AgentForm({
     <section className="gx-create">
       <header className="gx-create-head"><button type="button" className="gx-round" aria-label="Close" onClick={onCancel}><X size={22} /></button><h1>{initial ? "Edit Bot" : "Create New Bot"}</h1></header>
       <div className="gx-create-body">
-        <div className="gx-create-preview"><BotAvatar agent={{ name: name || "Bot", color: agentColorFor(hex), isDefault: false }} look={look} size={150} /></div>
+        <div className="gx-create-preview"><BotAvatar agent={{ name: name || "Bot", color: agentColorFor(hex), isDefault: false }} look={look} size={120} /></div>
         <input className="gx-name" maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder="Name your Bot" onKeyDown={(e) => { if (e.key === "Enter") submit(); }} />
         <div className="gx-shapes">{BOT_SHAPES.map((s) => (
           <button type="button" key={s.id} aria-label={s.id} data-active={shape === s.id} onClick={() => setShape(s.id)}>
-            <BotAvatar agent={{ name: s.id, color: "mono", isDefault: false }} look={{ shape: s.id, hex: "#7a7a7a" }} size={58} />
+            <BotAvatar agent={{ name: s.id, color: "mono", isDefault: false }} look={{ shape: s.id, hex: "#7a7a7a" }} size={36} />
           </button>
         ))}</div>
         <div className="gx-colors">{BOT_COLORS.map((c) => <button type="button" key={c.hex} aria-label={c.hex} data-active={hex === c.hex} style={{ background: c.hex }} onClick={() => setHex(c.hex)} />)}</div>
@@ -131,7 +131,7 @@ export function GroupForm({
     <section className="gx-create">
       <header className="gx-create-head"><button type="button" className="gx-round" aria-label="Back" onClick={() => setStep(1)}><ChevronRight size={22} style={{ transform: "rotate(180deg)" }} /></button><h1>New Group Chat</h1></header>
       <div className="gx-create-body gx-center">
-        <div className="gx-group-preview">{chosen.slice(0, 3).map((a, i) => <span key={a.id} style={{ zIndex: 3 - i }}><BotAvatar agent={a} size={84} /></span>)}</div>
+        <div className="gx-group-preview">{chosen.slice(0, 3).map((a, i) => <span key={a.id} style={{ zIndex: 3 - i }}><BotAvatar agent={a} size={56} /></span>)}</div>
         <input className="gx-name gx-name-soft" maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Project Falcon" />
         {error && <p className="hub-error" role="alert">{error}</p>}
       </div>
@@ -145,7 +145,7 @@ export function GroupForm({
         {members.length > 0 && <p className="gx-selected">{members.length} selected</p>}
         {shown.map((a) => (
           <button type="button" key={a.id} className="gx-pick" onClick={() => toggle(a.id)}>
-            <BotAvatar agent={a} size={44} /><span>{a.name}</span>{members.includes(a.id) && <Check size={22} />}
+            <BotAvatar agent={a} size={30} /><span>{a.name}</span>{members.includes(a.id) && <Check size={22} />}
           </button>
         ))}
         {agents.length < 2 && <p className="gx-selected">Create at least two bots first.</p>}

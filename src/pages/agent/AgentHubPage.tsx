@@ -12,6 +12,7 @@ import {
   Star,
   Trash2,
   Grid2X2,
+  Grid2x2Plus,
   Loader2,
   MessageSquareText,
   Plus,
@@ -358,7 +359,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       </div>
 
       <div className="hub-home-bottom">
-        <HubIconButton label="Connect apps" className="hub-apps-btn" onClick={() => nav("/settings/apps")}><Plus size={22} /></HubIconButton>
+        <HubIconButton label="Connect apps" className="hub-apps-btn" onClick={() => nav("/settings/apps")}><Grid2x2Plus size={21} strokeWidth={1.8} /></HubIconButton>
         <button type="button" className="hub-search-trigger" onClick={() => setSearchOpen(true)}><Search size={18} /><span>{ar ? "بحث" : "Search"}</span></button>
       </div>
       {rowMenu && <div className="hub-backdrop" onPointerDown={() => setRowMenu(null)} />}
