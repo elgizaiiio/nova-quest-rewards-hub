@@ -540,10 +540,25 @@ const AuthPage = () => {
       // an existing user into signup). Try signing them in instead; otherwise
       // bounce them back to the password screen with a friendly message.
       if (alreadyRegistered) {
-        const { error: signInErr } = await supabase.auth.signInWithPassword({
+        let { error: signInErr } = await supabase.auth.signInWithPassword({
           email: normalizedEmail,
           password: newPassword,
         });
+        // The email code was just verified, so the person owns this inbox:
+        // set the password they chose on the existing account, then sign in.
+        if (signInErr && afterVerification) {
+          const { data: upd, error: updErr } = await invokeAuth({
+            action: "update-password",
+            email: normalizedEmail,
+            password: newPassword,
+          });
+          if (!updErr && upd?.success) {
+            ({ error: signInErr } = await supabase.auth.signInWithPassword({
+              email: normalizedEmail,
+              password: newPassword,
+            }));
+          }
+        }
         if (!signInErr) {
           const mfa = await getMfaRedirect(
             redirectUrl || pathForZone("/chat", window.location.pathname),
