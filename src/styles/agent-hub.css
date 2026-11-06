@@ -377,3 +377,6 @@
 .hub-row-menu button svg{color:#bbb}
 .hub-row-menu button[data-danger="true"],.hub-row-menu button[data-danger="true"] svg{color:#ff6b6b}
 .hub-menu-chev{margin-inline-start:auto}
+.hub-home-bottom .hub-apps-btn{width:46px;height:46px;border:1px solid #3a3a3c;background:#1c1c1e;color:#fff}
+.hub-search-overlay .hub-search-bottom{border:0;box-shadow:none;background:transparent}
+.hub-search-overlay .hub-search-filters{background:transparent;border:0}
