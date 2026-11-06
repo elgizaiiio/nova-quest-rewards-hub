@@ -34,7 +34,7 @@ import { ApprovalCard, MediaCard, PlanCard, QuestionCard, TaskCard, VideoProposa
 import { AgentProposalCard } from "@/components/agent/AgentProposalCard";
 import { orbStateFor, type AgentTurn } from "@/lib/agentsky/transcript";
 import { groupTranscript, type AgentGroup } from "./hubStorage";
-import { BotAvatar, GroupAvatar, HubSpinner, type HubLang } from "./HubParts";
+import { BotAvatar, HubSpinner, type HubLang } from "./HubParts";
 import { readReactions, writeReactions, REACTIONS } from "./chatPrefs";
 
 type Bubble = {
@@ -325,7 +325,7 @@ export function HubChat({
       <header className="cx-head">
         <button type="button" className="cx-circle cx-glass" aria-label={ar ? "رجوع" : "Back"} onClick={onBack}><ChevronLeft size={22} /></button>
         <button type="button" className="cx-title-pill cx-glass" onClick={onProfile}>
-          {group ? <GroupAvatar group={group} agents={agents} size={22} /> : <BotAvatar agent={agent} size={24} state={s.running ? "thinking" : "idle"} />}
+          {group ? <span className="cx-stack">{group.memberIds.slice(0, 4).map((id) => agents.find((a) => a.id === id)).filter(Boolean).map((a) => <BotAvatar key={a!.id} agent={a!} size={22} />)}</span> : <BotAvatar agent={agent} size={24} state={s.running ? "thinking" : "idle"} />}
           <strong dir="auto">{title}</strong>
         </button>
         <button type="button" className="cx-circle cx-glass cx-more" aria-label="Menu" onClick={() => setMenuOpen((o) => !o)}><MoreHorizontal size={20} /></button>
