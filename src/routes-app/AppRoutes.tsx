@@ -30,7 +30,6 @@ export const AppRoutes = (_props: { currentUserId: string | null }) => (
   <>
     <Route path="/" element={guard(<AgentHubPage />, "/welcome")} />
     <Route path="/index" element={guard(<AgentHubPage />, "/welcome")} />
-    <Route path="/dev-hub" element={<AgentHubPage demo />} />
     <Route path="/welcome" element={<CeyoLanding />} />
     <Route path="/landing" element={<CeyoLanding />} />
 
