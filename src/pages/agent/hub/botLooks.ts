@@ -13,6 +13,10 @@ export const BOT_SHAPES: BotShape[] = [
   { id: "pill", radius: "50% / 42%" },
   { id: "pebble", radius: "30% 40% 26% 34%" },
   { id: "blob", radius: "62% 38% 54% 46% / 48% 56% 44% 52%" },
+  { id: "star6", clip: "polygon(50% 2%,63% 26%,92% 26%,77% 50%,92% 74%,63% 74%,50% 98%,37% 74%,8% 74%,23% 50%,8% 26%,37% 26%)" },
+  { id: "heart2", clip: "path('M50 92 C20 70 2 52 2 32 C2 14 16 4 30 4 C40 4 47 10 50 18 C53 10 60 4 70 4 C84 4 98 14 98 32 C98 52 80 70 50 92 Z')" },
+  { id: "diamond", clip: "polygon(50% 2%,98% 50%,50% 98%,2% 50%)" },
+  { id: "arch", radius: "50% 50% 18% 18%" },
   { id: "hexagon", radius: "34%" },
 ];
 
