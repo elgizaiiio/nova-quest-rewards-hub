@@ -253,7 +253,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     return (
       <div className="hub-list-row" key={key}>
         <button type="button" className="hub-list-row-main" onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
-          <BotAvatar agent={agent} size={43} />
+          <BotAvatar agent={agent} size={52} />
           <span className="hub-row-copy"><span className="hub-row-title"><strong>{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
@@ -268,7 +268,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     return (
       <div className="hub-list-row" key={key}>
         <button type="button" className="hub-list-row-main" onClick={() => openChat("group", group.id)} aria-label={`${ar ? "افتح" : "Open"} ${group.name}`}>
-          <GroupAvatar group={group} agents={ws.agents} size={35} />
+          <GroupAvatar group={group} agents={ws.agents} size={40} />
           <span className="hub-row-copy"><span className="hub-row-title"><strong>{group.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || members.map((member) => member.name).join(" · ")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
@@ -290,7 +290,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       <div className="hub-home-scroll">
         {primary ? (
           <button type="button" className="hub-primary-button" onClick={() => openChat("bot", primary.id)}>
-            <span className="hub-primary-character"><BotAvatar agent={primary} size={76} state="hello" /><i /></span>
+            <span className="hub-primary-character"><BotAvatar agent={primary} size={104} state="hello" /><i /></span>
             <strong>{primary.name}</strong>
             <small><span />{ar ? "متصل" : "Online"}</small>
           </button>
