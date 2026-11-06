@@ -110,7 +110,6 @@ export const AppRoutes = ({ currentUserId }: { currentUserId: string | null }) =
     <Route path="/team" element={<ProtectedRoute><TeamWorkspacePage /></ProtectedRoute>} />
     <Route path="/welcome" element={<WelcomePage />} />
     <Route path="/index" element={<ProtectedRoute guestEntry="/welcome"><AgentHubPage /></ProtectedRoute>} />
-    {import.meta.env.DEV && <Route path="/__hub-preview" element={<AgentHubPage demo />} />}
     <Route path="/share/:shareId" element={<SharedChatPage />} />
 
     {/* ── Auth hub — one page, animated inner views ──────────── */}
