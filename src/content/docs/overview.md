@@ -1,5 +1,3 @@
-#### Ceyo Bot
-
 # Ceyo Bot
 
 Ceyo Bot gives you Bots you can keep around: SI teammates with names, jobs, and

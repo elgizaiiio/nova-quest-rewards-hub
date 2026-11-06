@@ -1,5 +1,3 @@
-#### Start
-
 # Get Started
 
 This guide takes you from install to your first finished task. You'll set up the

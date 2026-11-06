@@ -1,5 +1,3 @@
-#### Work with Ceyo Bot
-
 # Shared Bots
 
 A Bot is either personal or shared. Share a Bot with your Ceyo team the way

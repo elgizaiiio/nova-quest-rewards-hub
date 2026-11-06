@@ -1,5 +1,3 @@
-#### Work with Ceyo Bot
-
 # Use the computer and apps
 
 Your Bots work from a persistent cloud computer with a browser, command line,

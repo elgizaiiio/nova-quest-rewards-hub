@@ -684,3 +684,53 @@ html[data-ceyo-surface="bot"] .agent-hub.ceyo-page{--ceyo-page-bg:#1b1b20;--ceyo
 .cx-composer textarea{padding:7px 4px;font-size:15px}
 .cx-composer .cx-circle{width:34px;height:34px}
 .cx-composer .cx-circle svg{width:17px;height:17px}
+
+/* ---------- markdown documents (legal + docs) ---------- */
+.cx-md { padding: 2px 18px 44px; color: #fff; font-size: 15px; line-height: 1.72; }
+.cx-md h1 { font-size: 25px; font-weight: 700; letter-spacing: -.02em; margin: 14px 0 10px; }
+.cx-md h2 { font-size: 19px; font-weight: 650; letter-spacing: -.01em; margin: 26px 0 6px; }
+.cx-md h3 { font-size: 16px; font-weight: 600; margin: 20px 0 4px; }
+.cx-md h4 { font-size: 15px; font-weight: 600; margin: 16px 0 4px; }
+.cx-md p { margin: 9px 0; color: rgba(255,255,255,.8); }
+.cx-md ul, .cx-md ol { margin: 9px 0; padding-left: 20px; }
+.cx-md li { margin: 5px 0; color: rgba(255,255,255,.8); }
+.cx-md li::marker { color: rgba(255,255,255,.35); }
+.cx-md a { color: #fff; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255,255,255,.35); }
+.cx-md strong { color: #fff; font-weight: 600; }
+.cx-md em { color: rgba(255,255,255,.7); }
+.cx-md code { background: rgba(255,255,255,.08); border-radius: 6px; padding: 2px 6px; font-size: 13px; }
+.cx-md pre { background: #0e0e10; border-radius: 14px; padding: 13px 14px; overflow-x: auto; margin: 12px 0; }
+.cx-md pre code { background: none; padding: 0; font-size: 12.5px; }
+.cx-md blockquote { margin: 12px 0; padding: 2px 0 2px 14px; border-left: 2px solid rgba(255,255,255,.18); color: rgba(255,255,255,.68); }
+.cx-md hr { border: 0; border-top: 1px solid rgba(255,255,255,.1); margin: 22px 0; }
+.cx-md table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+.cx-md th, .cx-md td { text-align: left; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.09); }
+.cx-md th { color: #fff; font-weight: 600; }
+.cx-md img { display: none; }
+
+/* ---------- docs chrome ---------- */
+.ceyo-docs-search { display: flex; align-items: center; gap: 9px; margin: 2px 16px 10px; padding: 10px 13px; background: #17171a; border-radius: 14px; color: #8e8e93; }
+.ceyo-docs-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font-size: 15px; }
+.ceyo-docs-search input::placeholder { color: #6e6e73; }
+.ceyo-docs-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; }
+.ceyo-docs-chips button { border: 1px solid rgba(255,255,255,.13); background: transparent; color: rgba(255,255,255,.72); border-radius: 999px; padding: 7px 13px; font-size: 13px; }
+.ceyo-docs-chips button[data-on="true"] { background: #fff; color: #000; border-color: #fff; }
+.ceyo-docs-none { color: #8e8e93; font-size: 13px; padding: 4px 2px; }
+
+/* ---------- premium / subscription ---------- */
+.ceyo-sub-note { margin: 14px 18px 0; color: #8e8e93; font-size: 12.5px; line-height: 1.6; }
+
+/* ---------- send feedback ---------- */
+.ceyo-fb { padding: 6px 16px 0; }
+.ceyo-fb textarea { width: 100%; min-height: 136px; background: #1a1a1c; border: 0; border-radius: 18px; padding: 14px; color: #fff; font-size: 15px; line-height: 1.6; resize: vertical; outline: 0; }
+.ceyo-fb textarea::placeholder { color: #6e6e73; }
+.ceyo-fb > p { margin: 10px 2px 20px; color: #8e8e93; font-size: 13px; }
+.ceyo-fb-label { display: block; margin: 0 2px 8px; color: #fff; font-size: 14px; }
+.ceyo-fb-pick { display: flex; width: 100%; align-items: center; justify-content: space-between; background: #252528; border: 0; border-radius: 14px; padding: 13px 14px; color: #fff; font-size: 15px; }
+.ceyo-fb-pick span { display: flex; align-items: center; gap: 8px; color: #8e8e93; }
+.ceyo-fb-pick span + span { color: #fff; }
+.ceyo-fb-list { margin-top: 8px; overflow: hidden; background: #1a1a1c; border-radius: 14px; }
+.ceyo-fb-list button { display: block; width: 100%; border: 0; background: transparent; color: #fff; font-size: 15px; padding: 12px 14px; text-align: left; }
+.ceyo-fb-foot { padding: 14px 16px calc(18px + env(safe-area-inset-bottom)); }
+.ceyo-fb-send { width: 100%; border: 0; border-radius: 999px; background: #2c2c2e; color: #fff; font-size: 16px; font-weight: 600; padding: 15px; }
+.ceyo-fb-send:disabled { opacity: .45; }

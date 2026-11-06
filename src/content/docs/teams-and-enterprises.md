@@ -1,5 +1,3 @@
-#### Manage and protect
-
 # Ceyo Bot for teams and enterprises
 
 Ceyo Bot gives each person on your team standing Bots for everyday work:

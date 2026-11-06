@@ -1,5 +1,3 @@
-#### Work with Ceyo Bot
-
 # Skills and routines
 
 Turn a successful task into a repeatable process. Ceyo Bot uses two building

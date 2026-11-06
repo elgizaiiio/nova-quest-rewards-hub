@@ -1,5 +1,3 @@
-#### Start
-
 # Ceyo Bot for Mobile
 
 Use Ceyo Bot on iPhone or Android to start work, answer questions, approve

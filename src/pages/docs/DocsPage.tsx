@@ -1,6 +1,6 @@
 /** Ceyo documentation — the guide pages, one topic per screen. */
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ChevronLeft, Search } from "lucide-react";
@@ -27,9 +27,10 @@ const DOCS = [
   { slug: "teams-and-enterprises", label: "Teams", source: teamsMd },
 ];
 
-export default function DocsPage({ slug = "overview" }: { slug?: string }) {
+export default function DocsPage() {
   const nav = useNavigate();
-  const active = DOCS.find((d) => d.slug === slug) || DOCS[0];
+  const { slug: raw } = useParams<{ slug: string }>();
+  const active = DOCS.find((d) => d.slug === (raw || "overview")) || DOCS[0];
   const [query, setQuery] = useState("");
 
   useEffect(() => {

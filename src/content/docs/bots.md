@@ -1,5 +1,3 @@
-#### Work with Ceyo Bot
-
 # Create and manage Bots
 
 A Bot is a durable SI teammate with a name, a job, its own conversation, and

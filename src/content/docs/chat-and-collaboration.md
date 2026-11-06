@@ -1,5 +1,3 @@
-#### Work with Ceyo Bot
-
 # Message and collaborate
 
 Ceyo Bot is designed to feel like messaging a teammate. Keep requests natural,
