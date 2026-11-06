@@ -19,7 +19,6 @@ import SEOHead from "@/components/common/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { agentApi, type AgentInfo, type SessionInfo } from "@/lib/agentsky/client";
 import { loadWorkspace, useWorkspaceStore, workspace } from "@/lib/agentsky/store";
-import { useUserLang } from "@/lib/authI18n";
 import { promptUpgrade } from "@/lib/upgradeMoment";
 import { isPaidUser } from "@/lib/subscriptionGating";
 import { HubChat } from "./hub/HubChat";

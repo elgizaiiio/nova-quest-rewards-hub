@@ -7,25 +7,25 @@ export const Route = createFileRoute("/")({
   component: SpaMount,
   head: () => ({
     meta: [
-      { title: "Megsy AI — Your Personal Bots and Group Chats" },
+      { title: "Ceyo — Your Personal Bots and Group Chats" },
       {
         name: "description",
         content:
-          "Meet your primary Megsy bot, create personal AI bots, coordinate group chats and pick up every conversation from one calm home.",
+          "Meet your main Ceyo bot, create personal bots, coordinate group chats and pick up every conversation from one calm home.",
       },
-      { property: "og:title", content: "Megsy AI — Your Personal Bots and Group Chats" },
+      { property: "og:title", content: "Ceyo — Your Personal Bots and Group Chats" },
       {
         property: "og:description",
         content:
-          "Create personal AI bots and coordinated group chats, then continue every conversation from one clean, animated home.",
+          "Create personal bots and coordinated group chats, then continue every conversation from one clean, animated home.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Megsy AI — Your Personal Bots and Group Chats" },
+      { name: "twitter:title", content: "Ceyo — Your Personal Bots and Group Chats" },
       {
         name: "twitter:description",
         content:
-          "Create personal AI bots and coordinated group chats, then continue every conversation from one clean, animated home.",
+          "Create personal bots and coordinated group chats, then continue every conversation from one clean, animated home.",
       },
     ],
   }),
