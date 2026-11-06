@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { AsyncLocalStorage } from "node:async_hooks";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") || "";
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
@@ -161,23 +162,19 @@ function requestClients(key: Key) {
   };
 }
 type Ctx = ReturnType<typeof requestClients>;
-let ctx: Ctx | null = null;
-const api = <T = any>(path: string, init?: RequestInit) => {
+// Per-request storage: a module global was reset by concurrent requests.
+const ctxStore = new AsyncLocalStorage<Ctx>();
+const currentCtx = () => {
+  const ctx = ctxStore.getStore();
   if (!ctx) throw new ProviderError(500, "server_error", "AgentSky context is missing.");
-  return ctx.api<T>(path, init);
+  return ctx;
 };
-const gateway = <T = any>(path: string, init?: RequestInit) => {
-  if (!ctx) throw new ProviderError(500, "server_error", "AgentSky context is missing.");
-  return ctx.gateway<T>(path, init);
-};
+const api = <T = any>(path: string, init?: RequestInit) => currentCtx().api<T>(path, init);
+const gateway = <T = any>(path: string, init?: RequestInit) =>
+  currentCtx().gateway<T>(path, init);
 async function withKey<T>(fn: () => Promise<T>): Promise<T> {
-  const prev = ctx;
-  ctx = requestClients(await takeKey());
-  try {
-    return await fn();
-  } finally {
-    ctx = prev;
-  }
+  const c = requestClients(await takeKey());
+  return await ctxStore.run(c, fn);
 }
 
 async function userTier(uid: string): Promise<"free" | "pro"> {
@@ -942,7 +939,7 @@ async function handleApi(request: Request, path: string, user: { user: any; toke
     if (parts[2] === "stream" && method === "GET") {
       const turnId = await latestOpenTurn(token, sid);
       // Use the request-pinned key so the stream reads from the same workspace.
-      const key = (ctx as Ctx).key;
+      const key = currentCtx().key;
       const upstream = await fetch(`${API}/sessions/${encodeURIComponent(sid)}/stream`, {
         headers: { Authorization: `Bearer ${key.value}`, Accept: "text/event-stream" },
         signal: request.signal,
