@@ -536,3 +536,10 @@ html[data-ceyo-surface="bot"] .agent-hub.ceyo-page{--ceyo-page-bg:#1b1b20;--ceyo
 .ceyo-plans-cta{width:100%;height:44px;margin-top:10px;border-radius:999px;background:#fff;color:#000;font-size:14.5px;font-weight:600}
 .ceyo-plans-cta[data-current=true]{background:transparent;color:#8a8a8a;border:1px solid #2c2c2c}
 .ceyo-plans-legal{margin-top:10px;color:#777;font-size:11px;text-align:center;line-height:1.4}
+
+/* Fast native bottom-sheet open for sub pages */
+@keyframes ceyo-from-bottom{from{transform:translate3d(0,100%,0)}to{transform:translate3d(0,0,0)}}
+.agent-hub.ceyo-page,.gx-apps,.gx-create,.cx-sub,.cx-profile{animation:ceyo-from-bottom .24s cubic-bezier(.2,.9,.25,1) both!important;will-change:transform}
+.hub-search-overlay,.cx-chat{animation:cx-fade .14s ease-out both!important}
+.cx-pop,.hub-menu,.gx-sheet,.cx-sheet{box-shadow:none!important}
+@media (prefers-reduced-motion:reduce){.agent-hub.ceyo-page,.gx-apps,.gx-create,.cx-sub,.cx-profile{animation:none!important}}
