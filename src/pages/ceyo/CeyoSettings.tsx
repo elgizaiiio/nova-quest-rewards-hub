@@ -21,7 +21,7 @@ type Nav = (to: string) => void;
 
 function Shell({ title, back, children, action }: { title: string; back: () => void; children: ReactNode; action?: ReactNode }) {
   return (
-    <div className="agent-hub ceyo-page" data-no-translate>
+    <div key={title} className="agent-hub ceyo-page" data-no-translate>
       <header className="ceyo-top">
         <button type="button" className="gx-round" aria-label={title === "Settings" ? "Close" : "Back"} onClick={back}>{title === "Settings" ? <X size={20} /> : <ChevronLeft size={20} />}</button>
         {title !== "Settings" && <h1>{title}</h1>}

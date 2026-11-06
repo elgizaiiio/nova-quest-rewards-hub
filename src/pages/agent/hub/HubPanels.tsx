@@ -60,7 +60,7 @@ export function AgentForm({
   onSubmit: (value: AgentFormValue) => void;
   onCancel: () => void;
 }) {
-  const start = initial ? lookFor(initial) : { shape: "square", hex: "#7a7a7a" };
+  const start = initial ? lookFor(initial) : { shape: "circle", hex: "#ffffff" };
   const [name, setName] = useState(initial?.name || "");
   const [shape, setShape] = useState(start.shape);
   const [hex, setHex] = useState(start.hex);
