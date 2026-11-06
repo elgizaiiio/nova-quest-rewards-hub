@@ -12,8 +12,6 @@ import {
   Plus,
   Search,
   Settings2,
-  Sparkles,
-  Users,
 } from "lucide-react";
 import SEOHead from "@/components/common/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
