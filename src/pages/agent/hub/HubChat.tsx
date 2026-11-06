@@ -311,13 +311,13 @@ export function HubChat({
   const activity = useMemo(() => {
     if (!s.running && !starting) return [] as { bot: AgentInfo; state: "thinking" | "tool" | "talking" }[];
     const live = s.running && lastAgent && s.turns[s.turns.length - 1] === lastAgent ? lastAgent : undefined;
-    const st = orb === "tool" ? "tool" : orb === "talking" ? "talking" : "thinking";
-    if (!group) return [{ bot: agent, state: live ? st : "thinking" as const }];
+    const st: "thinking" | "tool" | "talking" = orb === "tool" ? "tool" : orb === "talking" ? "talking" : "thinking";
+    if (!group) return [{ bot: agent, state: (live ? st : "thinking") as "thinking" | "tool" | "talking" }];
     const coord = agents.find((a) => a.id === group.coordinatorId) || agent;
     const parts = live ? groupTranscript(live.text || "") : [];
     const last = parts[parts.length - 1]?.speaker;
     const speaker = last ? agents.find((a) => group.memberIds.includes(a.id) && a.name === last) : undefined;
-    if (!speaker) return [{ bot: coord, state: live ? st : "thinking" as const }];
+    if (!speaker) return [{ bot: coord, state: (live ? st : "thinking") as "thinking" | "tool" | "talking" }];
     return [{ bot: speaker, state: st }];
   }, [s.running, starting, s.turns, lastAgent, orb, group, agents, agent]);
 
