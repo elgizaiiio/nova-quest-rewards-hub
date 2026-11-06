@@ -11,7 +11,6 @@ import {
   Flag,
   Loader2,
   MessageSquareDot,
-  MessageSquarePlus,
   MoreHorizontal,
   Plus,
   Paperclip,
