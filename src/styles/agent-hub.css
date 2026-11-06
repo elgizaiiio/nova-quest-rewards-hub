@@ -384,3 +384,9 @@
 .hub-search-overlay .hub-search-bottom>svg{position:absolute;inset-inline-start:16px;pointer-events:none}
 .hub-search-overlay .hub-search-bottom input{height:48px;padding-inline-start:44px;border:1px solid #3a3a3c;border-radius:999px;background:#1c1c1e;font-size:15px}
 .hub-search-overlay .hub-search-bottom .hub-icon-button{width:48px;height:48px;border:1px solid #3a3a3c;background:#1c1c1e;color:#fff}
+.hub-search-overlay .hub-search-filters button{border:0;background:transparent;color:#cfcfcf;font-size:15px}
+.hub-search-overlay .hub-search-filters button[data-active="true"]{background:#fff;color:#000}
+/* Grok looks */
+.hub-bot-avatar[data-look] .ag-orb__body{background:var(--look-fill)!important;clip-path:var(--look-clip)!important;border-radius:var(--look-radius)!important;box-shadow:none!important}
+.hub-bot-avatar[data-look] .ag-orb__halo{display:none}
+.hub-bot-avatar[data-look] { --ag-eye:#151515; }

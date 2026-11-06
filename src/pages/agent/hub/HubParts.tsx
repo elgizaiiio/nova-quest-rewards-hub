@@ -1,3 +1,4 @@
+import { lookFor, shapeStyle, type BotLook } from "./botLooks";
 import type { ReactNode } from "react";
 import { Bot, Check, ChevronLeft, ChevronRight, Loader2, Mic, Plus, Search, Users, X } from "lucide-react";
 import { AgentOrb, type OrbState } from "@/components/agent/AgentOrb";
@@ -11,16 +12,21 @@ export function BotAvatar({
   size = 46,
   state = "idle",
   className = "",
+  look,
 }: {
-  agent: Pick<AgentInfo, "name" | "color" | "isDefault">;
+  agent: Pick<AgentInfo, "name" | "color" | "isDefault"> & { id?: string };
   size?: number;
   state?: OrbState;
   className?: string;
+  look?: BotLook;
 }) {
+  const resolved = look || lookFor(agent);
   return (
     <span
       className={`hub-bot-avatar ${agent.isDefault ? "hub-primary-orb" : ""} ${className}`}
       data-agent-color={agent.color}
+      data-look={resolved.shape}
+      style={shapeStyle(resolved) as React.CSSProperties}
       aria-label={agent.name}
     >
       <AgentOrb color={agent.color} size={size} state={state} />
