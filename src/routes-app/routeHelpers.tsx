@@ -3,7 +3,6 @@ import { Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import PageTransition from "@/components/common/PageTransition";
-import { usePromoBanner } from "@/components/promo/usePromoBanner";
 import { useSidebarCollapsed } from "@/hooks/useSidebarCollapsed";
 import { useTrackInAppNavigation } from "@/hooks/useSmartBack";
 import { pathForZone, stripZonePrefix } from "@/lib/zoneRouting";
