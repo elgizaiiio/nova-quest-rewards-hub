@@ -130,7 +130,7 @@ html[data-theme="light"] .agent-hub {
 .hub-plus-wrap { position: relative; }
 .hub-plus-menu { inset-inline-end: 0; top: 47px; }
 .hub-apps-menu { inset-inline-start: 0; bottom: 50px; }
-.hub-menu-dismiss { position: absolute; z-index: 40; inset: 0; border: 0; background: transparent; cursor: default; }
+.hub-menu-dismiss { position: absolute; z-index: 2; inset: 0; border: 0; background: transparent; cursor: default; }
 .hub-plus-wrap, .hub-apps-wrap { z-index: 91; }
 
 /* Main chat */
