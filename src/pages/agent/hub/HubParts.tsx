@@ -1,11 +1,23 @@
 import { lookFor, shapeStyle, type BotLook } from "./botLooks";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { readGroupAvatar } from "./chatPrefs";
 import { Bot, Check, ChevronLeft, ChevronRight, Loader2, Mic, Plus, Search, Users, X } from "lucide-react";
 import { AgentOrb, type OrbState } from "@/components/agent/AgentOrb";
 import type { AgentColor, AgentInfo } from "@/lib/agentsky/client";
 import type { AgentGroup } from "./hubStorage";
 
 export type HubLang = "en" | "ar";
+
+export function useGroupAvatar(id: string) {
+  const [v, setV] = useState<string | null>(null);
+  useEffect(() => {
+    const read = () => setV(readGroupAvatar(id));
+    read();
+    window.addEventListener("ceyo-group-avatar", read);
+    return () => window.removeEventListener("ceyo-group-avatar", read);
+  }, [id]);
+  return v;
+}
 
 export function BotAvatar({
   agent,
@@ -50,6 +62,8 @@ export function GroupAvatar({
     .filter((agent): agent is AgentInfo => !!agent)
     .slice(0, 3);
   const remaining = Math.max(0, group.memberIds.length - members.length);
+  const custom = useGroupAvatar(group.id);
+  if (custom) return <img className={`hub-group-avatar-img ${className}`} src={custom} alt={group.name} style={{ width: size * 1.6, height: size * 1.6 }} />;
   return (
     <span className={`hub-group-avatar ${className}`} aria-label={group.name}>
       {members.map((agent, index) => (
