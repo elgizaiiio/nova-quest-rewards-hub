@@ -9,7 +9,6 @@ import {
   Grid2X2,
   Loader2,
   MessageSquareText,
-  MoreHorizontal,
   Plus,
   Search,
   Settings2,
@@ -21,7 +20,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { agentApi, type AgentInfo, type SessionInfo } from "@/lib/agentsky/client";
 import { loadWorkspace, useWorkspaceStore, workspace } from "@/lib/agentsky/store";
 import { useUserLang } from "@/lib/authI18n";
-import { canUseAgent } from "@/lib/octoberOffer";
 import { promptUpgrade } from "@/lib/upgradeMoment";
 import { isPaidUser } from "@/lib/subscriptionGating";
 import { HubChat } from "./hub/HubChat";
@@ -356,7 +354,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
 
   return (
     <div className="agent-hub" data-content-open={contentOpen} dir={ar ? "rtl" : "ltr"} data-no-translate>
-      <SEOHead locale={ar ? "ar" : "en"} path="/" title={ar ? "Megsy — بوتاتك وجروباتك" : "Megsy — Your bots and groups"} description={ar ? "اتكلم مع Megsy واعمل بوتات وجروبات ذكية لكل شغلك." : "Chat with Megsy and create personal bots and coordinated groups for your work."} />
+      <SEOHead path="/" title={ar ? "Megsy — بوتاتك وجروباتك" : "Megsy — Your bots and groups"} description={ar ? "اتكلم مع Megsy واعمل بوتات وجروبات ذكية لكل شغلك." : "Chat with Megsy and create personal bots and coordinated groups for your work."} />
       {listContent}
       <main className="hub-content">{content}</main>
       {searchOpen && <SearchOverlay lang={lang} agents={orderedAgents} groups={local.groups} sessions={ws.sessions} onClose={() => setSearchOpen(false)} onBot={(id) => openChat("bot", id)} onGroup={(id) => openChat("group", id)} onSession={(session) => { const group = local.groups.find((item) => item.coordinatorId === session.agentId); openChat(group ? "group" : "bot", group?.id || session.agentId, false, session.id); }} />}
