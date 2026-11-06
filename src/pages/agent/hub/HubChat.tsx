@@ -14,6 +14,9 @@ import {
   MessageSquarePlus,
   MoreHorizontal,
   Plus,
+  Paperclip,
+  Camera,
+  ImageIcon,
   Reply,
   Search,
   SmilePlus,
@@ -91,6 +94,11 @@ function Composer({
 }) {
   const [text, setText] = useState("");
   const [plusOpen, setPlusOpen] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const fileIn = useRef<HTMLInputElement>(null);
+  const camIn = useRef<HTMLInputElement>(null);
+  const mediaIn = useRef<HTMLInputElement>(null);
+  const addFiles = (list: FileList | null) => { if (list?.length) setFiles((c) => [...c, ...Array.from(list)].slice(0, 6)); };
   const [listening, setListening] = useState(false);
   const recognition = useRef<{ stop: () => void } | null>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
@@ -106,10 +114,12 @@ function Composer({
   useEffect(() => () => recognition.current?.stop(), []);
 
   const submit = () => {
-    const value = text.trim();
-    if (!value) return;
+    const typed = text.trim();
+    if (!typed && !files.length) return;
+    const value = files.length ? `${typed}${typed ? "\n\n" : ""}${files.map((f) => `📎 ${f.name}`).join("\n")}` : typed;
     onSend(replyTo ? `> ${replyTo.slice(0, 200).replace(/\n/g, " ")}\n\n${value}` : value);
     setText("");
+    setFiles([]);
     onCancelReply();
   };
 
@@ -139,14 +149,22 @@ function Composer({
       {replyTo && (
         <div className="cx-reply-chip"><Reply size={14} /><span dir="auto">{replyTo}</span><button type="button" aria-label="Cancel reply" onClick={onCancelReply}><X size={14} /></button></div>
       )}
+      {files.length > 0 && (
+        <div className="cx-files">{files.map((f, i) => <span key={`${f.name}-${i}`} className="cx-file-chip"><Paperclip size={13} /><span>{f.name}</span><button type="button" aria-label="Remove file" onClick={() => setFiles((c) => c.filter((_, j) => j !== i))}><X size={13} /></button></span>)}</div>
+      )}
+      <input ref={fileIn} type="file" multiple hidden onChange={(e) => addFiles(e.target.files)} />
+      <input ref={camIn} type="file" accept="image/*" capture="environment" hidden onChange={(e) => addFiles(e.target.files)} />
+      <input ref={mediaIn} type="file" accept="image/*,video/*" multiple hidden onChange={(e) => addFiles(e.target.files)} />
       {plusOpen && <div className="cx-scrim" onPointerDown={() => setPlusOpen(false)} />}
       <div className="cx-composer" data-listening={listening}>
         <div className="cx-plus-wrap">
           <button type="button" className="cx-circle" aria-label="More" onClick={() => setPlusOpen((o) => !o)}><Plus size={20} /></button>
           {plusOpen && (
             <div className="cx-pop cx-pop-up" role="menu">
+              <button type="button" onClick={() => { fileIn.current?.click(); setPlusOpen(false); }}><Paperclip size={18} />{ar ? "اختيار ملف" : "Choose File"}</button>
+              <button type="button" onClick={() => { camIn.current?.click(); setPlusOpen(false); }}><Camera size={18} />{ar ? "التقاط صورة" : "Take Photo"}</button>
+              <button type="button" onClick={() => { mediaIn.current?.click(); setPlusOpen(false); }}><ImageIcon size={18} />{ar ? "صورة أو فيديو" : "Photo or Video"}</button>
               <button type="button" onClick={() => { onNew(); setPlusOpen(false); }}><MessageSquarePlus size={18} />{ar ? "محادثة جديدة" : "New conversation"}</button>
-              <button type="button" onClick={() => { onConnect(); setPlusOpen(false); }}><Plus size={18} />{ar ? "ربط التطبيقات" : "Connect apps"}</button>
             </div>
           )}
         </div>
@@ -162,7 +180,7 @@ function Composer({
             if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); }
           }}
         />
-        {text.trim() ? (
+        {text.trim() || files.length ? (
           <button type="button" className="cx-circle cx-send" aria-label="Send" onClick={submit}><ArrowUp size={18} /></button>
         ) : running ? (
           <button type="button" className="cx-circle" aria-label="Stop" onClick={onStop} disabled={stopping}>

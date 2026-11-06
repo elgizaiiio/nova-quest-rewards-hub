@@ -25,7 +25,7 @@ export function ToolLoader({
   );
 }
 
-/** Megsy star + label — used in card headers while a job is streaming. */
+/** Ceyo star + label — used in card headers while a job is streaming. */
 export function ToolPulse({ label, className }: { label?: ReactNode; className?: string }) {
   return (
     <span

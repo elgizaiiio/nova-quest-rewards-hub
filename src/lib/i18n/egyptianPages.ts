@@ -22,20 +22,20 @@ export const EGYPTIAN_PAGES: Record<string, string> = {
   "Switch to monthly billing": "حوّل للاشتراك الشهري",
 
   // ------------------------------------------------------------------ about
-  "← Back to Megsy": "→ رجوع لـ Megsy",
-  "Megsy AI is an AI workspace that brings chat, deep research, media generation, skills and connected tools into a single product.":
-    "Megsy AI مساحة شغل بالذكاء الاصطناعي بتجمع الشات والبحث العميق وتوليد الميديا والمهارات والأدوات المتوصلة في منتج واحد.",
-  "What Megsy does": "Megsy بيعمل إيه",
+  "← Back to Ceyo": "→ رجوع لـ Ceyo",
+  "Ceyo SI is an AI workspace that brings chat, deep research, media generation, skills and connected tools into a single product.":
+    "Ceyo SI مساحة شغل بالذكاء الاصطناعي بتجمع الشات والبحث العميق وتوليد الميديا والمهارات والأدوات المتوصلة في منتج واحد.",
+  "What Ceyo does": "Ceyo بيعمل إيه",
   "Chat with modern AI models, run multi-step deep research with sources, generate images and video, build reusable skills, and connect tools through integrations — from one interface on desktop and mobile.":
     "اتكلم مع أحدث موديلات الذكاء الاصطناعي، شغّل بحث عميق بخطوات ومصادر، ولّد صور وفيديو، اعمل مهارات تقدر تستخدمها كل مرة، ووصّل أدواتك بالتكاملات — كل ده من واجهة واحدة على الكمبيوتر والموبايل.",
   "How it is built": "متبني إزاي",
-  "Megsy runs on a modern web stack with a managed Postgres backend. Access control, usage limits and credit accounting are enforced on the server, not in the browser.":
-    "Megsy شغّال على تقنيات ويب حديثة مع باك إند Postgres مُدار. صلاحيات الدخول وحدود الاستخدام وحساب الكريدت كلها بتتنفّذ على السيرفر مش في المتصفح.",
+  "Ceyo runs on a modern web stack with a managed Postgres backend. Access control, usage limits and credit accounting are enforced on the server, not in the browser.":
+    "Ceyo شغّال على تقنيات ويب حديثة مع باك إند Postgres مُدار. صلاحيات الدخول وحدود الاستخدام وحساب الكريدت كلها بتتنفّذ على السيرفر مش في المتصفح.",
   "For support, partnerships or press: @Torekr on Telegram":
     "للدعم أو الشراكات أو الصحافة: تليجرام @Torekr",
 
   // ---------------------------------------------------------------- contact
-  "Contact Megsy AI": "اتواصل مع Megsy AI",
+  "Contact Ceyo SI": "اتواصل مع Ceyo SI",
   "We read every message sent to our support address.": "بنقرا كل رسالة بتوصل على إيميل الدعم.",
   "General help, bugs and account issues: @Torekr on Telegram":
     "مساعدة عامة ومشاكل وأعطال الحساب: تليجرام @Torekr",
@@ -47,16 +47,16 @@ export const EGYPTIAN_PAGES: Record<string, string> = {
     "لو لقيت ثغرة، بلّغنا على تليجرام @Torekr مع خطوات إعادة المشكلة. ومن فضلك متنشرش التفاصيل قبل ما نرد عليك.",
 
   // ------------------------------------------------------------------ terms
-  "These terms describe how Megsy AI may be used. By creating an account or using the service you agree to them.":
-    "الشروط دي بتوضح إزاي تستخدم Megsy AI. أول ما تعمل حساب أو تستخدم الخدمة تبقى موافق عليها.",
+  "These terms describe how Ceyo SI may be used. By creating an account or using the service you agree to them.":
+    "الشروط دي بتوضح إزاي تستخدم Ceyo SI. أول ما تعمل حساب أو تستخدم الخدمة تبقى موافق عليها.",
   "Your account": "حسابك",
-  "You need an account to use most of Megsy. You are responsible for keeping your credentials safe and for the activity that happens under your account.":
-    "محتاج حساب عشان تستخدم أغلب مميزات Megsy. وإنت مسؤول عن الحفاظ على بيانات دخولك وعن أي نشاط بيحصل من حسابك.",
+  "You need an account to use most of Ceyo. You are responsible for keeping your credentials safe and for the activity that happens under your account.":
+    "محتاج حساب عشان تستخدم أغلب مميزات Ceyo. وإنت مسؤول عن الحفاظ على بيانات دخولك وعن أي نشاط بيحصل من حسابك.",
   "You must be legally able to enter into an agreement in your country to use the service.":
     "لازم تكون مؤهل قانونًا في بلدك إنك تدخل في اتفاق عشان تستخدم الخدمة.",
   "Acceptable use": "الاستخدام المسموح",
-  "Do not use Megsy to break the law, to attack or overload the service, to bypass usage limits or billing, or to generate content that harms other people.":
-    "متستخدمش Megsy في مخالفة القانون، ولا في مهاجمة الخدمة أو تحميلها فوق طاقتها، ولا في تخطّي حدود الاستخدام أو الفوترة، ولا في توليد محتوى بيأذي غيرك.",
+  "Do not use Ceyo to break the law, to attack or overload the service, to bypass usage limits or billing, or to generate content that harms other people.":
+    "متستخدمش Ceyo في مخالفة القانون، ولا في مهاجمة الخدمة أو تحميلها فوق طاقتها، ولا في تخطّي حدود الاستخدام أو الفوترة، ولا في توليد محتوى بيأذي غيرك.",
   "Automated scraping, credential sharing, and reselling access without a written agreement are not permitted.":
     "السحب الآلي للبيانات ومشاركة بيانات الدخول وإعادة بيع الوصول من غير اتفاق مكتوب كلها ممنوعة.",
   "Plans, credits and usage limits": "الباقات والكريدت وحدود الاستخدام",
@@ -72,13 +72,13 @@ export const EGYPTIAN_PAGES: Record<string, string> = {
   "Changes and termination": "التعديلات وإنهاء الخدمة",
   "We may update the service and these terms. Material changes are announced in the app or by email.":
     "ممكن نحدّث الخدمة والشروط دي، وأي تغيير مهم هنعلنه في التطبيق أو على الإيميل.",
-  "You may stop using Megsy and delete your account at any time from your account settings. We may suspend accounts that violate these terms.":
-    "تقدر تبطّل استخدام Megsy وتمسح حسابك في أي وقت من إعدادات الحساب. وإحنا ممكن نوقف أي حساب بيخالف الشروط دي.",
+  "You may stop using Ceyo and delete your account at any time from your account settings. We may suspend accounts that violate these terms.":
+    "تقدر تبطّل استخدام Ceyo وتمسح حسابك في أي وقت من إعدادات الحساب. وإحنا ممكن نوقف أي حساب بيخالف الشروط دي.",
   "Questions about these terms: @Torekr on Telegram": "أي استفسار عن الشروط: تليجرام @Torekr",
 
   // ---------------------------------------------------------------- privacy
-  "This page explains what data Megsy collects, why it is collected, and the control you have over it.":
-    "الصفحة دي بتوضح البيانات اللي Megsy بيجمعها، وليه بيجمعها، وإيه التحكم اللي في إيدك.",
+  "This page explains what data Ceyo collects, why it is collected, and the control you have over it.":
+    "الصفحة دي بتوضح البيانات اللي Ceyo بيجمعها، وليه بيجمعها، وإيه التحكم اللي في إيدك.",
   "Data we collect": "البيانات اللي بنجمعها",
   "Account data: email address, authentication identifiers, and profile details you provide.":
     "بيانات الحساب: الإيميل ومعرّفات تسجيل الدخول وتفاصيل البروفايل اللي بتدخلها.",
@@ -86,8 +86,8 @@ export const EGYPTIAN_PAGES: Record<string, string> = {
     "بيانات المنتج: المحادثات والأوامر والملفات المرفوعة والميديا المولّدة والمهارات والذاكرة والإعدادات اللي بتعملها في التطبيق.",
   "Technical data: request logs, usage counters, error reports and security events needed to operate and protect the service.":
     "بيانات تقنية: سجلات الطلبات وعدادات الاستخدام وتقارير الأخطاء وأحداث الأمان اللازمة لتشغيل الخدمة وحمايتها.",
-  "Billing data: subscription status and transaction records. Card details are handled by our payment provider, not stored by Megsy.":
-    "بيانات الفوترة: حالة الاشتراك وسجل المعاملات. بيانات الكارت بتتعامل معاها بوابة الدفع، وMegsy مش بيخزّنها.",
+  "Billing data: subscription status and transaction records. Card details are handled by our payment provider, not stored by Ceyo.":
+    "بيانات الفوترة: حالة الاشتراك وسجل المعاملات. بيانات الكارت بتتعامل معاها بوابة الدفع، وCeyo مش بيخزّنها.",
   "How we use it": "بنستخدمها إزاي",
   "To deliver the features you request, apply plan limits and credits, provide support, detect abuse, and improve reliability and safety.":
     "عشان نقدّم المميزات اللي بتطلبها، ونطبّق حدود الباقة والكريدت، ونديك دعم، ونكشف إساءة الاستخدام، ونحسّن الاستقرار والأمان.",
@@ -150,14 +150,14 @@ export const EGYPTIAN_PAGES: Record<string, string> = {
   "e.g. Alex": "مثلاً: أحمد",
 
   // ------------------------------------------------------------ profile edit
-  "Shown across Megsy.": "بيظهر في كل حتة في Megsy.",
-  "How Megsy addresses you.": "Megsy بينده عليك إزاي.",
+  "Shown across Ceyo.": "بيظهر في كل حتة في Ceyo.",
+  "How Ceyo addresses you.": "Ceyo بينده عليك إزاي.",
   "Custom guidance applied to every conversation.": "تعليمات خاصة بتتطبّق على كل محادثة.",
   "Irreversible actions.": "إجراءات مش بترجع تاني.",
   "Permanently remove your account and all associated data.": "امسح حسابك وكل بياناته نهائي.",
 
   // ---------------------------------------------------------- notifications
-  "Notifications inside Megsy.": "الإشعارات جوه Megsy.",
+  "Notifications inside Ceyo.": "الإشعارات جوه Ceyo.",
   "Generation complete": "التوليد خلص",
   "Get notified when a generation completes": "يوصلك إشعار أول ما التوليد يخلص",
   "Credit updates": "تحديثات الكريدت",

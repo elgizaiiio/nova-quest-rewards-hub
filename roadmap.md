@@ -69,3 +69,8 @@
 - [x] Find in chat bar
 - [x] Group profile, Routines, Library, Members, Edit name, Avatar (upload; generate not connected)
 - [x] Smoother page-open animation
+
+- [x] Ceyo: black sign-in, redesigned verification-code screen, Megsy text replaced, old unreachable pages removed.
+- [x] Compact pricing, bot edit voice/speed/language, bot profile Computer/Notifications/Share as Template, chat + attachments menu, faster bottom-sheet page opens.
+- [ ] Replace Primary Bot: needs backend support to change the primary bot.
+- [ ] Sending attached files to bots: only file names are sent until upload is connected.

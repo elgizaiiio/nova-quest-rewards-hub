@@ -449,7 +449,7 @@ const ChatMessageItemImpl = ({
               <div className="text-[13px] font-semibold">
                 {/^[\u0600-\u06FF]/.test(msg.slidesPendingTopic || "")
                   ? "ميغسي بيجهز السلايدس"
-                  : "Megsy is creating your slides"}
+                  : "Ceyo is creating your slides"}
               </div>
               <div className="text-[12px] text-muted-foreground">
                 {msg.slidesStatus ||
