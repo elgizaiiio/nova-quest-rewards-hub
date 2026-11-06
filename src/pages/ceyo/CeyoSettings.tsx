@@ -56,8 +56,7 @@ function Row({ icon, label, value, onClick, danger, right, sub, checked, disable
       data-danger={danger}
       onClick={onClick}
       disabled={disabled}
-      role={checked === undefined ? undefined : "switch"}
-      aria-checked={checked}
+      aria-pressed={checked}
       tabIndex={onClick ? 0 : -1}
     >
       {icon && <span className="ceyo-row-icon">{icon}</span>}

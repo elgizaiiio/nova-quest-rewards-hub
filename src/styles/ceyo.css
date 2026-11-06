@@ -269,6 +269,7 @@
   scrollbar-width:none;
 }
 .agent-hub.ceyo-page .ceyo-scroll::-webkit-scrollbar{display:none}
+.ceyo-top h1{font-size:17px}
 .ceyo-top-action{margin-inline-start:auto;align-items:center}
 .ceyo-top-action:empty{width:40px}
 .ceyo-row[tabindex="-1"],.ceyo-me[tabindex="-1"]{cursor:default}
