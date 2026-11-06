@@ -16,7 +16,6 @@ import {
   MessageSquareText,
   Plus,
   Search,
-  Settings2,
 } from "lucide-react";
 import SEOHead from "@/components/common/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -416,7 +415,6 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       {listContent}
       <main className="hub-content">{content}</main>
       {searchOpen && <SearchOverlay lang={lang} agents={orderedAgents} groups={local.groups} sessions={ws.sessions} onClose={() => setSearchOpen(false)} onBot={(id) => openChat("bot", id)} onGroup={(id) => openChat("group", id)} onSession={(session) => { const group = local.groups.find((item) => item.coordinatorId === session.agentId); openChat(group ? "group" : "bot", group?.id || session.agentId, false, session.id); }} />}
-      {(plusOpen || appsOpen) && <button type="button" className="hub-menu-dismiss" aria-label={ar ? "قفل القائمة" : "Dismiss menu"} onClick={() => { setPlusOpen(false); setAppsOpen(false); }} />}
     </div>
   );
 }
