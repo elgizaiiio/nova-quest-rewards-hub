@@ -4,12 +4,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { askConfirm } from "@/components/common/CeyoConfirm";
 import {
-  ArrowUpRight, Check, ChevronLeft, ChevronRight, Contrast, Copy, CreditCard,
+  ArrowUpRight, Check, ChevronLeft, ChevronRight, ChevronsUpDown, Contrast, Copy, CreditCard,
   KeyRound, Moon, Plus, Search, Smartphone, Sun, Trash2, User, Vault, X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
 import { getStoredTheme, setTheme, type ThemeMode } from "@/lib/theme";
+import { useWorkspaceStore } from "@/lib/agentsky/store";
 import { integrations as CATALOG, type Integration } from "@/lib/integrationsData";
 import {
   disconnectIntegration, loadIntegrationConnections, startIntegrationConnection, waitForConnectionRefresh,
@@ -160,7 +161,7 @@ function Main({ nav }: { nav: Nav }) {
       <Group>
         <MeCard onClick={() => nav("/settings/account")} />
         <Row label="Usage" value={loading ? "…" : `${usage.used}%`} onClick={() => nav("/settings/usage")} />
-        <Row label="Manage Subscription" onClick={() => nav("/settings/plans")} />
+        <Row label="Manage Subscription" onClick={() => nav("/settings/subscription")} />
         <Row label="Vault" sub="Logins, cards and contact info Ceyo can use" onClick={() => nav("/settings/vault")} />
       </Group>
       <Group><Row label="Connect apps" sub="Search plugins" onClick={() => nav("/settings/apps")} /></Group>
@@ -179,13 +180,13 @@ function Main({ nav }: { nav: Nav }) {
         <Row label="Haptics" value={haptics ? "On" : "Off"} onClick={() => flip("ceyo_haptics", !haptics, setHaptics)} />
       </Group>
       <Group>
-        <Row label="Help Center" onClick={() => window.open("mailto:support@ceyo.si", "_self")} right={<Ext />} />
+        <Row label="Help Center" sub="Guides for bots, groups and routines" onClick={() => nav("/docs")} right={<Ext />} />
         <Row label="Privacy Policy" onClick={() => nav("/privacy")} right={<Ext />} />
         <Row label="Terms of Service" onClick={() => nav("/terms")} right={<Ext />} />
-        <Row label="Ceyo Bot Terms" onClick={() => nav("/terms")} right={<Ext />} />
+        <Row label="Subscription Terms" onClick={() => nav("/subscription-terms")} right={<Ext />} />
       </Group>
       <p className="ceyo-legal-note">If you subscribe through a Teams, Enterprise or other plan, the agreement for that plan applies.</p>
-      <Group><Row label="Send Feedback" onClick={() => window.open("mailto:support@ceyo.si?subject=Ceyo%20feedback", "_self")} /></Group>
+      <Group><Row label="Send Feedback" onClick={() => nav("/settings/feedback")} /></Group>
       <Group><Row label="Sign Out" danger onClick={() => void signOut(nav)} /></Group>
       <div className="ceyo-brand-foot"><span className="ceyo-brand-orb"><i /><i /></span><strong>Ceyo</strong><small>1.0.0</small></div>
     </Shell>
@@ -562,6 +563,62 @@ function Language({ nav }: { nav: Nav }) {
   );
 }
 
+const PLAY_BILLING = "https://play.google.com/store/account/subscriptions";
+
+/** Google Play owns the card, the receipts and the cancellation. */
+function Subscription({ nav }: { nav: Nav }) {
+  const openBilling = () => window.open(PLAY_BILLING, "_blank", "noopener");
+  return (
+    <Shell title="Premium" back={() => nav("/settings")}>
+      <Group>
+        <Row label="Manage subscription in Google Play" sub="Card details are handled outside the app." onClick={openBilling} right={<Ext />} />
+        <Row label="Change plan" sub="Change your subscription plan." onClick={() => nav("/settings/plans")} />
+        <Row label="Cancel subscription" sub="Cancel your subscription through Google Play." onClick={openBilling} right={<Ext />} />
+      </Group>
+      <p className="ceyo-sub-note">Ceyo never stores your card. Google Play handles billing, receipts, tax and cancellation, and you can bring a cancelled plan back before the period ends.</p>
+    </Shell>
+  );
+}
+
+function Feedback({ nav }: { nav: Nav }) {
+  const live = useWorkspaceStore() as { agents?: { name?: string }[] };
+  const [text, setText] = useState("");
+  const [bot, setBot] = useState("None");
+  const [pick, setPick] = useState(false);
+  const names = ["None", ...new Set((live.agents || []).map((a) => a.name).filter(Boolean) as string[])];
+
+  const send = () => {
+    const body = encodeURIComponent(`${text.trim()}\n\nBot: ${bot}`);
+    window.location.href = `mailto:support@ceyo.si?subject=Ceyo%20feedback&body=${body}`;
+    toast.success("Thanks — your feedback is on its way");
+    nav("/settings");
+  };
+
+  return (
+    <Shell title="Send Feedback" back={() => nav("/settings")}>
+      <div className="ceyo-fb">
+        <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="What happened? What did you expect?" />
+        <p>We value all feedback, whether it&apos;s a bug, an idea, or a question.</p>
+        <span className="ceyo-fb-label">Was your issue with a specific Bot?</span>
+        <button type="button" className="ceyo-fb-pick" aria-expanded={pick} onClick={() => setPick((v) => !v)}>
+          <span>Bot</span>
+          <span>{bot} <ChevronsUpDown size={16} /></span>
+        </button>
+        {pick && (
+          <div className="ceyo-fb-list">
+            {names.map((n) => (
+              <button key={n} type="button" onClick={() => { setBot(n); setPick(false); }}>{n}</button>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="ceyo-fb-foot">
+        <button type="button" className="ceyo-fb-send" disabled={!text.trim()} onClick={send}>Send Feedback</button>
+      </div>
+    </Shell>
+  );
+}
+
 export default function CeyoSettings() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -571,6 +628,8 @@ export default function CeyoSettings() {
     case "account": return <Account nav={nav} />;
     case "usage": return <Usage nav={nav} />;
     case "plans": return <Plans nav={nav} />;
+    case "subscription": return <Subscription nav={nav} />;
+    case "feedback": return <Feedback nav={nav} />;
     case "vault": return <Vault_ nav={nav} />;
     case "apps": return <Apps nav={nav} appId={sub ? decodeURIComponent(sub) : undefined} />;
     case "devices": return <Devices nav={nav} />;
