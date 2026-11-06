@@ -54,7 +54,7 @@ export const AppRoutes = (_props: { currentUserId: string | null }) => (
       <Route path="/settings/delete-account" element={guard(<DeleteAccountPage />)} />
     </Route>
 
-    <Route path="/__settings-preview" element={<CeyoSettingsPreview />} />
+    <Route path="/__settings-preview/*" element={<CeyoSettingsPreview />} />
     <Route path="/settings" element={guard(<CeyoSettings />)} />
     <Route path="/settings/:section" element={guard(<CeyoSettings />)} />
     <Route path="/settings/:section/:sub" element={guard(<CeyoSettings />)} />
