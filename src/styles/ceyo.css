@@ -198,9 +198,6 @@
 .ceyo-brand-orb i{width:5px;height:14px;border-radius:9px;background:#111}
 .ceyo-brand-foot strong{font-size:17px;font-weight:500}
 .ceyo-brand-foot small{color:#9a9a9a;font-size:13px}
-/* sheet look for create pages */
-.gx-create{top:44px;border-radius:24px 24px 0 0;box-shadow:0 -1px 0 rgba(255,255,255,.04)}
-.gx-create::before{content:"";position:fixed;inset:0 0 auto 0;height:60px;background:#0e0e0e;z-index:-1}
 /* search header chips: shorter rounded rectangles */
 .hub-search-overlay .hub-search-filters button{padding:5px 12px!important;border-radius:10px!important;font-size:13px!important}
 /* home rows like reference */
@@ -208,3 +205,6 @@
 .hub-row-title strong{font-size:15px;font-weight:400;color:#fff}
 .hub-row-title time{font-size:13px;color:#8a8a8a}
 .hub-row-preview{font-size:13.5px;color:#9a9a9a}
+
+.agent-hub.ceyo-page{height:100dvh!important;min-height:0!important;overflow:hidden!important}
+.agent-hub.ceyo-page .ceyo-scroll{overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
