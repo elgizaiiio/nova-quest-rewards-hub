@@ -1,9 +1,8 @@
 import { askConfirm, askText } from "@/components/common/CeyoConfirm";
 /** Grok-style home for Ceyo bots and multi-bot groups, backed by real AgentSky chats. */
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  Bot,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
