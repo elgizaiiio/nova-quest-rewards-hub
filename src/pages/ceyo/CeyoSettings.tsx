@@ -563,7 +563,7 @@ export default function CeyoSettings() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const nav: Nav = (to) => navigate(to);
-  const [, , section, sub] = pathname.replace(/^\/__pv/, "").split("/");
+  const [, , section, sub] = pathname.split("/");
   switch (section) {
     case "account": return <Account nav={nav} />;
     case "usage": return <Usage nav={nav} />;
