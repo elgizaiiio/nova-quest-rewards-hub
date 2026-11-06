@@ -253,7 +253,12 @@ export function ProfilePanel({
   if (view === "members") return (
     <section className="cx-sub" key={view}>
       <Head title={ar ? "الأعضاء" : "Members"} back={() => setView("main")} />
-      <div className="cx-card cx-members">{members.map((m) => <div key={m.id}><BotAvatar agent={m} size={30} /><span dir="auto">{m.name}</span>{m.isDefault && <small>{ar ? "أساسي" : "Primary"}</small>}</div>)}</div>
+      <p className="cx-members-count">{members.length} {ar ? "عضو" : "members"}</p>
+      <div className="cx-card cx-members">{members.map((m) => <div key={m.id} className="cx-member">
+        <BotAvatar agent={m} size={40} state="hello" />
+        <span className="cx-member-name" dir="auto">{m.name}</span>
+        {m.isDefault && <em className="cx-member-tag">{ar ? "أساسي" : "Primary"}</em>}
+      </div>)}</div>
     </section>
   );
 
