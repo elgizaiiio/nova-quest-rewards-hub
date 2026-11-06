@@ -648,3 +648,28 @@ html[data-ceyo-surface="bot"] .agent-hub.ceyo-page{--ceyo-page-bg:#1b1b20;--ceyo
 .cx-choice-input input::placeholder{color:var(--cx-mute,#8e8e90)}
 .cx-choice-input button{display:grid;place-items:center;width:32px;height:32px;border:0;border-radius:50%;background:#fff;color:#000;cursor:pointer}
 .cx-choice-input button:disabled{background:#3a3a3c;color:#8e8e90;cursor:default}
+
+/* Recording waves inside the composer */
+.cx-rec{position:absolute;inset:0 96px 0 56px;z-index:2;display:flex;align-items:center;gap:3px;padding-inline:10px;background:var(--cx-card,#262628);border-radius:999px;pointer-events:none}
+.cx-rec-dot{width:8px;height:8px;margin-inline-end:8px;border-radius:50%;background:#ff453a;animation:cx-rec-blink 1s ease-in-out infinite}
+.cx-rec i{flex:1;max-width:4px;height:6px;border-radius:3px;background:#fff;animation:cx-rec-wave .8s ease-in-out infinite alternate}
+@keyframes cx-rec-wave{to{height:22px}}
+@keyframes cx-rec-blink{50%{opacity:.25}}
+.cx-composer{position:relative}
+.cx-mic[data-active="true"]{background:#ff453a;color:#fff;animation:cx-mic-pulse 1.4s ease-out infinite}
+@keyframes cx-mic-pulse{0%{box-shadow:0 0 0 0 rgba(255,69,58,.55)}100%{box-shadow:0 0 0 12px rgba(255,69,58,0)}}
+
+/* Grok-style voice call bar */
+.cx-call{position:absolute;top:calc(max(14px,env(safe-area-inset-top)) + 58px);left:12px;right:12px;z-index:45;display:flex;align-items:center;gap:10px;padding:12px 12px 18px 16px;border-radius:999px;background:#2a2a2c;border:1px solid rgba(255,255,255,.1);animation:ceyo-from-bottom .24s ease-out}
+.cx-call-level{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.cx-call-level span{display:block;height:100%;width:38%;border-radius:2px;background:#fff;transform-origin:left}
+.cx-call-level[data-phase="listening"] span{animation:cx-level 1.1s ease-in-out infinite alternate}
+.cx-call-level[data-phase="speaking"] span{animation:cx-level .45s ease-in-out infinite alternate}
+.cx-call-level[data-phase="thinking"] span{width:20%;animation:cx-slide 1.2s ease-in-out infinite}
+.cx-call-level[data-phase="muted"] span{width:0}
+@keyframes cx-level{from{width:12%}to{width:62%}}
+@keyframes cx-slide{from{transform:translateX(0)}to{transform:translateX(400%)}}
+.cx-call-btn{all:unset;box-sizing:border-box;display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.14);color:#fff;cursor:pointer}
+.cx-call-btn[data-off="true"]{background:#fff;color:#000}
+.cx-call-end{border:0;background:#ff453a}
+.cx-call-grip{position:absolute;bottom:6px;left:50%;width:40px;height:3px;margin-left:-20px;border-radius:2px;background:rgba(255,255,255,.22)}
