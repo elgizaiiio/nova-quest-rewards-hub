@@ -94,7 +94,7 @@ export function makeGroup(input: {
 
 export function groupPrompt(name: string, members: { name: string; description: string; prompt: string }[]) {
   const roster = members
-    .map((member) => `- ${member.name}: ${member.description || "Personal AI bot"}. ${member.prompt || ""}`.trim())
+    .map((member) => `- ${member.name}: ${member.description || "Personal bot"}. ${member.prompt || ""}`.trim())
     .join("\n");
   return `You are the coordinator of the multi-bot group "${name}". Reply in the user's language. Understand the request, decide which listed bot should lead, and identify the speaker before each contribution. When the user mentions @BotName, that bot must lead the next answer. Keep contributions concise and do not invent completed actions. Format every contribution as a separate block beginning with [[speaker: Exact Bot Name]], using only names from this roster. Use one block when one bot is enough and up to three blocks when collaboration helps.\n\nGroup members:\n${roster}`;
 }

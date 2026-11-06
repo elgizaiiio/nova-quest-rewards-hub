@@ -1,4 +1,4 @@
-/** Grok-style home for Megsy bots and multi-bot groups, backed by real AgentSky chats. */
+/** Grok-style home for Ceyo bots and multi-bot groups, backed by real AgentSky chats. */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -71,7 +71,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   const ws = demo
     ? { ready: true, error: null, agents: DEMO_AGENTS, tier: "pro" as const, models: [], sessions: DEMO_SESSIONS }
     : live;
-  const lang: HubLang = useUserLang() === "ar-eg" ? "ar" : "en";
+  const lang: HubLang = "en";
   const ar = lang === "ar";
   const nav = useNavigate();
   const [params, setParams] = useSearchParams();
@@ -281,7 +281,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     <aside className="hub-home" aria-label={ar ? "البوتات والجروبات" : "Bots and groups"}>
       <header className="hub-home-header">
         <HubIconButton label={ar ? "الإعدادات" : "Settings"} className="hub-account-button" onClick={() => nav("/settings")}><span className="hub-account-orb"><Sparkles size={19} /></span></HubIconButton>
-        <span className="hub-home-wordmark">Megsy</span>
+        <span className="hub-home-wordmark">Ceyo</span>
         <div className="hub-plus-wrap">
           <HubIconButton label={ar ? "إنشاء" : "Create"} onClick={() => setPlusOpen((open) => !open)} active={plusOpen}><Plus size={22} /></HubIconButton>
           {plusOpen && <div className="hub-menu hub-plus-menu" role="menu"><button type="button" role="menuitem" onClick={() => go({ new: "bot" })}><Bot size={18} />{ar ? "بوت جديد" : "New Bot"}</button><button type="button" role="menuitem" onClick={() => go({ new: "group" })}><Users size={18} />{ar ? "جروب جديد" : "New Group Chat"}</button></div>}
@@ -328,7 +328,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       <div className="hub-home-bottom">
         <div className="hub-apps-wrap">
           <HubIconButton label={ar ? "التطبيقات" : "Apps"} onClick={() => setAppsOpen((open) => !open)} active={appsOpen}><Grid2X2 size={19} /></HubIconButton>
-          {appsOpen && <div className="hub-menu hub-apps-menu" role="menu"><button type="button" role="menuitem" onClick={() => nav("/chat")}><MessageSquareText size={18} />{ar ? "المحادثة الأساسية" : "Quick Chat"}</button><button type="button" role="menuitem" onClick={() => nav("/agents")}><Settings2 size={18} />{ar ? "إعدادات البوتات" : "Bot settings"}</button><button type="button" role="menuitem" onClick={() => nav("/integrations")}><Grid2X2 size={18} />{ar ? "ربط التطبيقات" : "Connect apps"}</button></div>}
+          {appsOpen && <div className="hub-menu hub-apps-menu" role="menu"><button type="button" role="menuitem" onClick={() => primary && openChat("bot", primary.id, false)}><MessageSquareText size={18} />{ar ? "المحادثة الأساسية" : "New chat"}</button><button type="button" role="menuitem" onClick={() => nav("/settings")}><Settings2 size={18} />{ar ? "الإعدادات" : "Settings"}</button><button type="button" role="menuitem" onClick={() => nav("/settings/apps")}><Grid2X2 size={18} />{ar ? "ربط التطبيقات" : "Connect apps"}</button></div>}
         </div>
         <button type="button" className="hub-search-trigger" onClick={() => setSearchOpen(true)}><Search size={18} /><span>{ar ? "بحث" : "Search"}</span></button>
       </div>
@@ -339,7 +339,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     <div className="hub-desktop-empty">
       {primary && <BotAvatar agent={primary} size={92} state="idle" />}
       <h1>{ar ? "كل بوتاتك في مكان واحد" : "All your bots, one calm place"}</h1>
-      <p>{ar ? "اختار بوت أو جروب وابدأ. ولو عايز بوت جديد، Megsy هيساعدك تعمله." : "Pick a bot or group to begin. If you need a new bot, Megsy will help you create it."}</p>
+      <p>{ar ? "اختار بوت أو جروب وابدأ. ولو عايز بوت جديد، Ceyo هيساعدك تعمله." : "Pick a bot or group to begin. If you need a new bot, Ceyo will help you create it."}</p>
       <button type="button" className="hub-button hub-button-secondary" onClick={() => primary && openChat("bot", primary.id, false)}><MessageSquareText size={17} />{ar ? "ابدأ محادثة" : "Start chatting"}</button>
     </div>
   );
@@ -354,7 +354,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
 
   return (
     <div className="agent-hub" data-content-open={contentOpen} dir={ar ? "rtl" : "ltr"} data-no-translate>
-      <SEOHead path="/" title={ar ? "Megsy — بوتاتك وجروباتك" : "Megsy — Your bots and groups"} description={ar ? "اتكلم مع Megsy واعمل بوتات وجروبات ذكية لكل شغلك." : "Chat with Megsy and create personal bots and coordinated groups for your work."} />
+      <SEOHead path="/" title={ar ? "Ceyo — بوتاتك وجروباتك" : "Ceyo — Your bots and groups"} description={ar ? "اتكلم مع Ceyo واعمل بوتات وجروبات ذكية لكل شغلك." : "Chat with Ceyo and create personal bots and coordinated groups for your work."} />
       {listContent}
       <main className="hub-content">{content}</main>
       {searchOpen && <SearchOverlay lang={lang} agents={orderedAgents} groups={local.groups} sessions={ws.sessions} onClose={() => setSearchOpen(false)} onBot={(id) => openChat("bot", id)} onGroup={(id) => openChat("group", id)} onSession={(session) => { const group = local.groups.find((item) => item.coordinatorId === session.agentId); openChat(group ? "group" : "bot", group?.id || session.agentId, false, session.id); }} />}

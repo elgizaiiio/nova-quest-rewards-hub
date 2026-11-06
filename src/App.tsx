@@ -212,7 +212,6 @@ const App = () => {
                     <ScrollToTop />
                     <PageViewTracker />
                     <ReminderWatcher />
-                    <OctoberOfferDialog />
                     <InternalLinkInterceptor />
                     <MarketingTypographyScope />
 
@@ -233,7 +232,6 @@ const App = () => {
                         </SettingsShell>
                       </RouteErrorBoundary>
                     </Suspense>
-                    <FirstRunWelcome />
                     </DynamicNotifications>
                   </ConfirmProvider>
                 </PromoBannerProvider>
