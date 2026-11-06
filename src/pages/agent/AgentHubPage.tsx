@@ -24,6 +24,7 @@ import { loadWorkspace, useWorkspaceStore, workspace } from "@/lib/agentsky/stor
 import { promptUpgrade } from "@/lib/upgradeMoment";
 import { isPaidUser } from "@/lib/subscriptionGating";
 import { HubChat } from "./hub/HubChat";
+import { setBotLook } from "./hub/botLooks";
 import { AgentForm, GroupForm, ProfilePanel, SearchOverlay, type AgentFormValue } from "./hub/HubPanels";
 import { BotAvatar, GroupAvatar, HubIconButton, type HubLang } from "./hub/HubParts";
 import {
@@ -185,10 +186,6 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
 
   const saveAgent = async (value: AgentFormValue, initial?: AgentInfo | null) => {
     if (demo) { setFormError("Design preview"); return; }
-    if (!initial && !paid) {
-      promptUpgrade("New bot", "Create your own bots with custom instructions.");
-      return;
-    }
     setBusy(true);
     setFormError("");
     try {
@@ -196,6 +193,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       const result = initial ? await agentApi.updateAgent(initial.id, payload) : await agentApi.createAgent(payload);
       if (initial) workspace.updateAgent(result.agent); else workspace.addAgent(result.agent);
       const id = result.agent.id;
+      if (value.look) setBotLook(id, value.look);
       updateLocal((current) => ({
         ...current,
         categories: { ...current.categories, [itemKey("bot", id)]: value.category },
@@ -211,10 +209,6 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
 
   const saveGroup = async (value: { name: string; memberIds: string[]; category: string }, initial?: AgentGroup | null) => {
     if (demo) { setFormError("Design preview"); return; }
-    if (!initial && !paid) {
-      promptUpgrade("New group chat", "Create a coordinated group with your bots.");
-      return;
-    }
     setBusy(true);
     setFormError("");
     try {
@@ -364,7 +358,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       </div>
 
       <div className="hub-home-bottom">
-        <HubIconButton label="Connect apps" className="hub-apps-btn" onClick={() => nav("/settings/apps")}><Grid2X2 size={19} /></HubIconButton>
+        <HubIconButton label="Connect apps" className="hub-apps-btn" onClick={() => nav("/settings/apps")}><Plus size={22} /></HubIconButton>
         <button type="button" className="hub-search-trigger" onClick={() => setSearchOpen(true)}><Search size={18} /><span>{ar ? "بحث" : "Search"}</span></button>
       </div>
       {rowMenu && <div className="hub-backdrop" onPointerDown={() => setRowMenu(null)} />}
