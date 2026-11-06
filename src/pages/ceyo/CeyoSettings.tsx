@@ -508,11 +508,10 @@ function Language({ nav }: { nav: Nav }) {
   );
 }
 
-export default function CeyoSettings({ preview = false }: { preview?: boolean }) {
-  const { pathname: locationPath } = useLocation();
+export default function CeyoSettings() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const nav: Nav = (to) => navigate(preview && to.startsWith("/settings") ? to.replace("/settings", "/__settings-preview") : to);
-  const pathname = preview ? locationPath.replace("/__settings-preview", "/settings") : locationPath;
+  const nav: Nav = (to) => navigate(to);
   const [, , section, sub] = pathname.split("/");
   switch (section) {
     case "account": return <Account nav={nav} />;

@@ -21,7 +21,6 @@ import {
 
 const CeyoLanding = lazy(() => import("@/pages/ceyo/CeyoLanding"));
 const CeyoSettings = lazy(() => import("@/pages/ceyo/CeyoSettings"));
-const CeyoSettingsPreview = lazy(() => import("@/pages/ceyo/CeyoSettingsPreview"));
 
 const guard = (el: React.ReactNode, guest?: string) => <ProtectedRoute guestEntry={guest}>{el}</ProtectedRoute>;
 const home = <Navigate to="/" replace />;
@@ -54,7 +53,6 @@ export const AppRoutes = (_props: { currentUserId: string | null }) => (
       <Route path="/settings/delete-account" element={guard(<DeleteAccountPage />)} />
     </Route>
 
-    <Route path="/__settings-preview/*" element={<CeyoSettingsPreview />} />
     <Route path="/settings" element={guard(<CeyoSettings />)} />
     <Route path="/settings/:section" element={guard(<CeyoSettings />)} />
     <Route path="/settings/:section/:sub" element={guard(<CeyoSettings />)} />
