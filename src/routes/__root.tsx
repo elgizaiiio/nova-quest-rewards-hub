@@ -151,17 +151,17 @@ const ORG_JSON_LD = JSON.stringify({
     {
       "@type": "Organization",
       "@id": "/#organization",
-      name: "Megsy AI",
+      name: "Ceyo",
       url: "/",
       logo: "/app-icon-512.png",
       sameAs: [],
       description:
-        "AI agent workspace for chat, image and video generation, research, documents, slides and app building.",
+        "Personal bots and group chats in one calm place.",
     },
     {
       "@type": "WebSite",
       "@id": "/#website",
-      name: "Megsy AI",
+      name: "Ceyo",
       url: "/",
       publisher: { "@id": "/#organization" },
       inLanguage: ["en", "ar"],
@@ -169,12 +169,12 @@ const ORG_JSON_LD = JSON.stringify({
     {
       "@type": "SoftwareApplication",
       "@id": "/#software",
-      name: "Megsy AI",
+      name: "Ceyo",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       url: "/",
       description:
-        "One AI agent workspace to chat, research, generate images and videos, create slides and documents, and build apps.",
+        "Personal bots and group chats in one calm place.",
       offers: {
         "@type": "Offer",
         price: "0",
@@ -257,29 +257,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "Megsy" },
-      { name: "application-name", content: "Megsy AI" },
+      { name: "apple-mobile-web-app-title", content: "Ceyo" },
+      { name: "application-name", content: "Ceyo" },
       { name: "theme-color", content: "#ffffff" },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { name: "format-detection", content: "telephone=no" },
-      { title: "Megsy AI — AI Agent Workspace for Chat, Research, Images & Video" },
+      { title: "Ceyo — Your Personal Bots" },
       {
         name: "description",
         content:
-          "Megsy AI is an all-in-one AI agent workspace for chat, research, image and video generation, slides, documents and app building. Free to start.",
+          "Ceyo gives you a main bot that creates new bots and group chats for you. Super intelligence, made personal.",
       },
       {
         property: "og:title",
-        content: "Megsy AI — AI Agent Workspace for Chat, Research, Images & Video",
+        content: "Ceyo — Your Personal Bots",
       },
       {
         property: "og:description",
         content:
-          "Megsy AI is an all-in-one AI agent workspace for chat, research, image and video generation, slides, documents and app building. Free to start.",
+          "Ceyo gives you a main bot that creates new bots and group chats for you. Super intelligence, made personal.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
-      { property: "og:site_name", content: "Megsy AI" },
+      { property: "og:site_name", content: "Ceyo" },
       { property: "og:locale", content: "en_US" },
       { property: "og:locale:alternate", content: "ar_EG" },
       { name: "twitter:card", content: "summary_large_image" },
