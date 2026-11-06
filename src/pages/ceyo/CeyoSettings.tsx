@@ -10,7 +10,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
 import { getStoredTheme, setTheme, type ThemeMode } from "@/lib/theme";
-import { useWorkspaceStore } from "@/lib/agentsky/store";import { integrations as CATALOG, type Integration } from "@/lib/integrationsData";
+import { loadWorkspace, useWorkspaceStore } from "@/lib/agentsky/store";import { integrations as CATALOG, type Integration } from "@/lib/integrationsData";
 import {
   disconnectIntegration, loadIntegrationConnections, startIntegrationConnection, waitForConnectionRefresh,
 } from "@/lib/integrationBackend";
@@ -585,6 +585,11 @@ function Feedback({ nav }: { nav: Nav }) {
   const [bot, setBot] = useState("None");
   const [pick, setPick] = useState(false);
   const names = ["None", ...new Set((live.agents || []).map((a) => a.name).filter(Boolean) as string[])];
+
+  // Opening settings straight from a cold start leaves the bot list empty.
+  useEffect(() => {
+    if (!(live.agents || []).length) void loadWorkspace();
+  }, [live.agents]);
 
   const send = () => {
     const body = encodeURIComponent(`${text.trim()}\n\nBot: ${bot}`);

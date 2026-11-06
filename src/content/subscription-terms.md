@@ -1,4 +1,4 @@
-# X-Subscription Consumer Terms of Service
+# Ceyo Subscription Consumer Terms of Service
 
 _Last Updated: November 6, 2026_
 
