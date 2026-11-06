@@ -15,22 +15,22 @@ import { registerRoute } from "@/lib/routePrefetch";
 
 // -- Top-level app routes --------------------------------------------------
 registerRoute(/^\/auth(\/|$)/, () => import("@/pages/auth/AuthPage"));
-registerRoute(/^\/chat(\/|$)/, () => import("@/pages/chat/ChatPage"));
+registerRoute(/^\/chat(\/|$)/, () => import("@/pages/agent/AgentHubPage"));
 
 // -- Settings --------------------------------------------------------------
-registerRoute(/^\/settings(\/|$)/, () => import("@/pages/settings/SettingsPage"));
-registerRoute(/^\/settings\/customization$/, () => import("@/pages/settings/CustomizationPage"));
-registerRoute(/^\/settings\/security$/, () => import("@/pages/settings/SecuritySettingsPage"));
-registerRoute(/^\/settings\/profile\/edit$/, () => import("@/pages/settings/ProfileEditPage"));
+registerRoute(/^\/settings(\/|$)/, () => import("@/pages/ceyo/CeyoSettings"));
+registerRoute(/^\/settings\/customization$/, () => import("@/pages/ceyo/CeyoSettings"));
+registerRoute(/^\/settings\/security$/, () => import("@/pages/ceyo/CeyoSettings"));
+registerRoute(/^\/settings\/profile\/edit$/, () => import("@/pages/ceyo/CeyoSettings"));
 
 // -- Billing / referrals ---------------------------------------------------
-registerRoute(/^\/usage(\/|$)/, () => import("@/pages/usage/UsagePage"));
-registerRoute(/^\/billing\/success$/, () => import("@/pages/billing/BillingSuccessPage"));
-registerRoute(/^\/referrals(\/|$)/, () => import("@/pages/billing/ReferralsPage"));
-registerRoute(/^\/referrals\/resources$/, () => import("@/pages/billing/ReferralResourcesPage"));
+registerRoute(/^\/usage(\/|$)/, () => import("@/pages/ceyo/CeyoSettings"));
+registerRoute(/^\/billing\/success$/, () => import("@/pages/ceyo/CeyoSettings"));
+registerRoute(/^\/referrals(\/|$)/, () => import("@/pages/ceyo/CeyoSettings"));
+registerRoute(/^\/referrals\/resources$/, () => import("@/pages/ceyo/CeyoSettings"));
 
 // -- Marketing / SEO -------------------------------------------------------
-registerRoute(/^\/pricing$/, () => import("@/pages/marketing/PricingPage"));
+registerRoute(/^\/pricing$/, () => import("@/pages/ceyo/CeyoSettings"));
 
 // -- Integrations ----------------------------------------------------------
 

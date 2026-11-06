@@ -120,9 +120,9 @@ export const preloadCommonRoutes = () => {
   const routeTasks: Array<() => Promise<unknown>> = isMobile
     ? [() => import("@/pages/auth/AuthPage")]
     : [
-        () => import("@/pages/agent/AgentChatPage"),
+        () => import("@/pages/agent/AgentHubPage"),
         () => import("@/pages/auth/AuthPage"),
-        () => import("@/pages/marketing/PricingPage"),
+        () => import("@/pages/ceyo/CeyoSettings"),
       ];
 
   const tasks = isMobile ? routeTasks : [...warmShared, ...routeTasks];

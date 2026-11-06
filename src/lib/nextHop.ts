@@ -19,39 +19,39 @@ const NEXT_HOPS: Array<{ match: RegExp; hops: Loader[] }> = [
     match: /^\/(welcome)?$/,
     hops: [
       () => import("@/pages/auth/AuthPage"),
-      () => import("@/pages/chat/ChatPage"),
+      () => import("@/pages/agent/AgentHubPage"),
     ],
   },
   // Auth → the chat is the only destination after signing in.
   {
     match: /^\/auth(\/|$)/,
     hops: [
-      () => import("@/pages/chat/ChatPage"),
-      () => import("@/pages/settings/SettingsPage"),
+      () => import("@/pages/agent/AgentHubPage"),
+      () => import("@/pages/ceyo/CeyoSettings"),
     ],
   },
   // Chat → settings and pricing are the two menu exits.
   {
     match: /^\/chat(\/|$)/,
     hops: [
-      () => import("@/pages/settings/SettingsPage"),
-      () => import("@/pages/marketing/PricingPage"),
+      () => import("@/pages/ceyo/CeyoSettings"),
+      () => import("@/pages/ceyo/CeyoSettings"),
     ],
   },
   // Settings → the data/usage screens people open from the list.
   {
     match: /^\/settings\/?$/,
     hops: [
-      () => import("@/pages/settings/DataControlsPage"),
-      () => import("@/pages/usage/UsagePage"),
-      () => import("@/pages/marketing/PricingPage"),
+      () => import("@/pages/ceyo/CeyoSettings"),
+      () => import("@/pages/ceyo/CeyoSettings"),
+      () => import("@/pages/ceyo/CeyoSettings"),
     ],
   },
   // Pricing → checkout return screens.
   {
     match: /^\/pricing$/,
     hops: [
-      () => import("@/pages/usage/UsagePage"),
+      () => import("@/pages/ceyo/CeyoSettings"),
       () => import("@/pages/auth/AuthPage"),
     ],
   },
