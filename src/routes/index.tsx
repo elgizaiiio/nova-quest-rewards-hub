@@ -7,25 +7,25 @@ export const Route = createFileRoute("/")({
   component: SpaMount,
   head: () => ({
     meta: [
-      { title: "Megsy AI — AI Agent Workspace for Chat, Research, Images & Video" },
+      { title: "Megsy AI — Your Personal Bots and Group Chats" },
       {
         name: "description",
         content:
-          "Use one AI agent workspace for chat, deep research, image and video generation, presentations, coding and browser automation in English and Arabic.",
+          "Meet your primary Megsy bot, create personal AI bots, coordinate group chats and pick up every conversation from one calm home.",
       },
-      { property: "og:title", content: "Megsy AI — AI Agent Workspace for Real Work" },
+      { property: "og:title", content: "Megsy AI — Your Personal Bots and Group Chats" },
       {
         property: "og:description",
         content:
-          "Chat, research the web, generate images and videos, build presentations and delegate browser tasks from one AI workspace.",
+          "Create personal AI bots and coordinated group chats, then continue every conversation from one clean, animated home.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Megsy AI — AI Agent Workspace for Real Work" },
+      { name: "twitter:title", content: "Megsy AI — Your Personal Bots and Group Chats" },
       {
         name: "twitter:description",
         content:
-          "Chat, research the web, generate images and videos, build presentations and delegate browser tasks from one AI workspace.",
+          "Create personal AI bots and coordinated group chats, then continue every conversation from one clean, animated home.",
       },
     ],
   }),
