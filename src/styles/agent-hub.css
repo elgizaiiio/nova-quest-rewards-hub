@@ -351,3 +351,11 @@
 .hub-home-bottom { inset-inline: 18px; gap: 12px; }
 .hub-home-bottom > .hub-apps-wrap > .hub-icon-button { width: 48px; height: 48px; background: var(--hub-surface); color: var(--hub-ink); }
 .hub-search-trigger { height: 48px !important; border: 1px solid var(--hub-line-strong) !important; background: var(--hub-surface) !important; box-shadow: none !important; font-size: 16px !important; }
+
+/* Grok-exact home polish */
+.hub-user-avatar{width:44px;height:44px;border-radius:999px;overflow:hidden;display:grid;place-items:center;background:var(--hub-surface,#1c1c1e);color:var(--hub-text,#fff);font-weight:600;font-size:17px;box-shadow:0 0 0 2px #2a2a2c;flex:none}
+.hub-user-avatar img{width:100%;height:100%;object-fit:cover}
+.hub-home-header{justify-content:space-between}
+.hub-plus-menu{min-width:240px;padding:8px 0;border-radius:22px;background:#2a2a2c;border:1px solid rgba(255,255,255,.06);box-shadow:0 18px 40px rgba(0,0,0,.6)}
+.hub-plus-menu button{padding:14px 22px;font-size:16px;font-weight:400;gap:0;background:none}
+.hub-plus-menu button:hover{background:rgba(255,255,255,.05)}

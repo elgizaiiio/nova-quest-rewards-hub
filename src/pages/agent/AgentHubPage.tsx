@@ -23,7 +23,7 @@ import { promptUpgrade } from "@/lib/upgradeMoment";
 import { isPaidUser } from "@/lib/subscriptionGating";
 import { HubChat } from "./hub/HubChat";
 import { AgentForm, GroupForm, ProfilePanel, SearchOverlay, type AgentFormValue } from "./hub/HubPanels";
-import { BotAvatar, CreateHint, GroupAvatar, HubIconButton, HubSpinner, type HubLang } from "./hub/HubParts";
+import { BotAvatar, GroupAvatar, HubIconButton, type HubLang } from "./hub/HubParts";
 import {
   EMPTY_HUB_LOCAL,
   groupPrompt,
@@ -75,6 +75,8 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   const nav = useNavigate();
   const [params, setParams] = useSearchParams();
   const [userId, setUserId] = useState(demo ? "demo" : "");
+  const [userAvatar, setUserAvatar] = useState("");
+  const [userInitial, setUserInitial] = useState("C");
   const [local, setLocal] = useState<HubLocalState>(demo ? { ...EMPTY_HUB_LOCAL, groups: [DEMO_GROUP] } : EMPTY_HUB_LOCAL);
   const [storageReady, setStorageReady] = useState(demo);
   const [busy, setBusy] = useState(false);
@@ -93,7 +95,12 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     if (demo) return;
     let active = true;
     void supabase.auth.getUser().then(({ data }) => {
-      if (active) setUserId(data.user?.id || "device");
+      if (!active) return;
+      const u = data.user;
+      setUserId(u?.id || "device");
+      const meta = (u?.user_metadata || {}) as Record<string, string>;
+      setUserAvatar(meta.avatar_url || meta.picture || meta.photo_url || "");
+      setUserInitial(((meta.full_name || meta.name || u?.email || "C")[0] || "C").toUpperCase());
     });
     return () => { active = false; };
   }, [demo]);
@@ -279,11 +286,10 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   const listContent = (
     <aside className="hub-home" aria-label={ar ? "البوتات والجروبات" : "Bots and groups"}>
       <header className="hub-home-header">
-        <HubIconButton label={ar ? "الإعدادات" : "Settings"} className="hub-account-button" onClick={() => nav("/settings")}><span className="hub-account-orb"><Sparkles size={19} /></span></HubIconButton>
-        <span className="hub-home-wordmark">Ceyo</span>
+        <button type="button" aria-label="Account" className="hub-user-avatar" onClick={() => nav("/settings")}>{userAvatar ? <img src={userAvatar} alt="" /> : <span>{userInitial}</span>}</button>
         <div className="hub-plus-wrap">
           <HubIconButton label={ar ? "إنشاء" : "Create"} onClick={() => setPlusOpen((open) => !open)} active={plusOpen}><Plus size={22} /></HubIconButton>
-          {plusOpen && <div className="hub-menu hub-plus-menu" role="menu"><button type="button" role="menuitem" onClick={() => go({ new: "bot" })}><Bot size={18} />{ar ? "بوت جديد" : "New Bot"}</button><button type="button" role="menuitem" onClick={() => go({ new: "group" })}><Users size={18} />{ar ? "جروب جديد" : "New Group Chat"}</button></div>}
+          {plusOpen && <div className="hub-menu hub-plus-menu" role="menu"><button type="button" role="menuitem" onClick={() => go({ new: "bot" })}>{ar ? "بوت جديد" : "New Bot"}</button><button type="button" role="menuitem" onClick={() => go({ new: "group" })}>{ar ? "جروب جديد" : "New Group Chat"}</button></div>}
         </div>
       </header>
 
@@ -296,7 +302,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
           </button>
         ) : !ws.ready ? <div className="hub-primary-skeleton"><Loader2 size={24} className="animate-spin" /></div> : null}
 
-        {!ws.ready && <HubSpinner label={ar ? "بنجهز البوتات…" : "Loading your bots…"} />}
+        
         {ws.error && <div className="hub-workspace-error"><p>{ar ? "البوتات مش متاحة دلوقتي. المحادثة الأساسية لسه شغالة." : "Your bots are unavailable right now. Quick Chat still works."}</p><button type="button" onClick={() => void loadWorkspace(true)}>{ar ? "حاول تاني" : "Try again"}</button></div>}
 
         {ws.ready && (() => {
@@ -319,9 +325,6 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
           );
         })}
 
-        {ws.ready && storageReady && orderedAgents.filter((agent) => !agent.isDefault).length === 0 && local.groups.length === 0 && (
-          <CreateHint lang={lang} onClick={() => go({ new: "bot" })} />
-        )}
 
         {local.hidden.length > 0 && (
           <section className="hub-hidden-section">
