@@ -307,11 +307,19 @@ export function HubChat({
     if (key) document.getElementById(`cx-${key}`)?.scrollIntoView({ block: "center", behavior: "smooth" });
   }, [findIdx, matches]);
 
-  const workingNames = useMemo(() => {
-    if (!s.running && !starting) return [];
-    if (!group) return [agent.name];
-    return group.memberIds.map((id) => agents.find((a) => a.id === id)?.name).filter(Boolean) as string[];
-  }, [s.running, starting, group, agents, agent.name]);
+  // Who is busy right now and what they are doing (thinking / using a tool / writing).
+  const activity = useMemo(() => {
+    if (!s.running && !starting) return [] as { bot: AgentInfo; state: "thinking" | "tool" | "talking" }[];
+    const live = s.running && lastAgent && s.turns[s.turns.length - 1] === lastAgent ? lastAgent : undefined;
+    const st = orb === "tool" ? "tool" : orb === "talking" ? "talking" : "thinking";
+    if (!group) return [{ bot: agent, state: live ? st : "thinking" as const }];
+    const coord = agents.find((a) => a.id === group.coordinatorId) || agent;
+    const parts = live ? groupTranscript(live.text || "") : [];
+    const last = parts[parts.length - 1]?.speaker;
+    const speaker = last ? agents.find((a) => group.memberIds.includes(a.id) && a.name === last) : undefined;
+    if (!speaker) return [{ bot: coord, state: live ? st : "thinking" as const }];
+    return [{ bot: speaker, state: st }];
+  }, [s.running, starting, s.turns, lastAgent, orb, group, agents, agent]);
 
   const startPress = (b: Bubble) => {
     if (press.current) window.clearTimeout(press.current);
@@ -441,12 +449,15 @@ export function HubChat({
             {!demo && s.requests.map((r) => (
               <ApprovalCard key={r.id} request={r} lang={lang} onAnswer={(v) => { s.setRequests((rs) => rs.filter((x) => x.id !== r.id)); s.send(v); }} />
             ))}
-            {workingNames.length > 0 && (
-              <div className="cx-working">
-                <BotAvatar agent={group ? (agents.find((a) => a.id === group.coordinatorId) || agent) : agent} size={22} state="thinking" />
-                <span dir="auto">{workingNames.length > 2 ? `${workingNames.slice(0, 2).join(", ")} ${ar ? `و${workingNames.length - 2} كمان شغالين…` : `and ${workingNames.length - 2} others are working…`}` : `${workingNames.join(", ")} ${ar ? "شغال…" : workingNames.length > 1 ? "are working…" : "is working…"}`}</span>
-              </div>
-            )}
+            {activity.map(({ bot, state }) => {
+              const label = state === "tool" ? (ar ? "شغال على الطلب" : "Working on it") : state === "talking" ? (ar ? "بيكتب" : "Writing") : (ar ? "بيفكر في الموضوع" : "Thinking it through");
+              return (
+                <div className="cx-working" key={bot.id}>
+                  <BotAvatar agent={bot} size={30} state={state} />
+                  <span dir="auto" className="cx-working-text">{group && <b>{bot.name}</b>}<span className="cx-shimmer">{label}</span></span>
+                </div>
+              );
+            })}
           </div>
         )}
         {!pinned && !empty && (

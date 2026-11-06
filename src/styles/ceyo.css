@@ -434,7 +434,11 @@ html[data-ceyo-surface="bot"] .agent-hub.ceyo-page{--ceyo-page-bg:#1b1b20;--ceyo
 .cx-avatar{flex:none;width:26px;padding-bottom:4px}
 .cx-agent-body{display:flex;min-width:0;flex:1;flex-direction:column;align-items:flex-start;gap:6px}
 .cx-author{margin:4px 0 -2px 10px;color:var(--cx-mute);font-size:12.5px}
-.cx-working{display:flex;align-items:center;gap:12px;margin-top:8px;color:var(--cx-mute);font-size:15px}
+.cx-working{display:flex;align-items:center;gap:14px;margin:10px 0 4px 2px;color:var(--cx-mute);font-size:17px}
+.cx-working-text{display:flex;align-items:baseline;gap:6px}
+.cx-working-text b{color:#e5e5e7;font-weight:600;font-size:15px}
+.cx-shimmer{background:linear-gradient(90deg,#6e6e73 0%,#6e6e73 40%,#d1d1d6 50%,#6e6e73 60%,#6e6e73 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cx-shimmer 1.8s linear infinite}
+@keyframes cx-shimmer{from{background-position:100% 0}to{background-position:-150% 0}}
 .cx-latest{position:sticky;bottom:12px;float:right;margin:-56px 16px 0 0;z-index:5}
 [dir="rtl"] .cx-latest{float:left;margin:-56px 0 0 16px}
 
