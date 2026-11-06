@@ -9,6 +9,8 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
+- The signed-in `/` and `/index` render the AgentHub bot/group home while `/chat` preserves the full primary-agent workspace. Hub-local groups map to real coordinator agents and account-scoped browser metadata; the existing animated AgentOrb remains the only bot character system. Why: deliver the Grok-style multi-bot home without forking chat transport or replacing established characters.
+
 - Generative UI: chat models answer with a ```ui JSON block validated by src/components/chat/genui/schema.ts and rendered by GenUIBlock; the prompt lives in genui/prompt.ts and is copied into supabase/functions/_shared/genui.ts (used by chat-fast and chat-alibaba; Deno cannot import src) — keep both in sync. ui blocks render outside the markdown pipeline so math/sanitize plugins cannot break them.
 - Chat HTML widgets: ```widget blocks render in a sandboxed iframe (allow-scripts only) via genui/HtmlWidget.tsx with a built-in stylesheet; replies go back through megsy.send/postMessage. Why: rich model-drawn UI without access to the app session.
 - Chat interactive answers use the vendored thesysdev/open-intelligent-ui component catalogue with @openuidev/react-lang, lazy-loaded behind ClientOnly; native openui fences and translated legacy ui specs share this renderer. Why: preserve original library behavior without importing Next.js or changing the primary agent.
