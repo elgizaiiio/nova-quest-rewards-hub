@@ -54,6 +54,6 @@
 - [x] One-off channel post scheduled for 2026-10-24 02:00 UTC (fires on next bot traffic)
 
 ## Ceyo full rebuild
-- [ ] Settings screens matching screenshots (Account, Usage, Vault, Connect apps, Devices, Import memory, Appearance, Language)
-- [ ] New Ceyo landing page
-- [ ] Remove all old pages; rename to Ceyo, English UI, no "AI" wording
+- [x] Settings screens matching screenshots (Account, Usage, Vault, Connect apps, Devices, Import memory, Appearance, Language)
+- [x] New Ceyo landing page
+- [x] Remove all old pages from the app; rename to Ceyo, English UI, no "AI" wording
