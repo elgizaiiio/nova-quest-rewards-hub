@@ -299,7 +299,14 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
         {!ws.ready && <HubSpinner label={ar ? "بنجهز البوتات…" : "Loading your bots…"} />}
         {ws.error && <div className="hub-workspace-error"><p>{ar ? "البوتات مش متاحة دلوقتي. المحادثة الأساسية لسه شغالة." : "Your bots are unavailable right now. Quick Chat still works."}</p><button type="button" onClick={() => void loadWorkspace(true)}>{ar ? "حاول تاني" : "Try again"}</button></div>}
 
-        {ws.ready && [...categories].sort((a, b) => a === "Unassigned" ? 1 : b === "Unassigned" ? -1 : a.localeCompare(b)).map((category) => {
+        {ws.ready && (() => {
+          const bots = orderedAgents.filter((agent) => !agent.isDefault && categoryFor("bot", agent.id) === "Unassigned" && !local.hidden.includes(itemKey("bot", agent.id)));
+          const groups = local.groups.filter((group) => categoryFor("group", group.id, group) === "Unassigned" && !local.hidden.includes(itemKey("group", group.id)));
+          if (!bots.length && !groups.length) return null;
+          return <div className="hub-category-rows hub-flat-rows">{groups.map((group) => renderGroupRow(group))}{bots.map((agent) => renderBotRow(agent))}</div>;
+        })()}
+
+        {ws.ready && [...categories].filter((category) => category !== "Unassigned").sort((a, b) => a.localeCompare(b)).map((category) => {
           const bots = orderedAgents.filter((agent) => !agent.isDefault && categoryFor("bot", agent.id) === category && !local.hidden.includes(itemKey("bot", agent.id)));
           const groups = local.groups.filter((group) => categoryFor("group", group.id, group) === category && !local.hidden.includes(itemKey("group", group.id)));
           if (!bots.length && !groups.length) return null;

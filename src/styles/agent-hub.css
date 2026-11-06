@@ -336,3 +336,35 @@ html[data-theme="light"] .agent-hub {
 @media (prefers-reduced-motion: reduce) {
   .agent-hub *, .agent-hub *::before, .agent-hub *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Grok-bot home: pure black, flat list, big characters */
+.agent-hub {
+  --hub-bg: oklch(0 0 0);
+  --hub-surface: oklch(0.2 0 0);
+  --hub-surface-raised: oklch(0.25 0 0);
+  --hub-surface-soft: oklch(0.14 0 0);
+  --hub-ink: oklch(0.98 0 0);
+  --hub-muted: oklch(0.62 0 0);
+  --hub-faint: oklch(0.5 0 0);
+  --hub-line: oklch(1 0 0 / 8%);
+  --hub-line-strong: oklch(1 0 0 / 14%);
+  --hub-shadow: none;
+}
+.hub-home-wordmark { display: none; }
+.hub-home-header { min-height: 84px; padding-inline: 20px; }
+.hub-home-header .hub-icon-button { width: 44px; height: 44px; border: 1px solid var(--hub-line-strong); background: var(--hub-surface); color: var(--hub-ink); }
+.hub-account-orb { width: 34px; height: 34px; }
+.hub-primary-button { margin: 18px 0 40px; }
+.hub-primary-button > strong { font-size: 15px; font-weight: 500; }
+.hub-primary-button > small { display: none; }
+.hub-primary-character > i { background: var(--hub-accent); width: 10px; height: 10px; border: 0; inset-inline-end: auto; inset-inline-start: -16px; bottom: auto; top: calc(100% + 18px); }
+.hub-flat-rows, .hub-category-rows { gap: 18px; }
+.hub-list-row:hover { background: transparent; }
+.hub-list-row-main { gap: 16px; padding: 8px 10px; }
+.hub-row-title strong { font-size: 16px; font-weight: 500; }
+.hub-row-title time { font-size: 13px; color: var(--hub-muted); }
+.hub-row-preview { font-size: 14px; margin-top: 6px; }
+.hub-category-title { font-size: 13px; padding: 14px 10px 8px; }
+.hub-home-bottom { inset-inline: 18px; gap: 12px; }
+.hub-home-bottom > .hub-apps-wrap > .hub-icon-button { width: 48px; height: 48px; background: var(--hub-surface); color: var(--hub-ink); }
+.hub-search-trigger { height: 48px !important; border: 1px solid var(--hub-line-strong) !important; background: var(--hub-surface) !important; box-shadow: none !important; font-size: 16px !important; }
