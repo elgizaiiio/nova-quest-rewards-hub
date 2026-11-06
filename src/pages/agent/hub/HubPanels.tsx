@@ -1,3 +1,4 @@
+import "@/styles/ceyo.css";
 import { useMemo, useState } from "react";
 import {
   Bot,
