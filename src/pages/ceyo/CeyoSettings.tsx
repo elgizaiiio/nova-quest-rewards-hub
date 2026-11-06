@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   Brain, Check, ChevronLeft, ChevronRight, Copy, CreditCard, Gauge, HelpCircle, KeyRound, Languages,
-  LayoutGrid, LogOut, Monitor, Moon, Plus, Search, Shield, Smartphone, Trash2, User, UserPlus, Vibrate, Vault, X,
+  LayoutGrid, LogOut, Monitor, Moon, Plus, Search, Shield, Smartphone, Trash2, User, UserPlus, Vibrate, Vault, X, ArrowUpRight,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
@@ -23,8 +23,8 @@ function Shell({ title, back, children, action }: { title: string; back: () => v
   return (
     <div className="agent-hub ceyo-page" data-no-translate>
       <header className="ceyo-top">
-        <button type="button" className="hub-icon-button" aria-label="Back" onClick={back}><ChevronLeft size={22} /></button>
-        <h1>{title}</h1>
+        <button type="button" className="gx-round" aria-label={title === "Settings" ? "Close" : "Back"} onClick={back}>{title === "Settings" ? <X size={20} /> : <ChevronLeft size={20} />}</button>
+        {title !== "Settings" && <h1>{title}</h1>}
         <span className="ceyo-top-action">{action}</span>
       </header>
       <div className="ceyo-scroll">{children}</div>
@@ -32,11 +32,11 @@ function Shell({ title, back, children, action }: { title: string; back: () => v
   );
 }
 
-function Row({ icon, label, value, onClick, danger, right }: { icon?: ReactNode; label: string; value?: string; onClick?: () => void; danger?: boolean; right?: ReactNode }) {
+function Row({ icon, label, value, onClick, danger, right, sub }: { icon?: ReactNode; label: string; value?: string; onClick?: () => void; danger?: boolean; right?: ReactNode; sub?: string }) {
   return (
     <button type="button" className="ceyo-row" data-danger={danger} onClick={onClick}>
       {icon && <span className="ceyo-row-icon">{icon}</span>}
-      <span className="ceyo-row-label">{label}</span>
+      <span className="ceyo-row-label">{sub ? <><strong>{label}</strong><small>{sub}</small></> : label}</span>
       {value && <span className="ceyo-row-value">{value}</span>}
       {right ?? (onClick && !danger ? <ChevronRight size={17} className="ceyo-row-chev" /> : null)}
     </button>
@@ -53,73 +53,94 @@ async function signOut(nav: Nav) {
 }
 
 /* ── Main ─────────────────────────────────────────────── */
-function Main({ nav }: { nav: Nav }) {
-  const [email, setEmail] = useState("");
-  const [haptics, setHaptics] = useState(true);
+function useMe() {
+  const [me, setMe] = useState({ email: "", name: "", avatar: "" });
   useEffect(() => {
-    void supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email || ""));
+    void supabase.auth.getUser().then(({ data }) => {
+      const m = (data.user?.user_metadata || {}) as Record<string, string>;
+      setMe({ email: data.user?.email || "", name: m.full_name || m.name || "", avatar: m.avatar_url || m.picture || "" });
+    });
+  }, []);
+  return me;
+}
+
+function MeCard({ onClick }: { onClick?: () => void }) {
+  const me = useMe();
+  return (
+    <button type="button" className="ceyo-row ceyo-me" onClick={onClick}>
+      <span className="ceyo-avatar">{me.avatar ? <img src={me.avatar} alt="" /> : (me.name || me.email || "C").charAt(0).toUpperCase()}</span>
+      <span className="ceyo-row-label"><strong>{me.name || "Ceyo account"}</strong><small>{me.email}</small></span>
+      {onClick && <ChevronRight size={17} className="ceyo-row-chev" />}
+    </button>
+  );
+}
+
+const Ext = () => <ArrowUpRight size={18} className="ceyo-row-chev" />;
+
+function Main({ nav }: { nav: Nav }) {
+  const [haptics, setHaptics] = useState(true);
+  const [notify, setNotify] = useState(false);
+  const [autoTz, setAutoTz] = useState(true);
+  useEffect(() => {
     setHaptics(localStorage.getItem("ceyo_haptics") !== "off");
+    setNotify(localStorage.getItem("ceyo_notify") === "on");
+    setAutoTz(localStorage.getItem("ceyo_auto_tz") !== "off");
   }, []);
   const theme = getStoredTheme();
+  const tz = typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "";
+  const flip = (key: string, v: boolean, set: (b: boolean) => void) => { set(v); localStorage.setItem(key, v ? "on" : "off"); };
   return (
     <Shell title="Settings" back={() => nav("/")}>
       <Group>
-        <Row icon={<User size={18} />} label="Account" value={email} onClick={() => nav("/settings/account")} />
-        <Row icon={<Gauge size={18} />} label="Usage" onClick={() => nav("/settings/usage")} />
-        <Row icon={<CreditCard size={18} />} label="Subscription" onClick={() => nav("/settings/usage")} />
+        <MeCard onClick={() => nav("/settings/account")} />
+        <Row label="Usage" onClick={() => nav("/settings/usage")} />
+        <Row label="Manage Subscription" onClick={() => nav("/settings/usage")} />
+        <Row label="Vault" sub="Logins, cards and contact info Ceyo can use" onClick={() => nav("/settings/vault")} />
       </Group>
       <Group>
-        <Row icon={<Vault size={18} />} label="Vault" onClick={() => nav("/settings/vault")} />
-        <Row icon={<LayoutGrid size={18} />} label="Connect apps" onClick={() => nav("/settings/apps")} />
-        <Row icon={<Monitor size={18} />} label="Devices" onClick={() => nav("/settings/devices")} />
-        <Row icon={<Brain size={18} />} label="Import memory" onClick={() => nav("/settings/memory")} />
+        <Row label="Connect apps" sub="Search plugins" onClick={() => nav("/settings/apps")} />
+      </Group>
+      <Group title="Bots">
+        <Row label="Set time zone automatically" sub="Your Bot's computer follows this device's time zone." onClick={() => flip("ceyo_auto_tz", !autoTz, setAutoTz)} right={<span className="ceyo-switch" data-on={autoTz}><i /></span>} />
+        <Row label="Time Zone" value={tz} right={<span />} />
+        <Row label="Manage your devices" onClick={() => nav("/settings/devices")} />
+        <Row label="Import Memory" onClick={() => nav("/settings/memory")} />
       </Group>
       <Group>
-        <Row icon={<Moon size={18} />} label="Appearance" value={theme === "system" ? "System" : theme === "dark" ? "Dark" : "Light"} onClick={() => nav("/settings/appearance")} />
-        <Row icon={<Languages size={18} />} label="Language" value="English" onClick={() => nav("/settings/language")} />
-        <Row
-          icon={<Vibrate size={18} />}
-          label="Haptics"
-          onClick={() => { const next = !haptics; setHaptics(next); localStorage.setItem("ceyo_haptics", next ? "on" : "off"); }}
-          right={<span className="ceyo-switch" data-on={haptics}><i /></span>}
-        />
+        <Row label="Notifications" onClick={() => flip("ceyo_notify", !notify, setNotify)} right={<span className="ceyo-switch" data-on={notify}><i /></span>} />
+        <Row label="Appearance" value={theme === "system" ? "Follow System" : theme === "dark" ? "Dark" : "Light"} onClick={() => nav("/settings/appearance")} />
+        <Row label="Language" value="System" onClick={() => nav("/settings/language")} />
+        <Row label="Haptics" value={haptics ? "On" : "Off"} onClick={() => flip("ceyo_haptics", !haptics, setHaptics)} />
       </Group>
       <Group>
-        <Row icon={<HelpCircle size={18} />} label="Help" onClick={() => window.open("mailto:support@ceyo.si")} />
-        <Row icon={<Shield size={18} />} label="Privacy policy" onClick={() => nav("/privacy")} />
-        <Row icon={<LogOut size={18} />} label="Sign out" danger onClick={() => void signOut(nav)} />
+        <Row label="Help Center" onClick={() => window.open("mailto:support@ceyo.si")} right={<Ext />} />
+        <Row label="Privacy Policy" onClick={() => nav("/privacy")} right={<Ext />} />
+        <Row label="Terms of Service" onClick={() => nav("/terms")} right={<Ext />} />
       </Group>
-      <p className="ceyo-foot">Ceyo · ceyo.si</p>
+      <Group>
+        <Row label="Send Feedback" onClick={() => window.open("mailto:support@ceyo.si?subject=Ceyo%20feedback")} />
+      </Group>
+      <Group>
+        <Row label="Sign Out" danger onClick={() => void signOut(nav)} />
+      </Group>
+      <div className="ceyo-brand-foot"><span className="ceyo-brand-orb"><i /><i /></span><strong>Ceyo</strong><small>ceyo.si</small></div>
     </Shell>
   );
 }
 
 /* ── Account ──────────────────────────────────────────── */
 function Account({ nav }: { nav: Nav }) {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  useEffect(() => {
-    void supabase.auth.getUser().then(({ data }) => {
-      setEmail(data.user?.email || "");
-      setName((data.user?.user_metadata?.full_name as string) || (data.user?.user_metadata?.name as string) || "");
-    });
-  }, []);
+  const me = useMe();
   return (
     <Shell title="Account" back={() => nav("/settings")}>
-      <div className="ceyo-account-card">
-        <span className="ceyo-avatar">{(name || email || "C").charAt(0).toUpperCase()}</span>
-        <span><strong>{name || "Ceyo account"}</strong><small>{email}</small></span>
-        <Check size={18} />
-      </div>
-      <Group>
-        <Row icon={<UserPlus size={18} />} label="Add or switch account" onClick={() => void signOut(nav).then(() => nav("/auth"))} />
-        <Row icon={<KeyRound size={18} />} label="Change password" onClick={() => nav("/settings/change-password")} />
-        <Row icon={<Shield size={18} />} label="Two-factor authentication" onClick={() => nav("/settings/two-factor")} />
+      <Group><MeCard /></Group>
+      <Group title="Switch Account">
+        <Row label={me.email || "—"} right={<Check size={18} />} />
+        <Row icon={<Plus size={20} />} label="Add Account" onClick={() => void signOut(nav).then(() => nav("/auth"))} right={<span />} />
       </Group>
-      <Group>
-        <Row icon={<LogOut size={18} />} label="Sign out" danger onClick={() => void signOut(nav)} />
-        <Row icon={<Trash2 size={18} />} label="Delete account" danger onClick={() => nav("/settings/delete-account")} />
-      </Group>
+      <Group><Row label="Sign Out" danger onClick={() => void signOut(nav)} /></Group>
+      <Group><Row icon={<Trash2 size={19} />} label="Delete Account" danger onClick={() => nav("/settings/delete-account")} /></Group>
+      <p className="ceyo-note">Permanently deletes your Ceyo account. This can't be undone.</p>
     </Shell>
   );
 }

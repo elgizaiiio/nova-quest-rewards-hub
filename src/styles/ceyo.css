@@ -168,3 +168,43 @@
 .gx-detail h2{font-size:17px}
 .gx-detail p{font-size:13px}
 .gx-connect-big{padding:11px 30px;font-size:15px}
+/* Grok settings */
+.ceyo-page{background:#1e1e1e!important}
+.ceyo-top{justify-content:flex-start;gap:14px;min-height:0;padding:calc(env(safe-area-inset-top) + 16px) 16px 22px}
+.ceyo-top h1{flex:1;text-align:start;font-size:15.5px;font-weight:500}
+.ceyo-scroll{padding:6px 16px 60px}
+.ceyo-group{margin:0 0 26px}
+.ceyo-group h2{margin:0 0 8px 16px;color:#8a8a8a;font-size:12.5px;font-weight:400}
+.ceyo-group>div{border-radius:18px;background:#2a2a2c;border:1px solid rgba(255,255,255,.05)}
+.ceyo-row{min-height:46px;padding:11px 16px;font-size:15px;border-bottom:0;position:relative;color:#fff}
+.ceyo-row:not(:last-child)::after{content:"";position:absolute;left:16px;right:0;bottom:0;height:1px;background:rgba(255,255,255,.07)}
+.ceyo-row:hover{background:transparent}
+.ceyo-row[data-danger="true"]{color:#ff7a70}
+.ceyo-row-label strong{font-size:15px;font-weight:400}
+.ceyo-row-label small{font-size:12.5px;color:#9a9a9a;white-space:normal}
+.ceyo-row-value{font-size:14.5px;color:#9a9a9a}
+.ceyo-row-icon{color:inherit}
+.ceyo-row-chev{color:#9a9a9a}
+.ceyo-me{padding:14px 16px}
+.ceyo-avatar{width:38px;height:38px;overflow:hidden;background:#3a3a3c;font-size:15px}
+.ceyo-avatar img{width:100%;height:100%;object-fit:cover}
+.ceyo-switch{width:46px;height:28px;background:#5a5a5c}
+.ceyo-switch i{top:4px;width:20px;height:20px;background:#111}
+.ceyo-switch[data-on="true"]{background:#fff}
+.ceyo-switch[data-on="true"] i{transform:translateX(18px)}
+.ceyo-note{color:#8a8a8a;font-size:12.5px;margin:-16px 16px 20px}
+.ceyo-brand-foot{display:flex;flex-direction:column;align-items:center;gap:4px;padding:30px 0 20px}
+.ceyo-brand-orb{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px}
+.ceyo-brand-orb i{width:5px;height:14px;border-radius:9px;background:#111}
+.ceyo-brand-foot strong{font-size:17px;font-weight:500}
+.ceyo-brand-foot small{color:#9a9a9a;font-size:13px}
+/* sheet look for create pages */
+.gx-create{top:44px;border-radius:24px 24px 0 0;box-shadow:0 -1px 0 rgba(255,255,255,.04)}
+.gx-create::before{content:"";position:fixed;inset:0 0 auto 0;height:60px;background:#0e0e0e;z-index:-1}
+/* search header chips: shorter rounded rectangles */
+.hub-search-overlay .hub-search-filters button{padding:5px 12px!important;border-radius:10px!important;font-size:13px!important}
+/* home rows like reference */
+.hub-list-row-main{gap:13px;padding:10px 0}
+.hub-row-title strong{font-size:15px;font-weight:400;color:#fff}
+.hub-row-title time{font-size:13px;color:#8a8a8a}
+.hub-row-preview{font-size:13.5px;color:#9a9a9a}
