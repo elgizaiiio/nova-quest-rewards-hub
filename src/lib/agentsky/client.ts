@@ -78,6 +78,8 @@ export const agentApi = {
     req<{ agents: AgentInfo[]; tier: "free" | "pro"; models: MediaModelInfo[] }>("bootstrap"),
   createAgent: (a: { name: string; description: string; prompt: string; color: AgentColor }) =>
     req<{ agent: AgentInfo }>("agents", { method: "POST", body: JSON.stringify(a) }),
+  updateAgent: (id: string, a: { name: string; description: string; prompt: string; color: AgentColor }) =>
+    req<{ agent: AgentInfo }>("agents/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify(a) }),
   deleteAgent: (id: string) => req("agents/" + id, { method: "DELETE" }),
   sessions: () => req<{ sessions: SessionInfo[] }>("sessions"),
   createSession: (p: { agentId?: string; text: string; images?: string[] }) =>
