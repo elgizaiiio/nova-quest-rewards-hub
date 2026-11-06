@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { askConfirm } from "@/components/common/CeyoConfirm";
 import {
   ArrowUpRight, Check, ChevronLeft, ChevronRight, Contrast, Copy, CreditCard,
   KeyRound, Moon, Plus, Search, Smartphone, Sun, Trash2, User, Vault, X,
@@ -75,6 +76,7 @@ const Toggle = ({ on }: { on: boolean }) => <span className="ceyo-switch" data-o
 const Ext = () => <ArrowUpRight size={18} className="ceyo-row-chev" />;
 
 async function signOut(nav: Nav) {
+  if (!(await askConfirm({ title: "Sign out of Ceyo?", body: "Your bots and chats stay saved. Sign back in anytime.", confirm: "Sign Out", danger: true }))) return;
   try {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
@@ -193,6 +195,7 @@ function Main({ nav }: { nav: Nav }) {
 function Account({ nav }: { nav: Nav }) {
   const me = useMe();
   const addAccount = async () => {
+    if (!(await askConfirm({ title: "Add another account?", body: "You will be signed out of this account to sign in with another one.", confirm: "Continue" }))) return;
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;

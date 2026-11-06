@@ -231,7 +231,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
 
   const deleteBot = async (agent: AgentInfo) => {
     if (demo) return;
-    if (!window.confirm(ar ? `تحذف ${agent.name} وكل تعليماته؟` : `Delete ${agent.name} and its instructions?`)) return;
+    if (!(await askConfirm({ title: ar ? `تمسح ${agent.name}؟` : `Delete ${agent.name}?`, body: ar ? "البوت وتعليماته هيتمسحوا نهائيًا." : "This bot and its instructions will be deleted for good.", confirm: ar ? "مسح" : "Delete", cancel: ar ? "إلغاء" : "Cancel", danger: true }))) return;
     try {
       await agentApi.deleteAgent(agent.id);
       workspace.removeAgent(agent.id);
@@ -249,7 +249,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
 
   const deleteGroup = async (group: AgentGroup) => {
     if (demo) return;
-    if (!window.confirm(ar ? `تحذف جروب ${group.name}؟` : `Delete ${group.name}?`)) return;
+    if (!(await askConfirm({ title: ar ? `تمسح جروب ${group.name}؟` : `Delete ${group.name}?`, body: ar ? "الجروب هيتمسح نهائيًا." : "This group will be deleted for good.", confirm: ar ? "مسح" : "Delete", cancel: ar ? "إلغاء" : "Cancel", danger: true }))) return;
     try {
       await agentApi.deleteAgent(group.coordinatorId);
       workspace.removeAgent(group.coordinatorId);
@@ -388,7 +388,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
             </>) : (<>
               <button type="button" role="menuitem" onClick={() => setRowMenu({ ...rowMenu, move: false })}><ChevronLeft size={20} />Back</button>
               {existing.map((c) => <button type="button" role="menuitem" key={c} onClick={() => setCategory(c)}><Folder size={20} />{c}</button>)}
-              <button type="button" role="menuitem" onClick={() => { const name = window.prompt("Section name")?.trim(); if (name) setCategory(name.slice(0, 40)); else close(); }}><Plus size={20} />New section</button>
+              <button type="button" role="menuitem" onClick={() => { close(); void askText({ title: ar ? "قسم جديد" : "New section", placeholder: ar ? "اسم القسم" : "Section name", confirm: ar ? "إضافة" : "Add", cancel: ar ? "إلغاء" : "Cancel" }).then((name) => { if (name) setCategory(name.slice(0, 40)); }); }}><Plus size={20} />New section</button>
               {existing.length > 0 && <button type="button" role="menuitem" onClick={() => setCategory("Unassigned")}><Folder size={20} />Unassigned</button>}
             </>)}
           </div>
