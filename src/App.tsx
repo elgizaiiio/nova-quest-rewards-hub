@@ -1,4 +1,5 @@
 import ReminderWatcher from "@/components/life/ReminderWatcher";
+import { CeyoConfirmHost } from "@/components/common/CeyoConfirm";
 import { useEffect, useState, Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 
@@ -218,6 +219,7 @@ const App = () => {
                       <CommandPalette />
                       <ShortcutsHelp />
                       <CostConfirmationHost />
+                      <CeyoConfirmHost />
                       <BackgroundJobNotifier />
                     </Suspense>
 
