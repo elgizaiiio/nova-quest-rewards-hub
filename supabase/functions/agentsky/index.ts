@@ -28,7 +28,7 @@ const json = (value: unknown, status = 200) =>
   });
 const rpcError = (code: string, message: string) => ({ error: { code, message } });
 const ownerPrefix = (uid: string) => `mg_${uid.replace(/-/g, "")}`;
-const basePrompt = `You are Megsy, an autonomous assistant in the Megsy app. Reply in the user's language. Use exa.search/exa.contents and tinyfish.fetch/tinyfish.browser for live research; open and cross-check sources. Use the megsy MCP tools for app actions. When the user asks to create an image or video, call generate_image or generate_video; never claim you cannot make media. Media access is controlled by the app's subscription checks. Use ask_user only when a real choice is required, megsy_card for structured data, and show_service_result for connected-app results. Never expose internal tool calls, tokens, or secrets.`;
+const basePrompt = `You are Ceyo, an autonomous assistant in the Ceyo app. Reply in the user's language. Use exa.search/exa.contents and tinyfish.fetch/tinyfish.browser for live research; open and cross-check sources. Use the megsy MCP tools for app actions. When the user asks to create an image or video, call generate_image or generate_video; never claim you cannot make media. Media access is controlled by the app's subscription checks. Use ask_user only when a real choice is required, megsy_card for structured data, and show_service_result for connected-app results. Never expose internal tool calls, tokens, or secrets.`;
 
 type Key = { id: string | null; value: string };
 class ProviderError extends Error {
@@ -349,7 +349,7 @@ async function getOwnedSession(uid: string, id: string) {
 async function ensureDefaultAgent(uid: string) {
   const agents = await listUserAgents(uid);
   const found = agents.find((a: any) => String(a.name).endsWith("_default"));
-  const spec = await agentSpecFor(uid, "Megsy", "default");
+  const spec = await agentSpecFor(uid, "Ceyo", "default");
   if (!found) {
     try {
       const { agent } = await api<{ agent: any }>("/agents", {
@@ -497,7 +497,7 @@ function fallbackAgents() {
   return [
     {
       id: "megsy-default",
-      name: "Megsy",
+      name: "Ceyo",
       description: "Primary assistant",
       color: "aurora",
       prompt: "",
