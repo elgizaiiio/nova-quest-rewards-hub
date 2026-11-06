@@ -390,3 +390,7 @@
 .hub-bot-avatar[data-look] .ag-orb__body{background:var(--look-fill)!important;clip-path:var(--look-clip)!important;border-radius:var(--look-radius)!important;box-shadow:none!important}
 .hub-bot-avatar[data-look] .ag-orb__halo{display:none}
 .hub-bot-avatar[data-look] { --ag-eye:#151515; }
+/* search header exactly like reference */
+.hub-search-overlay .hub-search-filters{background:transparent!important;border:0!important;box-shadow:none!important;gap:8px;padding:calc(env(safe-area-inset-top) + 18px) 18px 10px}
+.hub-search-overlay .hub-search-filters button{border:0!important;background:#262628;color:#fff;font-size:13.5px;font-weight:500;padding:7px 13px}
+.hub-search-overlay .hub-search-filters button[data-active="true"]{background:#fff;color:#000}
