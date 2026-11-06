@@ -32,7 +32,8 @@ import { agentApi, type AgentInfo, type SessionInfo } from "@/lib/agentsky/clien
 import { refreshSessions, workspace } from "@/lib/agentsky/store";
 import { useAgentSession } from "@/hooks/useAgentSession";
 import { StepTimeline } from "@/components/agent/StepTimeline";
-import { ApprovalCard, MediaCard, PlanCard, QuestionCard, TaskCard, VideoProposalCard } from "@/components/agent/Cards";
+import { MediaCard, PlanCard, TaskCard, VideoProposalCard } from "@/components/agent/Cards";
+import { ChoiceCard, ConnectAppsCard, SecretCard, readConnectApps } from "./HubCards";
 import { AgentProposalCard } from "@/components/agent/AgentProposalCard";
 import { orbStateFor, type AgentTurn } from "@/lib/agentsky/transcript";
 import { groupTranscript, type AgentGroup } from "./hubStorage";
@@ -435,7 +436,16 @@ export function HubChat({
                           if (card.kind === "agent-proposal") return <AgentProposalCard key={card.id} proposal={card.proposal} />;
                           if (card.kind === "media") return <MediaCard key={card.id} media={card.media} lang={lang} />;
                           if (card.kind === "video") return <VideoProposalCard key={card.id} proposal={card.proposal} models={models} tier={tier} lang={lang} onUpgrade={() => nav("/pricing")} />;
-                          if (card.kind === "question") return <QuestionCard key={card.id} question={card.question} options={card.options} allowFreeText={card.allowFreeText} answered={card.answered} lang={lang} onAnswer={(v) => s.send(v)} />;
+                          if (card.kind === "question") return <ChoiceCard key={card.id} question={card.question} options={card.options} allowFreeText={card.allowFreeText} answered={card.answered} ar={ar} onAnswer={(v) => s.send(v)} />;
+                          if (card.kind === "widget") {
+                            const d = (card.data || {}) as Record<string, any>;
+                            if (card.name === "connect_app") return <ConnectAppsCard key={card.id} apps={readConnectApps(d)} title={d.title || d.question} ar={ar} onAuthorize={() => nav("/settings/apps")} />;
+                            if (card.name === "secret" || card.name === "api_key") return <SecretCard key={card.id} name={String(d.name || d.title || "API key")} ar={ar} onOpen={() => nav("/settings/vault")} />;
+                            if (card.name === "question" || card.name === "option_picker") {
+                              const opts = (Array.isArray(d.options) ? d.options : Array.isArray(d.choices) ? d.choices : []).map((o: any) => typeof o === "string" ? o : String(o?.label ?? o?.name ?? o?.title ?? "")).filter(Boolean);
+                              return <ChoiceCard key={card.id} question={d.question || d.title} options={opts} allowFreeText={d.allow_free_text !== false} ar={ar} onAnswer={(v) => s.send(v)} />;
+                            }
+                          }
                           if (card.kind === "task") return <TaskCard key={card.id} title={card.title} dueAt={card.dueAt} lang={lang} onOpen={() => nav("/agents")} />;
                           return null;
                         })}
@@ -447,7 +457,9 @@ export function HubChat({
               );
             })}
             {!demo && s.requests.map((r) => (
-              <ApprovalCard key={r.id} request={r} lang={lang} onAnswer={(v) => { s.setRequests((rs) => rs.filter((x) => x.id !== r.id)); s.send(v); }} />
+              r.kind === "connect_app"
+                ? <ConnectAppsCard key={r.id} title={r.question} apps={readConnectApps({ apps: r.options?.length ? r.options.map((o) => ({ id: o.id, name: o.label, description: o.description })) : [r.subject || r.question] })} ar={ar} onAuthorize={() => nav("/settings/apps")} />
+                : <ChoiceCard key={r.id} question={r.question} options={r.options?.length ? r.options.map((o) => o.label) : r.kind === "approval" ? [ar ? "موافق" : "Approve", ar ? "لأ" : "Don't"] : []} allowFreeText={r.allow_free_text || r.kind === "question"} ar={ar} onAnswer={(v) => { s.setRequests((rs) => rs.filter((x) => x.id !== r.id)); s.send(v); }} />
             ))}
             {activity.map(({ bot, state }) => {
               const label = state === "tool" ? (ar ? "شغال على الطلب" : "Working on it") : state === "talking" ? (ar ? "بيكتب" : "Writing") : (ar ? "بيفكر في الموضوع" : "Thinking it through");
