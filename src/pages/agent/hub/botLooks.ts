@@ -7,16 +7,14 @@ export const BOT_SHAPES: BotShape[] = [
   { id: "circle", radius: "50%" },
   { id: "cloud", radius: "58% 52% 46% 54% / 60% 58% 44% 46%" },
   { id: "square", radius: "24%" },
-  { id: "spark", clip: "polygon(50% 0%,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0% 50%,38% 38%)" },
   { id: "puff", radius: "46% 54% 40% 60% / 52% 44% 56% 48%" },
   { id: "heart", radius: "50% 50% 50% 50% / 60% 60% 40% 40%" },
-  { id: "flower", clip: "polygon(50% 0%,66% 14%,86% 14%,86% 34%,100% 50%,86% 66%,86% 86%,66% 86%,50% 100%,34% 86%,14% 86%,14% 66%,0% 50%,14% 34%,14% 14%,34% 14%)" },
   { id: "drop", radius: "50% 50% 50% 50% / 40% 40% 60% 60%" },
   { id: "pill", radius: "50% / 42%" },
-  { id: "triangle", clip: "polygon(10% 8%,100% 55%,10% 95%)" },
   { id: "pebble", radius: "30% 40% 26% 34%" },
-  { id: "star", clip: "polygon(50% 0%,61% 18%,82% 10%,80% 32%,100% 42%,84% 58%,92% 80%,68% 78%,56% 100%,42% 82%,20% 92%,20% 68%,0% 56%,16% 40%,8% 18%,32% 20%)" },
-  { id: "hexagon", clip: "polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0% 50%)" },
+  { id: "blob", radius: "62% 38% 54% 46% / 48% 56% 44% 52%" },
+  { id: "tall", radius: "44% / 36%" },
+  { id: "hexagon", radius: "34%" },
 ];
 
 export const BOT_COLORS: { hex: string; agent: AgentColor }[] = [

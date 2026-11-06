@@ -285,7 +285,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       <div className="hub-list-row" key={key}>
         <button type="button" className="hub-list-row-main" {...pressProps("bot", agent.id)} data-unread={isUnread(key, latest?.createdAt)} onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
           <BotAvatar agent={agent} size={44} />
-          <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
+          <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || (ar ? "ابدأ محادثة" : "Start a conversation")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
       </div>
