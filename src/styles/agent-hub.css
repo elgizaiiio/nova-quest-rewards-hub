@@ -140,8 +140,8 @@ html[data-theme="light"] .agent-hub {
 .hub-chat-identity { display: flex; min-width: 0; flex: 1; align-items: center; gap: 10px; padding: 3px 6px; border: 0; border-radius: 16px; background: transparent; color: var(--hub-ink); text-align: start; cursor: pointer; }
 .hub-chat-identity > span:last-child { min-width: 0; }
 .hub-chat-identity strong, .hub-chat-identity small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hub-chat-identity strong { font-size: 13.5px; font-weight: 600; }
-.hub-chat-identity small { margin-top: 2px; color: var(--hub-muted); font-size: 10.5px; }
+.hub-chat-identity strong { font-size: 13.5px; font-weight: 600; line-height: 1.45; }
+.hub-chat-identity small { margin-top: 2px; color: var(--hub-muted); font-size: 10.5px; line-height: 1.35; }
 .hub-chat-identity .hub-group-avatar { width: 49px; height: 39px; transform: scale(.85); transform-origin: center; }
 .hub-header-menu, .hub-history-menu { inset-inline-end: 12px; top: 59px; }
 .hub-history-menu { max-height: min(430px, 60dvh); overflow-y: auto; }

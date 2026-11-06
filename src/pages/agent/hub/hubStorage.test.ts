@@ -31,7 +31,16 @@ describe("agent hub local state", () => {
       { name: "Guard", description: "Risk review", prompt: "Reject unsafe trades." },
     ]);
     expect(prompt).toContain("@BotName");
+    expect(prompt).toContain("[[speaker: Exact Bot Name]]");
     expect(prompt).toContain("Analyst");
     expect(prompt).toContain("Reject unsafe trades.");
+  });
+
+  it("attributes each group contribution to its named bot", () => {
+    expect(groupTranscript("[[speaker: Analyst]]\nPrices rose.\n[[speaker: Guard]]\nKeep the position small.")).toEqual([
+      { speaker: "Analyst", text: "Prices rose." },
+      { speaker: "Guard", text: "Keep the position small." },
+    ]);
+    expect(groupTranscript("A normal answer.")).toEqual([{ speaker: "", text: "A normal answer." }]);
   });
 });

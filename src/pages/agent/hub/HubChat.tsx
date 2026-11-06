@@ -25,8 +25,9 @@ import { refreshSessions, workspace } from "@/lib/agentsky/store";
 import { useAgentSession } from "@/hooks/useAgentSession";
 import { StepTimeline } from "@/components/agent/StepTimeline";
 import { ApprovalCard, MediaCard, PlanCard, QuestionCard, TaskCard, VideoProposalCard } from "@/components/agent/Cards";
+import { AgentProposalCard } from "@/components/agent/AgentProposalCard";
 import { orbStateFor, type AgentTurn } from "@/lib/agentsky/transcript";
-import type { AgentGroup } from "./hubStorage";
+import { groupTranscript, type AgentGroup } from "./hubStorage";
 import { BackButton, BotAvatar, GroupAvatar, HubIconButton, HubSpinner, VoiceCaptureButton, type HubLang } from "./HubParts";
 
 function HubComposer({
