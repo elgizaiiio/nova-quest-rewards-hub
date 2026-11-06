@@ -669,7 +669,8 @@ html[data-ceyo-surface="bot"] .agent-hub.ceyo-page{--ceyo-page-bg:#1b1b20;--ceyo
 .cx-call-level[data-phase="muted"] span{width:0}
 @keyframes cx-level{from{width:12%}to{width:62%}}
 @keyframes cx-slide{from{transform:translateX(0)}to{transform:translateX(400%)}}
-.cx-call-btn{all:unset;box-sizing:border-box;display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.14);color:#fff;cursor:pointer}
+.cx-call-btn{all:unset;box-sizing:border-box;display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;border:0;outline:0;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.cx-call-btn:focus,.cx-call-btn:focus-visible{outline:0;box-shadow:none}
 .cx-call-btn[data-off="true"]{background:#fff;color:#000}
 .cx-call-end{border:0;background:#ff453a}
 .cx-call-grip{position:absolute;bottom:6px;left:50%;width:40px;height:3px;margin-left:-20px;border-radius:2px;background:rgba(255,255,255,.22)}
