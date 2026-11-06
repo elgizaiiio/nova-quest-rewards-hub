@@ -21,6 +21,10 @@ import {
   Search,
   Users,
   X,
+  Star,
+  Share2,
+  Monitor,
+  Bell,
 } from "lucide-react";
 import type { AgentColor, AgentInfo, SessionInfo } from "@/lib/agentsky/client";
 import type { AgentGroup, VoiceSettings } from "./hubStorage";
@@ -125,7 +129,7 @@ export function AgentForm({
         <div className="cx-sheet" role="listbox">
           {VOICE_OPTIONS[pickVoice].map((o) => {
             const on = String(v[pickVoice]) === String(o);
-            return <button type="button" key={String(o)} className="gx-opt" data-active={on} onClick={() => { setV({ ...v, [pickVoice]: o }); setPickVoice(null); }}>
+            return <button type="button" key={String(o)} className="gx-opt" data-active={on} onClick={() => { setV({ ...v, [pickVoice]: o } as VoiceSettings); setPickVoice(null); }}>
               <span>{pickVoice === "speed" ? `${o}x` : o}</span>{on && <Check size={18} />}
             </button>;
           })}
@@ -206,6 +210,8 @@ export function ProfilePanel({
   onOpenChat,
   onRename,
   onDelete,
+  onMakePrimary,
+  onComputer,
 }: {
   lang: HubLang;
   agent: AgentInfo;
@@ -217,8 +223,11 @@ export function ProfilePanel({
   onOpenChat: () => void;
   onRename?: (name: string) => void;
   onDelete?: () => void;
+  onMakePrimary?: () => void;
+  onComputer?: () => void;
 }) {
   void sessions; void onOpenChat;
+  const [notify, setNotify] = useState(() => { try { return localStorage.getItem(`ceyo_bot_notify:${agent.id}`) !== "0"; } catch { return true; } });
   const ar = lang === "ar";
   const [view, setView] = useState<"main" | "routines" | "library" | "members" | "edit" | "avatar">("main");
   const [menu, setMenu] = useState(false);
@@ -258,17 +267,21 @@ export function ProfilePanel({
         {menu && <div className="cx-scrim" onPointerDown={() => setMenu(false)} />}
         {menu && <div className="cx-pop cx-pop-down" role="menu">
           <button type="button" onClick={() => { void navigator.clipboard?.writeText(id).then(() => setCopied(true)); setMenu(false); }}><Copy size={19} />{ar ? "نسخ المعرّف" : "Copy ID"}</button>
+          {!group && !agent.isDefault && onMakePrimary && <button type="button" onClick={() => { setMenu(false); onMakePrimary(); }}><Star size={19} />{ar ? "اجعله البوت الأساسي" : "Replace Primary Bot"}</button>}
+          {!group && <button type="button" onClick={() => { void navigator.clipboard?.writeText(`${agent.name}\n\n${agent.prompt || agent.description || ""}`).then(() => setCopied(true)); setMenu(false); }}><Share2 size={19} />{ar ? "شارك كقالب" : "Share as Template"}</button>}
           {onDelete && <button type="button" data-danger="true" onClick={() => { setMenu(false); onDelete(); }}><Trash2 size={19} />{group ? (ar ? "حذف الجروب" : "Delete Group Chat") : (ar ? "حذف البوت" : "Delete Bot")}</button>}
         </div>}
       </>} />
       <div className="cx-profile">
         <div className="cx-profile-avatar">{big}</div>
-        <h2 dir="auto">{title}</h2>
+        <h2 dir="auto">{title}{!group && agent.isDefault && <Star size={16} className="cx-gold" fill="currentColor" />}</h2>
         <button type="button" className="cx-pill-btn" onClick={() => group ? setView("edit") : onEdit()}>{ar ? "تعديل" : "Edit"}</button>
-        {copied && <p className="cx-copied">{ar ? "اتنسخ" : "ID copied"}</p>}
+        {copied && <p className="cx-copied">{ar ? "اتنسخ" : "Copied"}</p>}
         <div className="cx-card">
           <button type="button" onClick={() => setView("routines")}><Clock3 size={20} /><span>{ar ? "الروتينات" : "Routines"}</span><small>0 {ar ? "شغال" : "on"}</small><ChevronRight size={18} /></button>
           <button type="button" onClick={() => setView("library")}><Library size={20} /><span>{ar ? "المكتبة" : "Library"}</span><ChevronRight size={18} /></button>
+          {!group && <button type="button" onClick={() => onComputer?.()}><Monitor size={20} /><span>{ar ? "الكمبيوتر" : "Computer"}</span><ChevronRight size={18} /></button>}
+          {!group && <button type="button" onClick={() => setNotify((n) => { const next = !n; try { localStorage.setItem(`ceyo_bot_notify:${agent.id}`, next ? "1" : "0"); } catch { /* storage unavailable */ } return next; })}><Bell size={20} /><span>{ar ? "الإشعارات" : "Notifications"}</span><small>{notify ? (ar ? "شغالة" : "On") : (ar ? "مقفولة" : "Off")}</small></button>}
           {group && <button type="button" onClick={() => setView("members")}><Users size={20} /><span>{ar ? "الأعضاء" : "Members"}</span><small>{members.length}</small><ChevronRight size={18} /></button>}
         </div>
       </div>
