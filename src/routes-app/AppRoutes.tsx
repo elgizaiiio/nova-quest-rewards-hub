@@ -15,7 +15,8 @@ import {
   DeleteAccountPage,
   AcceptInvitePage,
   ReferralRedirectPage,
-  LegalPage,
+  LegalDocPage,
+  DocsPage,
   AgentHubPage,
 } from "./lazyPages";
 
@@ -57,8 +58,11 @@ export const AppRoutes = (_props: { currentUserId: string | null }) => (
     <Route path="/settings/:section" element={guard(<CeyoSettings />)} />
     <Route path="/settings/:section/:sub" element={guard(<CeyoSettings />)} />
 
-    <Route path="/terms" element={<LegalPage slug="terms" />} />
-    <Route path="/privacy" element={<LegalPage slug="privacy" />} />
+    <Route path="/terms" element={<LegalDocPage slug="terms" />} />
+    <Route path="/privacy" element={<LegalDocPage slug="privacy" />} />
+    <Route path="/subscription-terms" element={<LegalDocPage slug="subscription-terms" />} />
+    <Route path="/docs" element={<DocsPage />} />
+    <Route path="/docs/:slug" element={<DocsPage />} />
 
     <Route path="/chat" element={home} />
     <Route path="*" element={home} />
