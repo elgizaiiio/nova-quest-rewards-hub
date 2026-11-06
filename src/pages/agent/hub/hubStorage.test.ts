@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { EMPTY_HUB_LOCAL, groupPrompt, loadHubLocal, makeGroup, saveHubLocal } from "./hubStorage";
+import { EMPTY_HUB_LOCAL, groupPrompt, groupTranscript, loadHubLocal, makeGroup, saveHubLocal } from "./hubStorage";
 
 describe("agent hub local state", () => {
   beforeEach(() => window.localStorage.clear());

@@ -96,7 +96,17 @@ export function groupPrompt(name: string, members: { name: string; description: 
   const roster = members
     .map((member) => `- ${member.name}: ${member.description || "Personal AI bot"}. ${member.prompt || ""}`.trim())
     .join("\n");
-  return `You are the coordinator of the multi-bot group "${name}". Reply in the user's language. Understand the request, decide which listed bot should lead, and identify the speaker before each contribution. When the user mentions @BotName, that bot must lead the next answer. Keep contributions concise and do not invent completed actions.\n\nGroup members:\n${roster}`;
+  return `You are the coordinator of the multi-bot group "${name}". Reply in the user's language. Understand the request, decide which listed bot should lead, and identify the speaker before each contribution. When the user mentions @BotName, that bot must lead the next answer. Keep contributions concise and do not invent completed actions. Format every contribution as a separate block beginning with [[speaker: Exact Bot Name]], using only names from this roster. Use one block when one bot is enough and up to three blocks when collaboration helps.\n\nGroup members:\n${roster}`;
+}
+
+export function groupTranscript(content: string) {
+  const marker = /\[\[speaker:\s*([^\]\n]{1,80})\]\]\s*/g;
+  const matches = [...content.matchAll(marker)];
+  if (!matches.length) return [{ speaker: "", text: content }];
+  return matches.map((match, index) => ({
+    speaker: match[1].trim(),
+    text: content.slice((match.index || 0) + match[0].length, matches[index + 1]?.index).trim(),
+  })).filter((part) => part.text);
 }
 
 export function itemKey(kind: "bot" | "group", id: string) {
