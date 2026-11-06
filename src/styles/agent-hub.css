@@ -1,6 +1,6 @@
 /* Megsy agent home — quiet, character-first messenger surfaces. */
 .agent-hub {
-  --hub-bg: oklch(0.145 0.006 260);
+  --hub-bg: #000;
   --hub-surface: oklch(0.205 0.007 260);
   --hub-surface-raised: oklch(0.245 0.008 260);
   --hub-surface-soft: oklch(0.185 0.006 260);
@@ -35,23 +35,6 @@
   font-family: "DM Sans", "Readex Pro", system-ui, sans-serif;
   color-scheme: dark;
   isolation: isolate;
-}
-html[data-theme="light"] .agent-hub {
-  --hub-bg: oklch(0.975 0.004 260);
-  --hub-surface: oklch(1 0 0);
-  --hub-surface-raised: oklch(0.94 0.005 260);
-  --hub-surface-soft: oklch(0.955 0.005 260);
-  --hub-ink: oklch(0.22 0.01 260);
-  --hub-muted: oklch(0.48 0.012 260);
-  --hub-faint: oklch(0.62 0.01 260);
-  --hub-line: oklch(0.2 0.01 260 / 8%);
-  --hub-line-strong: oklch(0.2 0.01 260 / 13%);
-  --hub-accent: oklch(0.55 0.17 245);
-  --hub-online: oklch(0.55 0.15 165);
-  --hub-orb-light: oklch(0.99 0 0);
-  --hub-orb-shade: oklch(0.87 0.008 260);
-  --hub-shadow: 0 18px 50px oklch(0.25 0.02 260 / 12%);
-  color-scheme: light;
 }
 .agent-hub *, .agent-hub *::before, .agent-hub *::after { box-sizing: border-box; }
 .agent-hub button, .agent-hub input, .agent-hub textarea, .agent-hub select { font: inherit; }
