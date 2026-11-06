@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   Bot,
+  Check,
   ChevronRight,
   Clock3,
   FileText,
@@ -16,6 +17,7 @@ import {
 import type { AgentColor, AgentInfo, SessionInfo } from "@/lib/agentsky/client";
 import type { AgentGroup, VoiceSettings } from "./hubStorage";
 import { DEFAULT_VOICE } from "./hubStorage";
+import { BOT_COLORS, BOT_SHAPES, agentColorFor, lookFor, type BotLook } from "./botLooks";
 import {
   BackButton,
   BotAvatar,
@@ -35,6 +37,7 @@ export type AgentFormValue = {
   color: AgentColor;
   category: string;
   voice: VoiceSettings;
+  look?: BotLook;
 };
 
 export function AgentForm({
@@ -56,89 +59,40 @@ export function AgentForm({
   onSubmit: (value: AgentFormValue) => void;
   onCancel: () => void;
 }) {
-  const ar = lang === "ar";
+  const start = initial ? lookFor(initial) : { shape: "square", hex: "#7a7a7a" };
   const [name, setName] = useState(initial?.name || "");
-  const [description, setDescription] = useState(initial?.description || "");
-  const [prompt, setPrompt] = useState(initial?.prompt || "");
-  const [color, setColor] = useState<AgentColor>(initial?.color || "aurora");
-  const [folder, setFolder] = useState(category);
-  const [voiceSettings, setVoiceSettings] = useState<VoiceSettings>(voice);
-
-  const previewVoice = () => {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(ar ? "أهلًا، أنا جاهز أساعدك." : "Hi, I’m ready to help.");
-    utterance.rate = voiceSettings.speed;
-    if (voiceSettings.language !== "Auto") utterance.lang = voiceSettings.language;
-    const selected = window.speechSynthesis.getVoices().find((item) => item.name === voiceSettings.voice);
-    if (selected) utterance.voice = selected;
-    window.speechSynthesis.speak(utterance);
+  const [shape, setShape] = useState(start.shape);
+  const [hex, setHex] = useState(start.hex);
+  const look = { shape, hex };
+  const ok = name.trim().length >= 2 && !busy;
+  const submit = () => {
+    if (!ok) return;
+    const n = name.trim();
+    onSubmit({
+      name: n,
+      description: initial?.description || `${n} — personal Ceyo bot`,
+      prompt: initial?.prompt || `You are ${n}, a personal bot inside Ceyo. Be helpful, clear and concise. Reply in the user's language.`,
+      color: agentColorFor(hex),
+      category,
+      voice,
+      look,
+    });
   };
-
   return (
-    <section className="hub-panel hub-form-panel">
-      <header className="hub-panel-header">
-        <BackButton lang={lang} onClick={onCancel} />
-        <h1>{initial ? (ar ? "تعديل البوت" : "Edit Bot") : ar ? "بوت جديد" : "New Bot"}</h1>
-        <span className="hub-header-spacer" />
-      </header>
-      <form
-        className="hub-form-scroll"
-        onSubmit={(event) => {
-          event.preventDefault();
-          onSubmit({ name: name.trim(), description: description.trim(), prompt: prompt.trim(), color, category: folder.trim() || "Unassigned", voice: voiceSettings });
-        }}
-      >
-        <div className="hub-form-hero">
-          <BotAvatar agent={{ name: name || "New bot", color, isDefault: false }} size={76} state="hello" />
-          <span>{ar ? "شخصية البوت هتتحرك مع حالته" : "Your bot’s character moves with its state"}</span>
-        </div>
-        <div className="hub-form-card">
-          <label className="hub-field">
-            <span>{ar ? "الاسم" : "Name"}</span>
-            <input required minLength={2} maxLength={60} value={name} onChange={(event) => setName(event.target.value)} placeholder={ar ? "مثال: مساعد" : "e.g. Assistant"} />
-          </label>
-          <label className="hub-field">
-            <span>{ar ? "وصف قصير" : "Short description"}</span>
-            <input required minLength={10} maxLength={160} value={description} onChange={(event) => setDescription(event.target.value)} placeholder={ar ? "بيساعدك في إيه؟" : "What does it help with?"} />
-          </label>
-          <label className="hub-field">
-            <span>{ar ? "التصنيف" : "Category"}</span>
-            <input maxLength={40} value={folder} onChange={(event) => setFolder(event.target.value)} placeholder="Unassigned" />
-          </label>
-          <div className="hub-field">
-            <span>{ar ? "اللون" : "Appearance"}</span>
-            <ColorSwatches value={color} onChange={setColor} />
-          </div>
-        </div>
-        <div className="hub-form-card">
-          <label className="hub-field">
-            <span>{ar ? "التعليمات" : "Instructions"}</span>
-            <textarea required minLength={20} maxLength={6000} rows={6} value={prompt} onChange={(event) => setPrompt(event.target.value)} placeholder={ar ? "اكتب دور البوت، أسلوبه، حدوده، والنتيجة اللي عايزها…" : "Describe its role, tone, boundaries and what a successful result looks like…"} />
-            <small>{ar ? "كل ما التعليمات تكون أوضح، البوت يبقى أدق." : "Clear instructions make the bot more useful and consistent."}</small>
-          </label>
-        </div>
-        {initial && (
-          <section className="hub-form-section">
-            <h2>{ar ? "المكالمات الصوتية" : "Voice Calls"}</h2>
-            <div className="hub-form-card">
-              <label className="hub-field">
-                <span>{ar ? "اللغة" : "Language"}</span>
-                <select value={voiceSettings.language} onChange={(event) => setVoiceSettings((current) => ({ ...current, language: event.target.value }))}>
-                  <option value="Auto">Auto</option><option value="ar-EG">العربية — مصر</option><option value="en-US">English — US</option><option value="en-GB">English — UK</option><option value="fr-FR">Français</option>
-                </select>
-              </label>
-              <label className="hub-field">
-                <span>{ar ? "السرعة" : "Speed"} · {voiceSettings.speed}×</span>
-                <input className="hub-range" type="range" min="0.5" max="2" step="0.25" value={voiceSettings.speed} onChange={(event) => setVoiceSettings((current) => ({ ...current, speed: Number(event.target.value) }))} />
-              </label>
-              <button type="button" className="hub-voice-preview" onClick={previewVoice}><Play size={16} />{ar ? "تجربة الصوت" : "Preview voice"}</button>
-            </div>
-          </section>
-        )}
+    <section className="gx-create">
+      <header className="gx-create-head"><button type="button" className="gx-round" aria-label="Close" onClick={onCancel}><X size={22} /></button><h1>{initial ? "Edit Bot" : "Create New Bot"}</h1></header>
+      <div className="gx-create-body">
+        <div className="gx-create-preview"><BotAvatar agent={{ name: name || "Bot", color: agentColorFor(hex), isDefault: false }} look={look} size={150} /></div>
+        <input className="gx-name" maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder="Name your Bot" onKeyDown={(e) => { if (e.key === "Enter") submit(); }} />
+        <div className="gx-shapes">{BOT_SHAPES.map((s) => (
+          <button type="button" key={s.id} aria-label={s.id} data-active={shape === s.id} onClick={() => setShape(s.id)}>
+            <BotAvatar agent={{ name: s.id, color: "mono", isDefault: false }} look={{ shape: s.id, hex: "#7a7a7a" }} size={58} />
+          </button>
+        ))}</div>
+        <div className="gx-colors">{BOT_COLORS.map((c) => <button type="button" key={c.hex} aria-label={c.hex} data-active={hex === c.hex} style={{ background: c.hex }} onClick={() => setHex(c.hex)} />)}</div>
         {error && <p className="hub-error" role="alert">{error}</p>}
-        <FormFooter lang={lang} busy={busy} disabled={name.trim().length < 2 || description.trim().length < 10 || prompt.trim().length < 20} submitLabel={initial ? (ar ? "حفظ التعديلات" : "Save changes") : ar ? "إنشاء البوت" : "Create bot"} onCancel={onCancel} />
-      </form>
+      </div>
+      <button type="button" className="gx-create-cta" disabled={!ok} onClick={submit}>{busy ? "…" : initial ? "Save" : "Create"}</button>
     </section>
   );
 }
@@ -160,38 +114,43 @@ export function GroupForm({
   onSubmit: (value: { name: string; memberIds: string[]; category: string }) => void;
   onCancel: () => void;
 }) {
-  const ar = lang === "ar";
+  void lang;
+  const [step, setStep] = useState<1 | 2>(1);
   const [name, setName] = useState(initial?.name || "");
   const [members, setMembers] = useState<string[]>(initial?.memberIds || []);
-  const [category, setCategory] = useState(initial?.category || "Unassigned");
-  const toggle = (id: string) => setMembers((current) => current.includes(id) ? current.filter((item) => item !== id) : current.length >= 8 ? current : [...current, id]);
-  const previewGroup: AgentGroup = initial || { id: "preview", name: name || "Group", coordinatorId: "", memberIds: members, category, createdAt: "" };
-
-  return (
-    <section className="hub-panel hub-form-panel">
-      <header className="hub-panel-header"><BackButton lang={lang} onClick={onCancel} /><h1>{initial ? (ar ? "تعديل الجروب" : "Edit Group Chat") : ar ? "جروب جديد" : "New Group Chat"}</h1><span className="hub-header-spacer" /></header>
-      <form className="hub-form-scroll" onSubmit={(event) => { event.preventDefault(); onSubmit({ name: name.trim(), memberIds: members, category: category.trim() || "Unassigned" }); }}>
-        <div className="hub-form-hero"><GroupAvatar group={previewGroup} agents={agents} size={54} /><span>{ar ? `${members.length} من 8 بوتات` : `${members.length} of 8 bots selected`}</span></div>
-        <div className="hub-form-card">
-          <label className="hub-field"><span>{ar ? "اسم الجروب" : "Group name"}</span><input required minLength={2} maxLength={60} value={name} onChange={(event) => setName(event.target.value)} placeholder={ar ? "مثال: تداول — قيادة" : "e.g. Trading — Lead"} /></label>
-          <label className="hub-field"><span>{ar ? "التصنيف" : "Category"}</span><input maxLength={40} value={category} onChange={(event) => setCategory(event.target.value)} /></label>
-        </div>
-        <section className="hub-form-section">
-          <h2>{ar ? "اختار الأعضاء" : "Choose members"}</h2>
-          <div className="hub-member-picker">
-            {agents.map((agent) => (
-              <button type="button" key={agent.id} onClick={() => toggle(agent.id)} data-selected={members.includes(agent.id)} disabled={!members.includes(agent.id) && members.length >= 8}>
-                <BotAvatar agent={agent} size={37} />
-                <span><strong>{agent.name}</strong><small>{agent.description || (ar ? "بوت شخصي" : "Personal bot")}</small></span>
-                <SelectionToggle selected={members.includes(agent.id)} label={`${members.includes(agent.id) ? "Remove" : "Add"} ${agent.name}`} />
-              </button>
-            ))}
-          </div>
-          {agents.length < 2 && <p className="hub-form-note">{ar ? "اعمل بوت تاني الأول عشان تقدر تعمل جروب." : "Create another bot first so your group has at least two members."}</p>}
-        </section>
+  const [q, setQ] = useState("");
+  const category = initial?.category || "Unassigned";
+  const toggle = (id: string) => setMembers((c) => c.includes(id) ? c.filter((x) => x !== id) : c.length >= 8 ? c : [...c, id]);
+  const shown = agents.filter((a) => !q || a.name.toLowerCase().includes(q.toLowerCase()));
+  const chosen = members.map((id) => agents.find((a) => a.id === id)).filter((a): a is AgentInfo => !!a);
+  const finish = (skip: boolean) => {
+    const n = skip || !name.trim() ? chosen.map((a) => a.name).slice(0, 3).join(", ") : name.trim();
+    onSubmit({ name: n.slice(0, 60), memberIds: members, category });
+  };
+  if (step === 2) return (
+    <section className="gx-create">
+      <header className="gx-create-head"><button type="button" className="gx-round" aria-label="Back" onClick={() => setStep(1)}><ChevronRight size={22} style={{ transform: "rotate(180deg)" }} /></button><h1>New Group Chat</h1></header>
+      <div className="gx-create-body gx-center">
+        <div className="gx-group-preview">{chosen.slice(0, 3).map((a, i) => <span key={a.id} style={{ zIndex: 3 - i }}><BotAvatar agent={a} size={84} /></span>)}</div>
+        <input className="gx-name gx-name-soft" maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Project Falcon" />
         {error && <p className="hub-error" role="alert">{error}</p>}
-        <FormFooter lang={lang} busy={busy} disabled={name.trim().length < 2 || members.length < 2} submitLabel={initial ? (ar ? "حفظ الجروب" : "Save group") : ar ? "إنشاء الجروب" : "Create group"} onCancel={onCancel} />
-      </form>
+      </div>
+      <button type="button" className="gx-create-cta" data-variant={name.trim() ? "solid" : "outline"} disabled={busy} onClick={() => finish(!name.trim())}>{busy ? "…" : name.trim() ? "Create" : "Skip"}</button>
+    </section>
+  );
+  return (
+    <section className="gx-create">
+      <header className="gx-create-head"><button type="button" className="gx-round" aria-label="Close" onClick={onCancel}><X size={22} /></button><h1>New Group Chat</h1><button type="button" className="gx-next" disabled={members.length < 2} onClick={() => setStep(2)}>Next</button></header>
+      <div className="gx-pick-list">
+        {members.length > 0 && <p className="gx-selected">{members.length} selected</p>}
+        {shown.map((a) => (
+          <button type="button" key={a.id} className="gx-pick" onClick={() => toggle(a.id)}>
+            <BotAvatar agent={a} size={44} /><span>{a.name}</span>{members.includes(a.id) && <Check size={22} />}
+          </button>
+        ))}
+        {agents.length < 2 && <p className="gx-selected">Create at least two bots first.</p>}
+      </div>
+      <div className="gx-bottom-search gx-abs"><Search size={20} /><input placeholder={members.length ? "Add another" : "Search Bots"} value={q} onChange={(e) => setQ(e.target.value)} /></div>
     </section>
   );
 }

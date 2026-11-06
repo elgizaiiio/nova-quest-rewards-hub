@@ -26,7 +26,7 @@ export function BotAvatar({
       className={`hub-bot-avatar ${agent.isDefault ? "hub-primary-orb" : ""} ${className}`}
       data-agent-color={agent.color}
       data-look={resolved.shape}
-      style={shapeStyle(resolved) as React.CSSProperties}
+      style={shapeStyle(resolved) as import("react").CSSProperties}
       aria-label={agent.name}
     >
       <AgentOrb color={agent.color} size={size} state={state} />
