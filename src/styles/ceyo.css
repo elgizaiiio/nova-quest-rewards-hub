@@ -230,3 +230,10 @@
 .hub-row-menu button,.hub-row-menu button:hover,.hub-row-menu button[data-active="true"],.hub-row-menu button:focus{background:transparent!important}
 .hub-row-menu button:active{background:rgba(255,255,255,.06)!important}
 .agent-hub .gx-create .gx-name::placeholder{color:#7a7a7a!important;-webkit-text-fill-color:#7a7a7a;opacity:1}
+
+.gx-colors{grid-template-columns:repeat(6,20px)!important;gap:16px 26px!important}
+.gx-colors button{width:20px!important;height:20px!important}
+.gx-colors button[data-active="true"]{outline-offset:3px}
+.gx-create,.ceyo-page,.gx-sheet,.hub-search-overlay{animation:ceyo-sheet-up .34s cubic-bezier(.22,.9,.28,1) both}
+@keyframes ceyo-sheet-up{from{transform:translateY(100%)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.gx-create,.ceyo-page,.gx-sheet,.hub-search-overlay{animation:none}}
