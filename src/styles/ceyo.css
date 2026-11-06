@@ -229,3 +229,4 @@
 .agent-hub .gx-pick>svg{flex:none;margin-left:auto}
 .hub-row-menu button,.hub-row-menu button:hover,.hub-row-menu button[data-active="true"],.hub-row-menu button:focus{background:transparent!important}
 .hub-row-menu button:active{background:rgba(255,255,255,.06)!important}
+.agent-hub .gx-create .gx-name::placeholder{color:#7a7a7a!important;-webkit-text-fill-color:#7a7a7a;opacity:1}

@@ -13,7 +13,6 @@ export const BOT_SHAPES: BotShape[] = [
   { id: "pill", radius: "50% / 42%" },
   { id: "pebble", radius: "30% 40% 26% 34%" },
   { id: "blob", radius: "62% 38% 54% 46% / 48% 56% 44% 52%" },
-  { id: "tall", radius: "44% / 36%" },
   { id: "hexagon", radius: "34%" },
 ];
 
