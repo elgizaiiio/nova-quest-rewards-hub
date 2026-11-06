@@ -15,27 +15,21 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 // First-paint colours match the stored theme. Do not render a fake app frame
 // here: on a slow or interrupted connection it looks like an endless loader.
 const BOOT_STYLE = `
-:root { color-scheme: light; }
-html, body { background-color: #f3f3f5; margin: 0; }
-#root { min-height: 100dvh; background-color: #f3f3f5; }
+:root { color-scheme: dark; }
+html, body { background-color: #000; margin: 0; }
+#root { min-height: 100dvh; background-color: #000; }
 html[data-theme="dark"] { color-scheme: dark; }
-html[data-theme="dark"], html[data-theme="dark"] body { background-color: #1c1c1c; }
-html[data-theme="dark"] #root { background-color: #1c1c1c; }
+html[data-theme="dark"], html[data-theme="dark"] body { background-color: #000; }
+html[data-theme="dark"] #root { background-color: #000; }
 `;
 
 const THEME_BOOT_SCRIPT = `
 (function(){try{
-  var p=location.pathname;
-  var auth=["/auth","/login","/signin","/sign-in","/signup","/sign-up","/register","/reset-password"]
-    .some(function(a){return p===a||p.indexOf(a+"/")===0;});
-  var m=localStorage.getItem("megsy_theme");
-  if(m!=="dark"&&m!=="light"&&m!=="system") m="light";
-  var t=auth?"dark":(m==="system"?(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):m);
   var h=document.documentElement;
-  h.setAttribute("data-theme",t);
-  h.classList.toggle("dark",t==="dark");
-  h.classList.toggle("light",t==="light");
-  h.style.colorScheme=t;
+  h.setAttribute("data-theme","dark");
+  h.classList.add("dark");
+  h.classList.remove("light");
+  h.style.colorScheme="dark";
 }catch(e){}})();
 `;
 

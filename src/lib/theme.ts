@@ -29,9 +29,9 @@ export const isAuthPath = (pathname: string): boolean =>
 export const getStoredTheme = (): ThemeMode => {
   try {
     const v = localStorage.getItem(THEME_STORAGE_KEY);
-    return v === "dark" || v === "light" || v === "system" ? v : "light";
+    return v === "dark" || v === "light" || v === "system" ? v : "dark";
   } catch {
-    return "light";
+    return "dark";
   }
 };
 
@@ -45,9 +45,11 @@ export const prefersDark = (): boolean => {
 
 /** Resolve the mode into the concrete theme that should be painted. */
 export const resolveTheme = (mode: ThemeMode, pathname: string): "light" | "dark" => {
-  if (isAuthPath(pathname)) return "dark";
-  if (mode === "system") return prefersDark() ? "dark" : "light";
-  return mode;
+  // Ceyo ships black-only for now: every screen paints the dark theme, and the
+  // stored mode is kept only so the picker can remember a future preference.
+  void mode;
+  void pathname;
+  return "dark";
 };
 
 /** Paint the resolved theme onto <html>. Safe to call repeatedly. */
