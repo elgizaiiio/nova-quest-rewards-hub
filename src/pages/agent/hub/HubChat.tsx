@@ -262,7 +262,12 @@ export function HubChat({
   const bubbles = useMemo<Bubble[]>(() => {
     const out: Bubble[] = [];
     let lastAt: string | undefined;
-    s.turns.forEach((turn: any, turnIndex) => {
+    const now = new Date().toISOString();
+    const source: any[] = demo ? [
+      { id: "d1", type: "user", text: ar ? "عايزكم تجهزوا خطة الأسبوع" : "Plan this week for me", images: [], at: now },
+      ...(group ? [{ id: "d2", type: "agent", text: group.memberIds.slice(0, 2).map((id) => `**${agents.find((a) => a.id === id)?.name}:** ${ar ? "تمام، هبدأ دلوقتي." : "On it."}`).join("\n\n"), steps: [], cards: [] }] : [{ id: "d2", type: "agent", text: ar ? "أكيد، هقسمها لثلاث خطوات." : "Sure, three steps.", steps: [], cards: [] }]),
+    ] : s.turns;
+    source.forEach((turn: any, turnIndex) => {
       if (turn.type === "user") {
         lastAt = turn.at || lastAt;
         out.push({ key: turn.id, turnId: turn.id, role: "user", text: turn.text, at: turn.at, turn, partIndex: 0, lastPart: true, turnIndex });
@@ -276,7 +281,7 @@ export function HubChat({
       });
     });
     return out;
-  }, [s.turns, group, agents, agent]);
+  }, [s.turns, group, agents, agent, demo, ar]);
 
   const q = findQuery.trim();
   const matches = useMemo(() => (q ? bubbles.filter((b) => b.text.toLowerCase().includes(q.toLowerCase())).map((b) => b.key) : []), [bubbles, q]);
