@@ -99,7 +99,7 @@ const AgentChatRedirect = () => {
 export const AppRoutes = ({ currentUserId }: { currentUserId: string | null }) => (
   <>
     {/* ── Entry ──────────────────────────────────────────────── */}
-    <Route path="/" element={<ProtectedRoute guestEntry="/welcome"><ChatPage /></ProtectedRoute>} />
+    <Route path="/" element={<ProtectedRoute guestEntry="/welcome"><AgentHubPage /></ProtectedRoute>} />
     <Route path="/chat" element={<ProtectedRoute guestEntry="/welcome"><ChatPage /></ProtectedRoute>} />
     <Route path="/agents" element={<ProtectedRoute><AgentSelectionPage /></ProtectedRoute>} />
     <Route path="/agents/directory" element={<Navigate to="/agents" replace />} />
@@ -109,7 +109,7 @@ export const AppRoutes = ({ currentUserId }: { currentUserId: string | null }) =
     <Route path="/agents/chat/:sessionId" element={<ProtectedRoute><AgentChatRedirect /></ProtectedRoute>} />
     <Route path="/team" element={<ProtectedRoute><TeamWorkspacePage /></ProtectedRoute>} />
     <Route path="/welcome" element={<WelcomePage />} />
-    <Route path="/index" element={<ProtectedRoute guestEntry="/welcome"><ChatPage /></ProtectedRoute>} />
+    <Route path="/index" element={<ProtectedRoute guestEntry="/welcome"><AgentHubPage /></ProtectedRoute>} />
     <Route path="/share/:shareId" element={<SharedChatPage />} />
 
     {/* ── Auth hub — one page, animated inner views ──────────── */}

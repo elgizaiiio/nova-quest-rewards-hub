@@ -117,6 +117,9 @@ export const workspace = {
   addAgent(a: AgentInfo) {
     set({ agents: [...state.agents.filter((x) => x.id !== a.id), a] });
   },
+  updateAgent(a: AgentInfo) {
+    set({ agents: state.agents.map((x) => (x.id === a.id ? a : x)) });
+  },
   removeAgent(id: string) {
     set({ agents: state.agents.filter((x) => x.id !== id) });
   },

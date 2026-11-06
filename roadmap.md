@@ -1,5 +1,9 @@
 # Roadmap
 
+- [x] Make the signed-in home a Grok-style bot/group hub with the existing animated characters.
+- [x] Add bot/group creation, categories, hidden chats, global search, profiles and editing while preserving real agent chats.
+- [x] Verify the new hub on mobile/desktop and run seven targeted tests; authenticated end-to-end coverage remains limited by the external unmanaged backend.
+
 - [x] Redesign Tasks with Orange point icon and five character images; restrict active tasks to the five requested types.
 - [x] Remove main Agents +; remove Earn tasks and rename Earn to Referral with Telegram-only invite links.
 - [x] Inline manual TON/USDT-TON checkout; strict reference matching and atomic settlement with transaction reuse prevention.

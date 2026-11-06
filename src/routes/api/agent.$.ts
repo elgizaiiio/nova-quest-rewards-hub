@@ -239,6 +239,32 @@ async function handle(request: Request, splat: string): Promise<Response> {
       });
       return j({ agent: agentView(agent) }, 201);
     }
+    if (parts[1] && method === "PATCH") {
+      const parsed = agentProposalSchema.safeParse(body);
+      if (!parsed.success)
+        return j(
+          {
+            error: {
+              code: "invalid_request",
+              message: "Please provide a valid name, description and instructions.",
+            },
+          },
+          400,
+        );
+      const a = await getOwnedAgent(uid, parts[1]);
+      const { name, description, prompt, color } = parsed.data;
+      const basePrompt = String(a.prompt || "").split("\n\nYour persona and job:")[0];
+      const { agent } = await api<{ agent: any }>(`/agents/${encodeURIComponent(a.id)}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          displayName: name,
+          description,
+          prompt: `${basePrompt}\n\nYour persona and job:\n${prompt}`.slice(0, 100000),
+          metadata: { ...a.metadata, color, userPrompt: prompt },
+        }),
+      });
+      return j({ agent: agentView(agent) });
+    }
     if (parts[1] && method === "DELETE") {
       const a = await getOwnedAgent(uid, parts[1]);
       if (String(a.name).endsWith("_default"))

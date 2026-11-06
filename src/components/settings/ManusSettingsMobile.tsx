@@ -106,17 +106,18 @@ const ManusSettingsMobile = () => {
     // Mail is hidden until its UI is reworked.
     // { icon: MailIcon, label: "Mail", trailing: "@megsyai.com", path: "/mail" },
     { icon: Brain, tone: "memory", label: "Memory", path: "/settings/memory" },
+    { icon: Monitor, tone: "browser", label: "Devices", path: "/settings/desktop-bridge" },
+    { icon: Wallet, tone: "wallet", label: "Vault", path: "/settings/passwords" },
     { icon: PanelBottom, tone: "browser", label: "Cloud browser", path: "/settings/cloud-browser" },
-
     { icon: Puzzle, tone: "skills", label: "Skills", path: "/settings/skills" },
-    { icon: Plug, label: "Integrations", path: "/integrations" },
+    { icon: Plug, label: "Connect apps", path: "/integrations" },
   ];
 
   const advancedRows: Row[] = [{ icon: Gift, tone: "referrals", label: "Referrals", path: "/referrals" }];
 
   const accountRows: Row[] = [
     { icon: CreditCard, tone: "wallet", label: "Subscription", trailing: planLabel, path: "/pricing" },
-    { icon: Zap, tone: "wallet", label: "Billing", trailing: String(credits ?? 0), path: "/usage" },
+    { icon: Zap, tone: "wallet", label: "Usage", trailing: String(credits ?? 0), path: "/usage" },
   ];
 
   const langLabel = AVAILABLE_LANGS.find((l) => l.code === lang)?.native ?? "English";
