@@ -208,3 +208,25 @@
 
 .agent-hub.ceyo-page{height:100dvh!important;min-height:0!important;overflow:hidden!important}
 .agent-hub.ceyo-page .ceyo-scroll{overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+
+/* create screens v3 */
+.gx-create-body{min-height:0;padding-top:28px!important}
+.gx-create-preview{margin-bottom:26px!important}
+.agent-hub .gx-create .gx-name{display:block;width:100%;height:50px!important;margin:0;padding:0 16px!important;border:1px solid #333!important;border-radius:16px!important;background:#2a2a2c!important;color:#fff!important;-webkit-text-fill-color:#fff;font-size:16px!important;line-height:50px;text-align:center;box-shadow:none!important;-webkit-appearance:none;appearance:none}
+.agent-hub .gx-create .gx-name:focus{border-color:#555!important}
+.agent-hub .gx-create .gx-name-soft{border-color:transparent!important;background:#242424!important}
+.gx-shapes{display:grid!important;grid-template-columns:repeat(5,48px);justify-content:center;gap:8px 12px!important;margin:24px 0 20px!important;max-width:none!important}
+.gx-shapes button{width:48px!important;height:48px!important;border:1.5px solid transparent!important;border-radius:14px!important}
+.gx-shapes button[data-active="true"]{border-color:#fff!important;background:#2a2a2c!important}
+.gx-colors{display:grid!important;grid-template-columns:repeat(6,26px);justify-content:center;gap:14px 22px!important;max-width:none!important;padding-bottom:20px}
+.gx-colors button{width:26px!important;height:26px!important}
+.gx-colors button[data-active="true"]{outline:2px solid #fff!important;outline-offset:3px}
+.gx-create-cta{flex:none;margin-top:12px}
+.gx-error{margin:8px 0 0;color:#ff7a70;font-size:13px;text-align:center}
+.agent-hub .gx-pick{justify-content:flex-start!important;text-align:left!important}
+.agent-hub .gx-pick>.hub-bot-avatar{flex:none}
+.agent-hub .gx-pick span{flex:1;text-align:left!important}
+.agent-hub .gx-pick>svg{flex:none;margin-left:auto}
+.hub-row-menu button,.hub-row-menu button:hover,.hub-row-menu button[data-active="true"],.hub-row-menu button:focus{background:transparent!important}
+.hub-row-menu button:active{background:rgba(255,255,255,.06)!important}
+.agent-hub .gx-create .gx-name::placeholder{color:#7a7a7a!important;-webkit-text-fill-color:#7a7a7a;opacity:1}

@@ -83,16 +83,16 @@ export function AgentForm({
     <section className="gx-create">
       <header className="gx-create-head"><button type="button" className="gx-round" aria-label="Close" onClick={onCancel}><X size={22} /></button><h1>{initial ? "Edit Bot" : "Create New Bot"}</h1></header>
       <div className="gx-create-body">
-        <div className="gx-create-preview"><BotAvatar agent={{ name: name || "Bot", color: agentColorFor(hex), isDefault: false }} look={look} size={120} /></div>
-        <input className="gx-name" maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder="Name your Bot" onKeyDown={(e) => { if (e.key === "Enter") submit(); }} />
+        <div className="gx-create-preview"><BotAvatar agent={{ name: name || "Bot", color: agentColorFor(hex), isDefault: false }} look={look} size={96} /></div>
+        <input className="gx-name" maxLength={40} value={name} onChange={(e) => setName(e.target.value)} placeholder="Name your Bot" onKeyDown={(e) => { if (e.key === "Enter") submit(); }} />
         <div className="gx-shapes">{BOT_SHAPES.map((s) => (
           <button type="button" key={s.id} aria-label={s.id} data-active={shape === s.id} onClick={() => setShape(s.id)}>
-            <BotAvatar agent={{ name: s.id, color: "mono", isDefault: false }} look={{ shape: s.id, hex: "#7a7a7a" }} size={36} />
+            <BotAvatar agent={{ name: s.id, color: "mono", isDefault: false }} look={{ shape: s.id, hex: "#7a7a7a" }} size={34} />
           </button>
         ))}</div>
         <div className="gx-colors">{BOT_COLORS.map((c) => <button type="button" key={c.hex} aria-label={c.hex} data-active={hex === c.hex} style={{ background: c.hex }} onClick={() => setHex(c.hex)} />)}</div>
-        {error && <p className="hub-error" role="alert">{error}</p>}
       </div>
+      {error && <p className="gx-error" role="alert">{error}</p>}
       <button type="button" className="gx-create-cta" disabled={!ok} onClick={submit}>{busy ? "…" : initial ? "Save" : "Create"}</button>
     </section>
   );
