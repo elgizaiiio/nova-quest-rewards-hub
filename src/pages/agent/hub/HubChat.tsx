@@ -330,32 +330,39 @@ export function HubChat({
         >
           <div className="hub-message-column">
             {s.loading && !turns.length && <HubSpinner label={ar ? "بنحمّل الرسائل…" : "Loading messages…"} />}
-            {turns.map((turn: any, index) =>
-              turn.type === "user" ? (
-                <div className="hub-user-message" key={turn.id} dir="auto">{turn.text}</div>
-              ) : (
-                <article className="hub-agent-message" key={turn.id}>
-                  <div className="hub-agent-message-avatar">
-                    {group ? <GroupAvatar group={group} agents={agents} size={23} /> : <BotAvatar agent={agent} size={28} state={index === turns.length - 1 ? orb : "idle"} />}
-                  </div>
-                  <div className="hub-agent-message-body">
-                    <span className="hub-message-author">{title}</span>
-                    {turn.steps?.length > 0 && <StepTimeline steps={turn.steps} lang={lang} />}
-                    {turn.cards?.filter((card: any) => card.kind === "plan").map((card: any) => <PlanCard key={card.id} title={card.title} steps={card.steps} lang={lang} />)}
-                    {turn.text && <div className="hub-answer" dir="auto"><ReactMarkdown remarkPlugins={[remarkGfm]} components={{ a: (props) => <a {...props} target="_blank" rel="noreferrer" /> }}>{turn.text}</ReactMarkdown></div>}
-                    {turn.cards?.map((card: any) => {
-                      if (card.kind === "media") return <MediaCard key={card.id} media={card.media} lang={lang} />;
-                      if (card.kind === "video") return <VideoProposalCard key={card.id} proposal={card.proposal} models={models} tier={tier} lang={lang} onUpgrade={() => nav("/pricing")} />;
-                      if (card.kind === "question") return <QuestionCard key={card.id} question={card.question} options={card.options} allowFreeText={card.allowFreeText} answered={card.answered} lang={lang} onAnswer={(value) => s.send(value)} />;
-                      if (card.kind === "task") return <TaskCard key={card.id} title={card.title} dueAt={card.dueAt} lang={lang} onOpen={() => nav("/agents")} />;
-                      return null;
-                    })}
-                    {turn.running && !turn.text && !turn.steps?.length && <span className="hub-handling"><Loader2 size={15} className="animate-spin" />{ar ? "بشتغل عليها" : "Handling it"}</span>}
-                    {turn.error && <p className="hub-error" role="alert">{turn.error}</p>}
-                  </div>
-                </article>
-              ),
-            )}
+            {turns.map((turn: any, index) => {
+              if (turn.type === "user") return <div className="hub-user-message" key={turn.id} dir="auto">{turn.text}</div>;
+              const parsed = group ? groupTranscript(turn.text || "") : [{ speaker: "", text: turn.text || "" }];
+              const contributions = parsed.length ? parsed : [{ speaker: "", text: "" }];
+              return contributions.map((part, partIndex) => {
+                const speaker = group && part.speaker ? agents.find((item) => group.memberIds.includes(item.id) && item.name === part.speaker) : undefined;
+                const shownAgent = speaker || agent;
+                const lastPart = partIndex === contributions.length - 1;
+                return (
+                  <article className="hub-agent-message" key={`${turn.id}-${partIndex}`}>
+                    <div className="hub-agent-message-avatar">
+                      <BotAvatar agent={shownAgent} size={28} state={index === turns.length - 1 && lastPart ? orb : "idle"} />
+                    </div>
+                    <div className="hub-agent-message-body">
+                      <span className="hub-message-author">{speaker?.name || title}</span>
+                      {partIndex === 0 && turn.steps?.length > 0 && <StepTimeline steps={turn.steps} lang={lang} />}
+                      {lastPart && turn.cards?.filter((card: any) => card.kind === "plan").map((card: any) => <PlanCard key={card.id} title={card.title} steps={card.steps} lang={lang} />)}
+                      {part.text && <div className="hub-answer" dir="auto"><ReactMarkdown remarkPlugins={[remarkGfm]} components={{ a: (props) => <a {...props} target="_blank" rel="noreferrer" /> }}>{part.text}</ReactMarkdown></div>}
+                      {lastPart && turn.cards?.map((card: any) => {
+                        if (card.kind === "agent-proposal") return <AgentProposalCard key={card.id} proposal={card.proposal} />;
+                        if (card.kind === "media") return <MediaCard key={card.id} media={card.media} lang={lang} />;
+                        if (card.kind === "video") return <VideoProposalCard key={card.id} proposal={card.proposal} models={models} tier={tier} lang={lang} onUpgrade={() => nav("/pricing")} />;
+                        if (card.kind === "question") return <QuestionCard key={card.id} question={card.question} options={card.options} allowFreeText={card.allowFreeText} answered={card.answered} lang={lang} onAnswer={(value) => s.send(value)} />;
+                        if (card.kind === "task") return <TaskCard key={card.id} title={card.title} dueAt={card.dueAt} lang={lang} onOpen={() => nav("/agents")} />;
+                        return null;
+                      })}
+                      {lastPart && turn.running && !turn.text && !turn.steps?.length && <span className="hub-handling"><Loader2 size={15} className="animate-spin" />{ar ? "بشتغل عليها" : "Handling it"}</span>}
+                      {lastPart && turn.error && <p className="hub-error" role="alert">{turn.error}</p>}
+                    </div>
+                  </article>
+                );
+              });
+            })}
             {!demo && s.requests.map((request) => (
               <ApprovalCard key={request.id} request={request} lang={lang} onAnswer={(value) => { s.setRequests((requests) => requests.filter((item) => item.id !== request.id)); s.send(value); }} />
             ))}
