@@ -532,12 +532,14 @@ const AuthPage = () => {
         email: normalizedEmail,
         password: newPassword,
       });
-      if (error) throw new Error(error.message);
+      const signupFailure = error ? String(error.message || "") : !data?.success ? String(data?.error || "") : "";
+      const alreadyRegistered = /already (been )?(registered|exists)|already exists/i.test(signupFailure);
+      if (error && !alreadyRegistered) throw new Error(error.message);
 
       // Account already exists (e.g. preview proxy skipped check-email and routed
       // an existing user into signup). Try signing them in instead; otherwise
       // bounce them back to the password screen with a friendly message.
-      if (!data?.success && /already exists/i.test(String(data?.error || ""))) {
+      if (alreadyRegistered) {
         const { error: signInErr } = await supabase.auth.signInWithPassword({
           email: normalizedEmail,
           password: newPassword,
