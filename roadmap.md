@@ -76,3 +76,6 @@
 - [ ] Sending attached files to bots: only file names are sent until upload is connected.
 - [x] Remove New conversation from chat + menu.
 - [x] Polish edit-bot fields and pricing; stop preloading and delete all remaining old pages and their unused code.
+
+- [ ] Clean unused files; integration + question cards in chat.
+- [ ] Mic recording animation; empty composer shows voice-call button (1:1 chats only) with Grok-style call bar.
