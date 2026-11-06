@@ -1,8 +1,15 @@
 import "@/styles/ceyo.css";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
+import { fileToAvatar, writeGroupAvatar } from "./chatPrefs";
 import {
   Bot,
+  Camera,
   Check,
+  ChevronLeft,
+  Copy,
+  ImageIcon,
+  MoreHorizontal,
+  Trash2,
   ChevronRight,
   Clock3,
   FileText,
@@ -165,6 +172,8 @@ export function ProfilePanel({
   onBack,
   onEdit,
   onOpenChat,
+  onRename,
+  onDelete,
 }: {
   lang: HubLang;
   agent: AgentInfo;
@@ -174,29 +183,117 @@ export function ProfilePanel({
   onBack: () => void;
   onEdit: () => void;
   onOpenChat: () => void;
+  onRename?: (name: string) => void;
+  onDelete?: () => void;
 }) {
+  void sessions; void onOpenChat;
   const ar = lang === "ar";
+  const [view, setView] = useState<"main" | "routines" | "library" | "members" | "edit" | "avatar">("main");
+  const [menu, setMenu] = useState(false);
+  const [copied, setCopied] = useState(false);
   const title = group?.name || agent.name;
   const members = group?.memberIds.map((id) => agents.find((item) => item.id === id)).filter((item): item is AgentInfo => !!item) || [];
+  const id = group?.id || agent.id;
+  const big = group ? <GroupAvatar group={group} agents={agents} size={64} className="cx-profile-group" /> : <BotAvatar agent={agent} size={96} state="hello" />;
+
+  const Head = ({ title: t, back, right }: { title?: string; back: () => void; right?: ReactNode }) => (
+    <header className="cx-sub-head"><button type="button" className="cx-circle cx-glass cx-lg" aria-label="Back" onClick={back}><ChevronLeft size={22} /></button>{t && <h1>{t}</h1>}<span className="cx-sub-right">{right}</span></header>
+  );
+
+  if (view === "routines" || view === "library") return (
+    <section className="cx-sub" key={view}>
+      <Head title={view === "routines" ? (ar ? "الروتينات" : "Routines") : (ar ? "المكتبة" : "Library")} back={() => setView("main")} />
+      <p className="cx-sub-empty">{view === "routines"
+        ? (ar ? "الروتينات مهام متكررة البوت بينفذها في مواعيد. اطلبها منه في الشات." : "Routines are recurring tasks this Bot runs on a schedule. Ask it in chat to set one up.")
+        : (ar ? "الصفحات والملفات والتطبيقات اللي البوت بيعملها هتظهر هنا" : "Pages, files, and apps this Bot makes show up here")}</p>
+    </section>
+  );
+
+  if (view === "members") return (
+    <section className="cx-sub" key={view}>
+      <Head title={ar ? "الأعضاء" : "Members"} back={() => setView("main")} />
+      <div className="cx-card cx-members">{members.map((m) => <div key={m.id}><BotAvatar agent={m} size={30} /><span dir="auto">{m.name}</span>{m.isDefault && <small>{ar ? "أساسي" : "Primary"}</small>}</div>)}</div>
+    </section>
+  );
+
+  if (view === "edit" && group) return <EditGroup lang={lang} group={group} agents={agents} onBack={() => setView("main")} onAvatar={() => setView("avatar")} onSave={(n) => { onRename?.(n); setView("main"); }} />;
+  if (view === "avatar" && group) return <GroupAvatarPage lang={lang} group={group} agents={agents} onBack={() => setView("edit")} />;
+
   return (
-    <section className="hub-panel hub-profile-panel">
-      <header className="hub-panel-header"><BackButton lang={lang} onClick={onBack} /><h1>{ar ? "البروفايل" : "Profile"}</h1><HubIconButton label={ar ? "تعديل" : "Edit"} onClick={onEdit}><Pencil size={18} /></HubIconButton></header>
-      <div className="hub-profile-scroll">
-        <div className="hub-profile-hero">
-          {group ? <GroupAvatar group={group} agents={agents} size={66} /> : <BotAvatar agent={agent} size={92} state="hello" />}
-          <h2>{title}</h2>
-          <p>{group ? (ar ? `${members.length} بوتات شغالين مع بعض` : `${members.length} bots working together`) : agent.description}</p>
-          <button type="button" className="hub-button hub-button-secondary" onClick={onOpenChat}><MessageSquareText size={16} />{ar ? "افتح المحادثة" : "Open chat"}</button>
+    <section className="cx-sub" key="main">
+      <Head back={onBack} right={<>
+        <button type="button" className="cx-circle cx-glass cx-lg" aria-label="Menu" onClick={() => setMenu((o) => !o)}><MoreHorizontal size={20} /></button>
+        {menu && <div className="cx-scrim" onPointerDown={() => setMenu(false)} />}
+        {menu && <div className="cx-pop cx-pop-down" role="menu">
+          <button type="button" onClick={() => { void navigator.clipboard?.writeText(id).then(() => setCopied(true)); setMenu(false); }}><Copy size={19} />{ar ? "نسخ المعرّف" : "Copy ID"}</button>
+          {onDelete && <button type="button" data-danger="true" onClick={() => { setMenu(false); onDelete(); }}><Trash2 size={19} />{group ? (ar ? "حذف الجروب" : "Delete Group Chat") : (ar ? "حذف البوت" : "Delete Bot")}</button>}
+        </div>}
+      </>} />
+      <div className="cx-profile">
+        <div className="cx-profile-avatar">{big}</div>
+        <h2 dir="auto">{title}</h2>
+        <button type="button" className="cx-pill-btn" onClick={() => group ? setView("edit") : onEdit()}>{ar ? "تعديل" : "Edit"}</button>
+        {copied && <p className="cx-copied">{ar ? "اتنسخ" : "ID copied"}</p>}
+        <div className="cx-card">
+          <button type="button" onClick={() => setView("routines")}><Clock3 size={20} /><span>{ar ? "الروتينات" : "Routines"}</span><small>0 {ar ? "شغال" : "on"}</small><ChevronRight size={18} /></button>
+          <button type="button" onClick={() => setView("library")}><Library size={20} /><span>{ar ? "المكتبة" : "Library"}</span><ChevronRight size={18} /></button>
+          {group && <button type="button" onClick={() => setView("members")}><Users size={20} /><span>{ar ? "الأعضاء" : "Members"}</span><small>{members.length}</small><ChevronRight size={18} /></button>}
         </div>
-        <div className="hub-profile-card">
-          <button type="button" onClick={onOpenChat}><Clock3 size={18} /><span>{ar ? "الروتينات" : "Routines"}</span><small>{sessions.filter((item) => item.status === "running").length} {ar ? "شغال" : "on"}</small><ChevronRight size={16} /></button>
-          <button type="button" onClick={onOpenChat}><Library size={18} /><span>{ar ? "المحادثات" : "Library"}</span><small>{sessions.length}</small><ChevronRight size={16} /></button>
-          {group && <div className="hub-profile-static-row"><Users size={18} /><span>{ar ? "الأعضاء" : "Members"}</span><small>{members.length}</small></div>}
-        </div>
-        {group && (
-          <section className="hub-profile-members"><h3>{ar ? "الأعضاء" : "Members"}</h3>{members.map((member) => <div key={member.id}><BotAvatar agent={member} size={38} /><span><strong>{member.name}</strong><small>{member.description}</small></span>{member.isDefault && <em>{ar ? "أساسي" : "Primary"}</em>}</div>)}</section>
-        )}
-        {!group && <div className="hub-profile-instructions"><h3>{ar ? "دور البوت" : "Bot instructions"}</h3><p>{agent.prompt || (ar ? "البوت الأساسي بيتكلم ويساعدك في كل مهامك." : "Your primary assistant for questions, research and getting things done.")}</p></div>}
+      </div>
+    </section>
+  );
+}
+
+function EditGroup({ lang, group, agents, onBack, onAvatar, onSave }: { lang: HubLang; group: AgentGroup; agents: AgentInfo[]; onBack: () => void; onAvatar: () => void; onSave: (name: string) => void }) {
+  const ar = lang === "ar";
+  const [name, setName] = useState(group.name);
+  const changed = name.trim().length > 0 && name.trim() !== group.name;
+  return (
+    <section className="cx-sub">
+      <header className="cx-sub-head"><button type="button" className="cx-circle cx-glass cx-lg" aria-label="Back" onClick={onBack}><ChevronLeft size={22} /></button><h1>{ar ? "تعديل الجروب" : "Edit Group Chat"}</h1><span className="cx-sub-right"><button type="button" className="cx-done-pill" disabled={!changed} onClick={() => onSave(name.trim().slice(0, 60))}>{ar ? "تم" : "Done"}</button></span></header>
+      <div className="cx-edit">
+        <button type="button" className="cx-profile-avatar cx-edit-avatar" onClick={onAvatar}><GroupAvatar group={group} agents={agents} size={64} className="cx-profile-group" /><span className="cx-pencil"><Pencil size={17} /></span></button>
+        <label className="cx-field-label">{ar ? "الاسم" : "Name"}</label>
+        <input className="cx-field" dir="auto" maxLength={60} value={name} onChange={(e) => setName(e.target.value)} />
+        <label className="cx-field-label">{ar ? "المظهر" : "Appearance"}</label>
+        <div className="cx-card"><button type="button" onClick={onAvatar}><span>{ar ? "الصورة" : "Avatar"}</span><ChevronRight size={18} /></button></div>
+      </div>
+    </section>
+  );
+}
+
+function GroupAvatarPage({ lang, group, agents, onBack }: { lang: HubLang; group: AgentGroup; agents: AgentInfo[]; onBack: () => void }) {
+  const ar = lang === "ar";
+  const [tab, setTab] = useState<"generate" | "upload">("generate");
+  const [prompt, setPrompt] = useState("");
+  const [err, setErr] = useState("");
+  const pick = useRef<HTMLInputElement>(null);
+  const cam = useRef<HTMLInputElement>(null);
+  const onFile = async (f?: File) => {
+    if (!f) return;
+    setErr("");
+    try { writeGroupAvatar(group.id, await fileToAvatar(f)); } catch (e) { setErr(e instanceof Error ? e.message : "Upload failed"); }
+  };
+  return (
+    <section className="cx-sub">
+      <header className="cx-sub-head"><button type="button" className="cx-circle cx-glass cx-lg" aria-label="Back" onClick={onBack}><ChevronLeft size={22} /></button><h1>{ar ? "الصورة" : "Avatar"}</h1><span className="cx-sub-right"><button type="button" className="cx-done-pill" onClick={onBack}>{ar ? "تم" : "Done"}</button></span></header>
+      <div className="cx-edit">
+        <div className="cx-seg"><button type="button" data-active={tab === "generate"} onClick={() => setTab("generate")}>{ar ? "توليد" : "Generate"}</button><button type="button" data-active={tab === "upload"} onClick={() => setTab("upload")}>{ar ? "رفع" : "Upload"}</button></div>
+        <div className="cx-profile-avatar"><GroupAvatar group={group} agents={agents} size={64} className="cx-profile-group" /></div>
+        {tab === "generate" ? (<>
+          <textarea className="cx-field cx-area" dir="auto" value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder={ar ? "اوصف الصورة…" : "Describe your avatar..."} />
+          <button type="button" className="cx-wide-btn" disabled={!prompt.trim()} onClick={() => setErr(ar ? "توليد الصور لسه مش متوصل. ارفع صورة بدلها." : "Avatar generation isn't connected yet. Upload a photo instead.")}>{ar ? "توليد" : "Generate"}</button>
+        </>) : (<>
+          <div className="cx-card">
+            <button type="button" onClick={() => pick.current?.click()}><ImageIcon size={20} /><span>{ar ? "اختار من الصور" : "Choose from Photos"}</span><ChevronRight size={18} /></button>
+            <button type="button" onClick={() => cam.current?.click()}><Camera size={20} /><span>{ar ? "صوّر" : "Take Photo"}</span><ChevronRight size={18} /></button>
+          </div>
+          <p className="cx-hint">{ar ? "صور لحد 25 ميجا." : "Images up to 25 MB."}</p>
+          <input ref={pick} type="file" accept="image/*" hidden onChange={(e) => void onFile(e.target.files?.[0])} />
+          <input ref={cam} type="file" accept="image/*" capture="environment" hidden onChange={(e) => void onFile(e.target.files?.[0])} />
+        </>)}
+        {err && <p className="cx-hint cx-hint-err" role="alert">{err}</p>}
+        <button type="button" className="cx-link-btn" onClick={() => writeGroupAvatar(group.id, null)}>{ar ? "رجّع صور الأعضاء" : "Reset to members' avatars"}</button>
       </div>
     </section>
   );
