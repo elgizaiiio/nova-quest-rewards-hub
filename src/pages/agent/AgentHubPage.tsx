@@ -253,7 +253,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     return (
       <div className="hub-list-row" key={key}>
         <button type="button" className="hub-list-row-main" onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
-          <BotAvatar agent={agent} size={43} />
+          <BotAvatar agent={agent} size={52} />
           <span className="hub-row-copy"><span className="hub-row-title"><strong>{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
@@ -268,7 +268,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     return (
       <div className="hub-list-row" key={key}>
         <button type="button" className="hub-list-row-main" onClick={() => openChat("group", group.id)} aria-label={`${ar ? "افتح" : "Open"} ${group.name}`}>
-          <GroupAvatar group={group} agents={ws.agents} size={35} />
+          <GroupAvatar group={group} agents={ws.agents} size={40} />
           <span className="hub-row-copy"><span className="hub-row-title"><strong>{group.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || members.map((member) => member.name).join(" · ")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
@@ -290,7 +290,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
       <div className="hub-home-scroll">
         {primary ? (
           <button type="button" className="hub-primary-button" onClick={() => openChat("bot", primary.id)}>
-            <span className="hub-primary-character"><BotAvatar agent={primary} size={76} state="hello" /><i /></span>
+            <span className="hub-primary-character"><BotAvatar agent={primary} size={104} state="hello" /><i /></span>
             <strong>{primary.name}</strong>
             <small><span />{ar ? "متصل" : "Online"}</small>
           </button>
@@ -299,7 +299,14 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
         {!ws.ready && <HubSpinner label={ar ? "بنجهز البوتات…" : "Loading your bots…"} />}
         {ws.error && <div className="hub-workspace-error"><p>{ar ? "البوتات مش متاحة دلوقتي. المحادثة الأساسية لسه شغالة." : "Your bots are unavailable right now. Quick Chat still works."}</p><button type="button" onClick={() => void loadWorkspace(true)}>{ar ? "حاول تاني" : "Try again"}</button></div>}
 
-        {ws.ready && [...categories].sort((a, b) => a === "Unassigned" ? 1 : b === "Unassigned" ? -1 : a.localeCompare(b)).map((category) => {
+        {ws.ready && (() => {
+          const bots = orderedAgents.filter((agent) => !agent.isDefault && categoryFor("bot", agent.id) === "Unassigned" && !local.hidden.includes(itemKey("bot", agent.id)));
+          const groups = local.groups.filter((group) => categoryFor("group", group.id, group) === "Unassigned" && !local.hidden.includes(itemKey("group", group.id)));
+          if (!bots.length && !groups.length) return null;
+          return <div className="hub-category-rows hub-flat-rows">{groups.map((group) => renderGroupRow(group))}{bots.map((agent) => renderBotRow(agent))}</div>;
+        })()}
+
+        {ws.ready && [...categories].filter((category) => category !== "Unassigned").sort((a, b) => a.localeCompare(b)).map((category) => {
           const bots = orderedAgents.filter((agent) => !agent.isDefault && categoryFor("bot", agent.id) === category && !local.hidden.includes(itemKey("bot", agent.id)));
           const groups = local.groups.filter((group) => categoryFor("group", group.id, group) === category && !local.hidden.includes(itemKey("group", group.id)));
           if (!bots.length && !groups.length) return null;
