@@ -189,8 +189,8 @@ function Apps({ nav, appId }: { nav: Nav; appId?: string }) {
   const [connected, setConnected] = useState<Record<string, boolean>>({});
   const [cat, setCat] = useState("Suggested");
   const [busy, setBusy] = useState("");
-  const refresh = async () => {
-    try { const s = await loadIntegrationConnections(CATALOG); setConnected(s.connectedApps as Record<string, boolean>); } catch { /* signed out */ }
+  const refresh = async (): Promise<boolean> => {
+    try { const s = await loadIntegrationConnections(CATALOG); setConnected(s.connectedApps as Record<string, boolean>); return true; } catch { return false; }
   };
   useEffect(() => { void refresh(); }, []);
   const cats = useMemo(() => ["Suggested", ...Array.from(new Set(CATALOG.map((i) => i.category)))], []);

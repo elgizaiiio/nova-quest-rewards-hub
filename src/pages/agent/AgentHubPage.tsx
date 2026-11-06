@@ -70,7 +70,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   const ws = demo
     ? { ready: true, error: null, agents: DEMO_AGENTS, tier: "pro" as const, models: [], sessions: DEMO_SESSIONS }
     : live;
-  const lang: HubLang = "en";
+  const lang = "en" as HubLang;
   const ar = lang === "ar";
   const nav = useNavigate();
   const [params, setParams] = useSearchParams();
