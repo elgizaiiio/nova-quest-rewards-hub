@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Bot,
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
   EyeOff,
   Folder,
@@ -283,7 +284,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     return (
       <div className="hub-list-row" key={key}>
         <button type="button" className="hub-list-row-main" {...pressProps("bot", agent.id)} data-unread={isUnread(key, latest?.createdAt)} onClick={() => openChat("bot", agent.id)} aria-label={`${ar ? "افتح" : "Open"} ${agent.name}`}>
-          <BotAvatar agent={agent} size={52} />
+          <BotAvatar agent={agent} size={44} />
           <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{agent.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || agent.description || (ar ? "بوت شخصي" : "Personal bot")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
@@ -298,7 +299,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     return (
       <div className="hub-list-row" key={key}>
         <button type="button" className="hub-list-row-main" {...pressProps("group", group.id)} data-unread={isUnread(key, latest?.createdAt)} onClick={() => openChat("group", group.id)} aria-label={`${ar ? "افتح" : "Open"} ${group.name}`}>
-          <GroupAvatar group={group} agents={ws.agents} size={40} />
+          <GroupAvatar group={group} agents={ws.agents} size={28} />
           <span className="hub-row-copy"><span className="hub-row-title"><strong>{local.pinned.includes(key) && <Pin size={12} className="hub-pin" />}{group.name}</strong><time>{relativeTime(latest?.createdAt, lang)}</time></span><span className="hub-row-preview">{latest?.title || members.map((member) => member.name).join(" · ")}</span></span>
         </button>
         {hidden && <HubIconButton label={ar ? "إظهار" : "Unhide"} onClick={() => toggleHidden(key, false)}><EyeOff size={16} /></HubIconButton>}
@@ -384,6 +385,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
               <button type="button" role="menuitem" data-danger="true" onClick={() => { toggleHidden(key, true); close(); }}><EyeOff size={20} />Hide</button>
               <button type="button" role="menuitem" data-danger="true" onClick={() => { close(); if (group) void deleteGroup(group); else if (agent) void deleteBot(agent); }}><Trash2 size={20} />Delete</button>
             </>) : (<>
+              <button type="button" role="menuitem" onClick={() => setRowMenu({ ...rowMenu, move: false })}><ChevronLeft size={20} />Back</button>
               {existing.map((c) => <button type="button" role="menuitem" key={c} onClick={() => setCategory(c)}><Folder size={20} />{c}</button>)}
               <button type="button" role="menuitem" onClick={() => { const name = window.prompt("Section name")?.trim(); if (name) setCategory(name.slice(0, 40)); else close(); }}><Plus size={20} />New section</button>
               {existing.length > 0 && <button type="button" role="menuitem" onClick={() => setCategory("Unassigned")}><Folder size={20} />Unassigned</button>}
