@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   Brain, Check, ChevronLeft, ChevronRight, Copy, CreditCard, Gauge, HelpCircle, KeyRound, Languages,
-  LayoutGrid, LogOut, Monitor, Moon, Plus, Search, Shield, Smartphone, Trash2, User, UserPlus, Vibrate, Vault,
+  LayoutGrid, LogOut, Monitor, Moon, Plus, Search, Shield, Smartphone, Trash2, User, UserPlus, Vibrate, Vault, X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
@@ -187,7 +187,7 @@ function Vault_({ nav }: { nav: Nav }) {
 /* ── Connect apps ─────────────────────────────────────── */
 function Apps({ nav, appId }: { nav: Nav; appId?: string }) {
   const [connected, setConnected] = useState<Record<string, boolean>>({});
-  const [cat, setCat] = useState("Suggested");
+  const [cat, setCat] = useState("All");
   const [busy, setBusy] = useState("");
   const refresh = async (): Promise<boolean> => {
     try { const s = await loadIntegrationConnections(CATALOG); setConnected(s.connectedApps as Record<string, boolean>); return true; } catch { return false; }
