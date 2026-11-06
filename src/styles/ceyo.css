@@ -594,3 +594,10 @@ html[data-ceyo-surface="bot"] .agent-hub.ceyo-page{--ceyo-page-bg:#1b1b20;--ceyo
 .agent-hub .gx-create .gx-name,.agent-hub .cx-field:not(.cx-area){all:unset;box-sizing:border-box;display:block;width:100%;height:50px;padding:0 16px;border-radius:16px;background:#2a2a2c;color:#fff;font-size:16px;font-weight:500;text-align:start}
 .agent-hub .gx-create .gx-name::placeholder,.agent-hub .cx-field::placeholder{color:#6e6e70}
 .agent-hub .gx-create .gx-name:focus,.agent-hub .cx-field:focus{box-shadow:inset 0 0 0 1px #48484a}
+
+/* Group members list */
+.cx-members-count{margin:16px 26px 8px;color:#8e8e90;font-size:13px;font-weight:500}
+.cx-sub>.cx-members{margin:0 24px}
+.cx-members>div.cx-member{min-height:62px;gap:12px}
+.cx-member-name{flex:1;min-width:0;font-size:16px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cx-member-tag{flex:none;padding:4px 10px;border-radius:999px;background:#37373a;color:#d2d2d4;font-size:12px;font-style:normal;font-weight:500}
