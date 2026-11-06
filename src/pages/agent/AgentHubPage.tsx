@@ -15,7 +15,6 @@ import {
   Grid2X2,
   Grid2x2Plus,
   Loader2,
-  MessageSquareText,
   Plus,
   Search,
 } from "lucide-react";
@@ -155,7 +154,6 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     : null;
   const activeSessions = activeAgent ? ws.sessions.filter((session) => session.agentId === activeAgent.id) : [];
   const selectedSession = chatTarget ? params.get("session") : null;
-  const contentOpen = !!newKind || !!activeTarget;
   const paid = isPaidUser(ws.tier);
 
   const go = useCallback((next: Record<string, string>, replace = false) => {
@@ -167,6 +165,12 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   }, [setParams]);
 
   const goHome = useCallback(() => go({}, false), [go]);
+
+  // A chat that no longer exists (deleted bot/group, stale link) drops back to the home list.
+  useEffect(() => {
+    if (!activeTarget || !ws.ready || !storageReady) return;
+    if (!activeAgent) goHome();
+  }, [activeTarget, activeAgent, goHome, storageReady, ws.ready]);
 
   const openChat = useCallback((kind: "bot" | "group", id: string, latest = true, sessionId?: string | null) => {
     const next: Record<string, string> = { chat: itemKey(kind, id) };
@@ -397,14 +401,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
     </aside>
   );
 
-  let content = (
-    <div className="hub-desktop-empty">
-      {primary && <BotAvatar agent={primary} size={92} state="idle" />}
-      <h1>{ar ? "كل بوتاتك في مكان واحد" : "All your bots, one calm place"}</h1>
-      <p>{ar ? "اختار بوت أو جروب وابدأ. ولو عايز بوت جديد، Ceyo هيساعدك تعمله." : "Pick a bot or group to begin. If you need a new bot, Ceyo will help you create it."}</p>
-      <button type="button" className="hub-button hub-button-secondary" onClick={() => primary && openChat("bot", primary.id, false)}><MessageSquareText size={17} />{ar ? "ابدأ محادثة" : "Start chatting"}</button>
-    </div>
-  );
+  let content: ReactNode = null;
 
   if (newKind === "bot") content = <AgentForm lang={lang} busy={busy} error={formError} onSubmit={(value) => void saveAgent(value)} onCancel={goHome} />;
   else if (newKind === "group") content = <GroupForm lang={lang} agents={groupMembersAgents} busy={busy} error={formError} onSubmit={(value) => void saveGroup(value)} onCancel={goHome} />;
@@ -412,7 +409,7 @@ export default function AgentHubPage({ demo = false }: { demo?: boolean }) {
   else if (editTarget?.kind === "bot" && activeAgent) content = <AgentForm lang={lang} initial={activeAgent} category={categoryFor("bot", activeAgent.id)} voice={voiceFor(local, activeAgent.id)} busy={busy} error={formError} onSubmit={(value) => void saveAgent(value, activeAgent)} onCancel={() => go({ profile: itemKey("bot", activeAgent.id) })} />;
   else if (editTarget?.kind === "group" && activeGroup) content = <GroupForm lang={lang} initial={activeGroup} agents={groupMembersAgents} busy={busy} error={formError} onSubmit={(value) => void saveGroup(value, activeGroup)} onCancel={() => go({ profile: itemKey("group", activeGroup.id) })} />;
   else if (chatTarget && activeAgent) content = <HubChat lang={lang} agent={activeAgent} group={activeGroup} agents={ws.agents} sessions={activeSessions} sessionId={demo ? "demo" : selectedSession} tier={ws.tier} models={ws.models} demo={demo} onSession={(id) => openChat(chatTarget.kind, chatTarget.id, false, id)} onBack={goHome} onProfile={() => go({ profile: itemKey(chatTarget.kind, chatTarget.id) })} onHide={() => toggleHidden(itemKey(chatTarget.kind, chatTarget.id), true)} onDelete={!activeAgent.isDefault ? () => activeGroup ? void deleteGroup(activeGroup) : void deleteBot(activeAgent) : undefined} onMarkUnread={() => { const k = itemKey(chatTarget.kind, chatTarget.id); updateLocal((c) => ({ ...c, unread: [...new Set([...c.unread, k])] })); }} />;
-  else if (activeTarget && ws.ready && storageReady) content = <div className="hub-desktop-empty"><Bot size={38} /><h1>{ar ? "المحادثة دي مش موجودة" : "This chat is not available"}</h1><button type="button" className="hub-button hub-button-secondary" onClick={goHome}>{ar ? "ارجع للرئيسية" : "Back home"}</button></div>;
+  const contentOpen = content !== null;
 
   return (
     <div className="agent-hub" data-content-open={contentOpen} dir={ar ? "rtl" : "ltr"} data-no-translate>
