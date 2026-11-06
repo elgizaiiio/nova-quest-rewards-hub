@@ -75,3 +75,4 @@
 - [ ] Replace Primary Bot: needs backend support to change the primary bot.
 - [ ] Sending attached files to bots: only file names are sent until upload is connected.
 - [x] Remove New conversation from chat + menu.
+- [x] Polish edit-bot fields and pricing; stop preloading and delete all remaining old pages and their unused code.
