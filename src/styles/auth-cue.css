@@ -1,12 +1,12 @@
 /* Reference auth palette is intentionally independent of the workspace theme. */
 .megsy-auth-screen {
-  --auth-surface: oklch(1 0 0); --auth-ink: oklch(.28 .035 205);
-  --auth-muted: oklch(.51 .006 205); --auth-control: oklch(.945 .004 100);
-  --auth-control-hover: oklch(.915 .004 100); --auth-border: oklch(.86 .008 205);
-  --auth-black: oklch(.12 0 0); --auth-focus: oklch(.53 .08 205);
-  --auth-error-surface: oklch(.96 .02 15); --auth-error-ink: oklch(.45 .15 15);
-  --auth-shadow: 0 8px 30px oklch(.2 0 0 / .06);
-  --foreground: 193 33% 18%; --background: 0 0% 100%;
+  --auth-surface: oklch(0 0 0); --auth-ink: oklch(.98 0 0);
+  --auth-muted: oklch(.62 0 0); --auth-control: oklch(.17 0 0);
+  --auth-control-hover: oklch(.22 0 0); --auth-border: oklch(.26 0 0);
+  --auth-black: oklch(.98 0 0); --auth-focus: oklch(.8 0 0);
+  --auth-error-surface: oklch(.22 .05 15); --auth-error-ink: oklch(.78 .12 15);
+  --auth-shadow: none;
+  --foreground: 0 0% 98%; --background: 0 0% 0%;
   position: relative; min-height: 100dvh; background: var(--auth-surface); color: var(--auth-ink);
   display: flex; flex-direction: column; padding: max(28px, env(safe-area-inset-top)) 24px max(38px, env(safe-area-inset-bottom));
   font-family: Inter, system-ui, sans-serif; letter-spacing: 0;
