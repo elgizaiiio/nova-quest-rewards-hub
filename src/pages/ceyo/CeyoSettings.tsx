@@ -158,7 +158,7 @@ function Main({ nav }: { nav: Nav }) {
       <Group>
         <MeCard onClick={() => nav("/settings/account")} />
         <Row label="Usage" value={loading ? "…" : `${usage.used}%`} onClick={() => nav("/settings/usage")} />
-        <Row label="Manage Subscription" onClick={() => nav("/settings/usage")} />
+        <Row label="Manage Subscription" onClick={() => nav("/settings/plans")} />
         <Row label="Vault" sub="Logins, cards and contact info Ceyo can use" onClick={() => nav("/settings/vault")} />
       </Group>
       <Group><Row label="Connect apps" sub="Search plugins" onClick={() => nav("/settings/apps")} /></Group>
@@ -237,6 +237,57 @@ function Usage({ nav }: { nav: Nav }) {
         <Row label="Weekly credit limit" value={usage.cap.toLocaleString()} />
       </Group>}
     </Shell>
+  );
+}
+
+const PLANS = [
+  { id: "plus", name: "Plus", price: 20, yearly: 199, mult: "4x", base: "", groups: [
+    { title: "SI benefits", items: ["Ceyo Bot", "Newest Ceyo models", "Faster chat replies", "Create images and videos with SI", "Cloud agents and automation", "Code hosting and SI code reviews"] },
+  ] },
+  { id: "pro", name: "Pro", price: 60, yearly: 0, mult: "15x", base: "Plus", groups: [
+    { title: "SI benefits", items: ["Create 1080p videos", "Priority model access at peak times", "Faster replies and generations"] },
+  ] },
+  { id: "ultra", name: "Ultra", price: 120, yearly: 0, mult: "50x", base: "Pro", groups: [
+    { title: "SI benefits", items: ["Most capable chat models", "Early access to new products and models", "Fastest replies and generations"] },
+  ] },
+] as const;
+
+function Plans({ nav }: { nav: Nav }) {
+  const { plan } = useCredits() as { plan: string };
+  const [tab, setTab] = useState(0);
+  const [yearly, setYearly] = useState(false);
+  const p = PLANS[tab];
+  const current = plan?.toLowerCase() === p.id;
+  return (
+    <div className="agent-hub ceyo-page ceyo-plans" data-no-translate>
+      <button type="button" className="gx-round ceyo-plans-close" aria-label="Close" onClick={() => nav("/settings")}><X size={20} /></button>
+      <div className="ceyo-scroll">
+        <div className="ceyo-plans-brand"><span className="ceyo-brand-orb"><i /><i /></span></div>
+        <h1 className="ceyo-plans-title">One subscription.<br />Access to everything.</h1>
+        <div className="ceyo-plans-card">
+          <div className="ceyo-plans-tabs">
+            {PLANS.map((x, i) => <button key={x.id} type="button" data-on={i === tab} onClick={() => { setTab(i); setYearly(false); }}>{x.name}</button>)}
+          </div>
+          {p.base && <p className="ceyo-plans-muted">Everything in {p.base}, and:</p>}
+          <strong className="ceyo-plans-mult">{p.mult}</strong>
+          <p className="ceyo-plans-sub">more usage than Free</p>
+          {p.groups.map((g) => <div key={g.title}>
+            <p className="ceyo-plans-muted ceyo-plans-gt">{g.title}</p>
+            <ul>{g.items.map((it) => <li key={it}><Check size={16} />{it}</li>)}</ul>
+          </div>)}
+          <p className="ceyo-plans-muted ceyo-plans-gt">Our other apps</p>
+          <ul><li className="ceyo-plans-muted">Coming soon</li></ul>
+        </div>
+      </div>
+      <div className="ceyo-plans-foot">
+        <div className="ceyo-plans-prices">
+          <button type="button" data-on={!yearly} onClick={() => setYearly(false)}><b>${p.price}</b> <span>{p.yearly ? "monthly" : "billed monthly"}</span></button>
+          {p.yearly > 0 && <button type="button" data-on={yearly} onClick={() => setYearly(true)}><b>${p.yearly}</b> <span>yearly</span><small>${(p.yearly / 12).toFixed(2)}/mo · <em>Save 17%</em></small></button>}
+        </div>
+        <button type="button" className="ceyo-plans-cta" data-current={current} disabled={current} onClick={() => toast("Payments are coming soon")}>{current ? "Current plan" : "Change plan"}</button>
+        <p className="ceyo-plans-legal">Subscriptions renew automatically until cancelled. Cancel anytime at least 24 hours before renewal. Prices may change.</p>
+      </div>
+    </div>
   );
 }
 
@@ -516,6 +567,7 @@ export default function CeyoSettings() {
   switch (section) {
     case "account": return <Account nav={nav} />;
     case "usage": return <Usage nav={nav} />;
+    case "plans": return <Plans nav={nav} />;
     case "vault": return <Vault_ nav={nav} />;
     case "apps": return <Apps nav={nav} appId={sub ? decodeURIComponent(sub) : undefined} />;
     case "devices": return <Devices nav={nav} />;
