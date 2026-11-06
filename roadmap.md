@@ -54,6 +54,10 @@
 - [x] One-off channel post scheduled for 2026-10-24 02:00 UTC (fires on next bot traffic)
 
 ## Ceyo full rebuild
-- [x] Settings screens matching screenshots (Account, Usage, Vault, Connect apps, Devices, Import memory, Appearance, Language)
+- [ ] Fix settings scrolling on mobile and verify the full settings list can reach its footer.
+- [ ] Match the settings home, Account, Usage and Vault screens to the supplied references.
+- [ ] Add Bot Computer and Permissions screens with persistent local rules.
+- [ ] Finish Devices, Import Memory, Appearance and Language controls.
+- [ ] Verify settings interactions and visuals; authenticated backend actions remain subject to the external session.
 - [x] New Ceyo landing page
 - [x] Remove all old pages from the app; rename to Ceyo, English UI, no "AI" wording
