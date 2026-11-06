@@ -2031,33 +2031,6 @@ export type Database = {
         }
         Relationships: []
       }
-      audit_logs: {
-        Row: {
-          action: string
-          actor_admin_id: number | null
-          created_at: string | null
-          details: Json | null
-          id: string
-          target_user_id: number | null
-        }
-        Insert: {
-          action: string
-          actor_admin_id?: number | null
-          created_at?: string | null
-          details?: Json | null
-          id?: string
-          target_user_id?: number | null
-        }
-        Update: {
-          action?: string
-          actor_admin_id?: number | null
-          created_at?: string | null
-          details?: Json | null
-          id?: string
-          target_user_id?: number | null
-        }
-        Relationships: []
-      }
       background_jobs: {
         Row: {
           attempt: number
@@ -2979,24 +2952,6 @@ export type Database = {
           keep_signed_in?: boolean | null
           updated_at?: string
           user_id?: string | null
-        }
-        Relationships: []
-      }
-      competition_config: {
-        Row: {
-          key: string
-          updated_at: string | null
-          value: Json
-        }
-        Insert: {
-          key: string
-          updated_at?: string | null
-          value: Json
-        }
-        Update: {
-          key?: string
-          updated_at?: string | null
-          value?: Json
         }
         Relationships: []
       }
@@ -4298,92 +4253,6 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
-      }
-      event_notifications: {
-        Row: {
-          created_at: string
-          id: number
-          message: string
-          metadata: Json
-          title: string
-          type: string
-          user_id: number
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          message: string
-          metadata?: Json
-          title: string
-          type?: string
-          user_id: number
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          message?: string
-          metadata?: Json
-          title?: string
-          type?: string
-          user_id?: number
-        }
-        Relationships: []
-      }
-      event_referrals: {
-        Row: {
-          created_at: string
-          id: number
-          qualified_at: string | null
-          referred_telegram_id: number
-          referrer_telegram_id: number
-          status: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          qualified_at?: string | null
-          referred_telegram_id: number
-          referrer_telegram_id: number
-          status?: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          qualified_at?: string | null
-          referred_telegram_id?: number
-          referrer_telegram_id?: number
-          status?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "event_referrals_referred_telegram_id_fkey"
-            columns: ["referred_telegram_id"]
-            isOneToOne: true
-            referencedRelation: "leaderboard_view"
-            referencedColumns: ["telegram_id"]
-          },
-          {
-            foreignKeyName: "event_referrals_referred_telegram_id_fkey"
-            columns: ["referred_telegram_id"]
-            isOneToOne: true
-            referencedRelation: "participants"
-            referencedColumns: ["telegram_id"]
-          },
-          {
-            foreignKeyName: "event_referrals_referrer_telegram_id_fkey"
-            columns: ["referrer_telegram_id"]
-            isOneToOne: false
-            referencedRelation: "leaderboard_view"
-            referencedColumns: ["telegram_id"]
-          },
-          {
-            foreignKeyName: "event_referrals_referrer_telegram_id_fkey"
-            columns: ["referrer_telegram_id"]
-            isOneToOne: false
-            referencedRelation: "participants"
-            referencedColumns: ["telegram_id"]
-          },
-        ]
       }
       focus_sessions: {
         Row: {
@@ -8191,105 +8060,6 @@ export type Database = {
         }
         Relationships: []
       }
-      participants: {
-        Row: {
-          created_at: string | null
-          current_rank: number | null
-          estimated_prize: number | null
-          first_name: string | null
-          is_admin: boolean | null
-          is_banned: boolean | null
-          is_premium: boolean | null
-          language_code: string | null
-          last_name: string | null
-          megsy_email: string | null
-          megsy_referral_code: string | null
-          megsy_referral_link: string | null
-          megsy_user_id: string | null
-          payout_network: string | null
-          plan: string | null
-          referrer_telegram_id: number | null
-          subscription_status: string | null
-          telegram_id: number
-          total_points: number
-          total_referrals: number
-          updated_at: string | null
-          username: string | null
-          verified_referrals: number
-          wallet_address: string | null
-          wallet_verified: boolean | null
-        }
-        Insert: {
-          created_at?: string | null
-          current_rank?: number | null
-          estimated_prize?: number | null
-          first_name?: string | null
-          is_admin?: boolean | null
-          is_banned?: boolean | null
-          is_premium?: boolean | null
-          language_code?: string | null
-          last_name?: string | null
-          megsy_email?: string | null
-          megsy_referral_code?: string | null
-          megsy_referral_link?: string | null
-          megsy_user_id?: string | null
-          payout_network?: string | null
-          plan?: string | null
-          referrer_telegram_id?: number | null
-          subscription_status?: string | null
-          telegram_id: number
-          total_points?: number
-          total_referrals?: number
-          updated_at?: string | null
-          username?: string | null
-          verified_referrals?: number
-          wallet_address?: string | null
-          wallet_verified?: boolean | null
-        }
-        Update: {
-          created_at?: string | null
-          current_rank?: number | null
-          estimated_prize?: number | null
-          first_name?: string | null
-          is_admin?: boolean | null
-          is_banned?: boolean | null
-          is_premium?: boolean | null
-          language_code?: string | null
-          last_name?: string | null
-          megsy_email?: string | null
-          megsy_referral_code?: string | null
-          megsy_referral_link?: string | null
-          megsy_user_id?: string | null
-          payout_network?: string | null
-          plan?: string | null
-          referrer_telegram_id?: number | null
-          subscription_status?: string | null
-          telegram_id?: number
-          total_points?: number
-          total_referrals?: number
-          updated_at?: string | null
-          username?: string | null
-          verified_referrals?: number
-          wallet_address?: string | null
-          wallet_verified?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "participants_referrer_telegram_id_fkey"
-            columns: ["referrer_telegram_id"]
-            isOneToOne: false
-            referencedRelation: "leaderboard_view"
-            referencedColumns: ["telegram_id"]
-          },
-          {
-            foreignKeyName: "participants_referrer_telegram_id_fkey"
-            columns: ["referrer_telegram_id"]
-            isOneToOne: false
-            referencedRelation: "participants"
-            referencedColumns: ["telegram_id"]
-          },
-        ]
-      }
       payment_events: {
         Row: {
           created_at: string
@@ -8316,60 +8086,6 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
-      }
-      payouts: {
-        Row: {
-          amount: number
-          created_at: string | null
-          id: string
-          network: string
-          rank_at_freeze: number | null
-          status: string | null
-          tx_hash: string | null
-          updated_at: string | null
-          user_id: number | null
-          wallet_address: string
-        }
-        Insert: {
-          amount: number
-          created_at?: string | null
-          id?: string
-          network: string
-          rank_at_freeze?: number | null
-          status?: string | null
-          tx_hash?: string | null
-          updated_at?: string | null
-          user_id?: number | null
-          wallet_address: string
-        }
-        Update: {
-          amount?: number
-          created_at?: string | null
-          id?: string
-          network?: string
-          rank_at_freeze?: number | null
-          status?: string | null
-          tx_hash?: string | null
-          updated_at?: string | null
-          user_id?: number | null
-          wallet_address?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payouts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "leaderboard_view"
-            referencedColumns: ["telegram_id"]
-          },
-          {
-            foreignKeyName: "payouts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "participants"
-            referencedColumns: ["telegram_id"]
-          },
-        ]
       }
       pending_video_jobs: {
         Row: {
@@ -10695,54 +10411,6 @@ export type Database = {
         }
         Relationships: []
       }
-      subscription_checks: {
-        Row: {
-          created_at: string | null
-          email: string
-          found: boolean | null
-          id: string
-          is_premium: boolean | null
-          plan: string | null
-          raw_response: Json | null
-          user_id: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          email: string
-          found?: boolean | null
-          id?: string
-          is_premium?: boolean | null
-          plan?: string | null
-          raw_response?: Json | null
-          user_id?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          email?: string
-          found?: boolean | null
-          id?: string
-          is_premium?: boolean | null
-          plan?: string | null
-          raw_response?: Json | null
-          user_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "subscription_checks_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "leaderboard_view"
-            referencedColumns: ["telegram_id"]
-          },
-          {
-            foreignKeyName: "subscription_checks_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "participants"
-            referencedColumns: ["telegram_id"]
-          },
-        ]
-      }
       subscriptions: {
         Row: {
           amount_cents: number | null
@@ -10922,42 +10590,6 @@ export type Database = {
           created_at?: string
           user_id?: string
           wallet?: string
-        }
-        Relationships: []
-      }
-      tasks: {
-        Row: {
-          action_url: string | null
-          description_en: string
-          is_active: boolean | null
-          is_mandatory: boolean | null
-          key: string
-          points: number
-          sort_order: number | null
-          title_en: string
-          verification_type: string
-        }
-        Insert: {
-          action_url?: string | null
-          description_en: string
-          is_active?: boolean | null
-          is_mandatory?: boolean | null
-          key: string
-          points: number
-          sort_order?: number | null
-          title_en: string
-          verification_type: string
-        }
-        Update: {
-          action_url?: string | null
-          description_en?: string
-          is_active?: boolean | null
-          is_mandatory?: boolean | null
-          key?: string
-          points?: number
-          sort_order?: number | null
-          title_en?: string
-          verification_type?: string
         }
         Relationships: []
       }
@@ -11242,36 +10874,6 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
           width?: number | null
-        }
-        Relationships: []
-      }
-      telegram_media_files: {
-        Row: {
-          created_at: string
-          file_id: string
-          file_path: string | null
-          file_path_at: string | null
-          mime: string | null
-          size_bytes: number | null
-          source_key: string
-        }
-        Insert: {
-          created_at?: string
-          file_id: string
-          file_path?: string | null
-          file_path_at?: string | null
-          mime?: string | null
-          size_bytes?: number | null
-          source_key: string
-        }
-        Update: {
-          created_at?: string
-          file_id?: string
-          file_path?: string | null
-          file_path_at?: string | null
-          mime?: string | null
-          size_bytes?: number | null
-          source_key?: string
         }
         Relationships: []
       }
@@ -12345,64 +11947,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_tasks: {
-        Row: {
-          created_at: string | null
-          points_awarded: number | null
-          proof_meta: Json | null
-          proof_url: string | null
-          status: string | null
-          task_key: string
-          updated_at: string | null
-          user_id: number
-          verified_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          points_awarded?: number | null
-          proof_meta?: Json | null
-          proof_url?: string | null
-          status?: string | null
-          task_key: string
-          updated_at?: string | null
-          user_id: number
-          verified_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          points_awarded?: number | null
-          proof_meta?: Json | null
-          proof_url?: string | null
-          status?: string | null
-          task_key?: string
-          updated_at?: string | null
-          user_id?: number
-          verified_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_tasks_task_key_fkey"
-            columns: ["task_key"]
-            isOneToOne: false
-            referencedRelation: "tasks"
-            referencedColumns: ["key"]
-          },
-          {
-            foreignKeyName: "user_tasks_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "leaderboard_view"
-            referencedColumns: ["telegram_id"]
-          },
-          {
-            foreignKeyName: "user_tasks_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "participants"
-            referencedColumns: ["telegram_id"]
-          },
-        ]
-      }
       v_referral_tier_progress: {
         Row: {
           active_refs: number | null
@@ -13437,17 +12981,6 @@ export type Database = {
       }
     }
     Views: {
-      leaderboard_view: {
-        Row: {
-          display_name: string | null
-          rank: number | null
-          telegram_id: number | null
-          total_points: number | null
-          total_referrals: number | null
-          verified_referrals: number | null
-        }
-        Relationships: []
-      }
       v_revenue_daily: {
         Row: {
           day: string | null
@@ -13771,11 +13304,6 @@ export type Database = {
         }
       }
       ensure_telegram_referral_code: { Args: never; Returns: string }
-      event_recompute_rankings: { Args: never; Returns: undefined }
-      expire_lapsed_subscriptions: {
-        Args: { _grace?: string }
-        Returns: number
-      }
       get_credit_overview: { Args: never; Returns: Json }
       get_integration_secret: {
         Args: {
@@ -13798,7 +13326,6 @@ export type Database = {
           total_slots: number
         }[]
       }
-      get_user_campaign_info: { Args: { p_email: string }; Returns: Json }
       get_user_subscription_status: {
         Args: { p_email?: string; p_user_id?: string }
         Returns: Json
@@ -13845,7 +13372,6 @@ export type Database = {
         Returns: boolean
       }
       is_service_role: { Args: never; Returns: boolean }
-      is_subscribed_by_email: { Args: { p_email: string }; Returns: boolean }
       is_workspace_admin: {
         Args: { _user: string; _ws: string }
         Returns: boolean
@@ -14001,7 +13527,6 @@ export type Database = {
         }[]
       }
       premium_image_quota: { Args: never; Returns: Json }
-      prize_for_rank: { Args: { r: number }; Returns: number }
       process_polar_order: {
         Args: {
           p_credits: number
