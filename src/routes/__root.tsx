@@ -282,12 +282,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "Megsy AI" },
       { property: "og:locale", content: "en_US" },
       { property: "og:locale:alternate", content: "ar_EG" },
-      { property: "og:image", content: "/og-megsy.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "Megsy AI — AI Agent Workspace" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "/og-megsy.jpg" },
     ],
     links: [
       { rel: "icon", type: "image/png", sizes: "32x32", href: "/app-icon-32.png" },

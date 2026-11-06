@@ -102,7 +102,7 @@ export function AgentForm({
           </label>
           <label className="hub-field">
             <span>{ar ? "وصف قصير" : "Short description"}</span>
-            <input required minLength={2} maxLength={160} value={description} onChange={(event) => setDescription(event.target.value)} placeholder={ar ? "بيساعدك في إيه؟" : "What does it help with?"} />
+            <input required minLength={10} maxLength={160} value={description} onChange={(event) => setDescription(event.target.value)} placeholder={ar ? "بيساعدك في إيه؟" : "What does it help with?"} />
           </label>
           <label className="hub-field">
             <span>{ar ? "التصنيف" : "Category"}</span>
@@ -139,7 +139,7 @@ export function AgentForm({
           </section>
         )}
         {error && <p className="hub-error" role="alert">{error}</p>}
-        <FormFooter lang={lang} busy={busy} disabled={name.trim().length < 2 || description.trim().length < 2 || prompt.trim().length < 20} submitLabel={initial ? (ar ? "حفظ التعديلات" : "Save changes") : ar ? "إنشاء البوت" : "Create bot"} onCancel={onCancel} />
+        <FormFooter lang={lang} busy={busy} disabled={name.trim().length < 2 || description.trim().length < 10 || prompt.trim().length < 20} submitLabel={initial ? (ar ? "حفظ التعديلات" : "Save changes") : ar ? "إنشاء البوت" : "Create bot"} onCancel={onCancel} />
       </form>
     </section>
   );

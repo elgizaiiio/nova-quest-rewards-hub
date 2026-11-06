@@ -794,6 +794,37 @@ async function handleApi(request: Request, path: string, user: { user: any; toke
       });
       return json({ agent: agentView(agent) }, 201);
     }
+    if (parts[1] && method === "PATCH") {
+      const name = String(body?.name || "").trim();
+      const description = String(body?.description || "").trim();
+      const prompt = String(body?.prompt || "").trim();
+      const color = String(body?.color || "aurora");
+      if (
+        name.length < 2 ||
+        name.length > 60 ||
+        description.length < 10 ||
+        description.length > 500 ||
+        prompt.length < 20 ||
+        prompt.length > 6000 ||
+        !["aurora", "ocean", "ember", "mint", "sun", "rose", "mono"].includes(color)
+      )
+        return json(
+          rpcError("invalid_request", "Please provide a valid name, description and instructions."),
+          400,
+        );
+      const a = await getOwnedAgent(uid, parts[1]);
+      const basePrompt = String(a.prompt || "").split("\n\nYour persona and job:")[0];
+      const { agent } = await api<{ agent: any }>(`/agents/${encodeURIComponent(a.id)}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          displayName: name,
+          description,
+          prompt: `${basePrompt}\n\nYour persona and job:\n${prompt}`.slice(0, 100000),
+          metadata: { ...a.metadata, color, userPrompt: prompt },
+        }),
+      });
+      return json({ agent: agentView(agent) });
+    }
     if (parts[1] && method === "DELETE") {
       const a = await getOwnedAgent(uid, parts[1]);
       if (String(a.name).endsWith("_default"))
