@@ -79,3 +79,6 @@
 
 - [x] Clean unused files; integration + question cards in chat.
 - [x] Mic recording animation; empty composer shows voice-call button (1:1 chats only) with Grok-style call bar.
+
+- [ ] Subscription management page (Grok-style) from the uploaded screenshots.
+- [ ] Clone legal + docs pages into Ceyo: grok-bot terms, X subscription terms, privacy policy, docs overview (https://cursor.com/en-US/terms/grok-bot, https://x.ai/legal/x-subscription-terms-of-service, https://x.ai/legal/privacy-policy, https://docs.x.ai/grok-bot/overview).
