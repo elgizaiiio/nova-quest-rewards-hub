@@ -26,6 +26,7 @@ import {
   X,
   CircleAlert,
   Mic,
+  AudioLines,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { agentApi, type AgentInfo, type SessionInfo } from "@/lib/agentsky/client";
@@ -33,6 +34,7 @@ import { refreshSessions, workspace } from "@/lib/agentsky/store";
 import { useAgentSession } from "@/hooks/useAgentSession";
 import { StepTimeline } from "@/components/agent/StepTimeline";
 import { MediaCard, PlanCard, TaskCard, VideoProposalCard } from "@/components/agent/Cards";
+import { VoiceCallBar } from "./VoiceCall";
 import { ChoiceCard, ConnectAppsCard, SecretCard, readConnectApps } from "./HubCards";
 import { AgentProposalCard } from "@/components/agent/AgentProposalCard";
 import { orbStateFor, type AgentTurn } from "@/lib/agentsky/transcript";
@@ -78,6 +80,7 @@ function Composer({
   onUnqueue,
   onNew,
   onConnect,
+  onCall,
 }: {
   lang: HubLang;
   placeholder: string;
@@ -91,6 +94,7 @@ function Composer({
   onUnqueue: (id: string) => void;
   onNew: () => void;
   onConnect: () => void;
+  onCall?: () => void;
 }) {
   const [text, setText] = useState("");
   const [plusOpen, setPlusOpen] = useState(false);
@@ -167,6 +171,7 @@ function Composer({
             </div>
           )}
         </div>
+        {listening && <div className="cx-rec" aria-hidden><span className="cx-rec-dot" />{Array.from({ length: 18 }, (_, i) => <i key={i} style={{ animationDelay: `${(i % 6) * 0.11}s` }} />)}</div>}
         <textarea
           ref={textarea}
           rows={1}
@@ -186,7 +191,10 @@ function Composer({
             {stopping ? <Loader2 size={16} className="animate-spin" /> : <Square size={12} fill="currentColor" />}
           </button>
         ) : (
-          <button type="button" className="cx-circle" data-active={listening} aria-label="Voice" onClick={listen}><Mic size={18} /></button>
+          <>
+            <button type="button" className="cx-circle cx-mic" data-active={listening} aria-label="Voice" onClick={listen}><Mic size={18} /></button>
+            {onCall && !listening && <button type="button" className="cx-circle cx-send" aria-label={ar ? "مكالمة صوتية" : "Voice call"} onClick={onCall}><AudioLines size={18} /></button>}
+          </>
         )}
       </div>
     </div>
@@ -236,6 +244,7 @@ export function HubChat({
   const [findIdx, setFindIdx] = useState(0);
   const [pinned, setPinned] = useState(true);
   const [sheet, setSheet] = useState<Bubble | null>(null);
+  const [calling, setCalling] = useState(false);
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [selectable, setSelectable] = useState<string | null>(null);
   const [reactions, setReactions] = useState<Record<string, string>>({});
@@ -363,6 +372,16 @@ export function HubChat({
           </div>
         )}
       </header>
+      {calling && !group && agent && (
+        <VoiceCallBar
+          agent={agent}
+          lang={lang}
+          busy={s.running || starting}
+          lastReply={bubbles.length && bubbles[bubbles.length - 1].type === "agent" ? bubbles[bubbles.length - 1].text : ""}
+          onSay={(text) => { setPinned(true); if (!sessionId && !demo) void startConversation(text); else s.send(text); }}
+          onEnd={() => setCalling(false)}
+        />
+      )}
 
       {toast && (
         <div className="cx-toast" data-tone={toast.tone} role="status">
@@ -498,6 +517,7 @@ export function HubChat({
           onUnqueue={s.unqueue}
           onNew={() => onSession(null)}
           onConnect={() => nav("/settings/apps")}
+          onCall={group ? undefined : () => setCalling(true)}
         />
       )}
 
